@@ -1,0 +1,367 @@
+{
+  "D:\\Vue\\alajandria-book\\.vscode\\extensions.json": {
+    "mtime": 1779738394.5311637,
+    "ast_hash": "886c161c2f2d9388473a64033e7d1931",
+    "semantic_hash": "886c161c2f2d9388473a64033e7d1931"
+  },
+  "D:\\Vue\\alajandria-book\\package.json": {
+    "mtime": 1782018573.2851486,
+    "ast_hash": "59fc834f8dc2e983b4f2fd8eeb0c3fc4",
+    "semantic_hash": "59fc834f8dc2e983b4f2fd8eeb0c3fc4"
+  },
+  "D:\\Vue\\alajandria-book\\skills-lock.json": {
+    "mtime": 1781925698.7272255,
+    "ast_hash": "85d6bff1f47d75975f1dca7ac6483e6a",
+    "semantic_hash": "85d6bff1f47d75975f1dca7ac6483e6a"
+  },
+  "D:\\Vue\\alajandria-book\\src\\App.vue": {
+    "mtime": 1781715735.779604,
+    "ast_hash": "9c1956103a456499afc662d0065c7647",
+    "semantic_hash": "9c1956103a456499afc662d0065c7647"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\auth\\application\\AuthService.ts": {
+    "mtime": 1781701913.4321346,
+    "ast_hash": "94c2ff638fe07b2cedd5ac13c5e06c20",
+    "semantic_hash": "94c2ff638fe07b2cedd5ac13c5e06c20"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\auth\\domain\\AuthEntity.ts": {
+    "mtime": 1781717460.367034,
+    "ast_hash": "6e024c7e6edd8bb85d76f99c375b5d72",
+    "semantic_hash": "6e024c7e6edd8bb85d76f99c375b5d72"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\auth\\domain\\AuthRepository.ts": {
+    "mtime": 1781701910.0472174,
+    "ast_hash": "0405a1a97ff7a1c50d21704be1f1dc66",
+    "semantic_hash": "0405a1a97ff7a1c50d21704be1f1dc66"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\auth\\domain\\UserEntity.ts": {
+    "mtime": 1781712923.0434294,
+    "ast_hash": "a94c602fc5bd6dc43287e67e77235ae4",
+    "semantic_hash": "a94c602fc5bd6dc43287e67e77235ae4"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\auth\\domain\\validators\\UserValidator.ts": {
+    "mtime": 1781715824.1296124,
+    "ast_hash": "7a40a79f3484783906cbc93687ff39a1",
+    "semantic_hash": "7a40a79f3484783906cbc93687ff39a1"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\auth\\infrastructure\\AuthApi.ts": {
+    "mtime": 1781701911.9197166,
+    "ast_hash": "ce2d63845dff221df17caafcd4ef7d04",
+    "semantic_hash": "ce2d63845dff221df17caafcd4ef7d04"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\auth\\presentation\\components\\UserRegisterForm.vue": {
+    "mtime": 1782271422.941399,
+    "ast_hash": "9a66fc3c7df7a7f715bd037996c840ec",
+    "semantic_hash": "9a66fc3c7df7a7f715bd037996c840ec"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\auth\\presentation\\pages\\LoginPage.vue": {
+    "mtime": 1781717466.6257732,
+    "ast_hash": "7e9f3915e44f8d3ebbffe15fb826ed9a",
+    "semantic_hash": "7e9f3915e44f8d3ebbffe15fb826ed9a"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\auth\\presentation\\pages\\RegisterForm.vue": {
+    "mtime": 1781716128.1762352,
+    "ast_hash": "5ebd7f24511069f22c7628eb639499c7",
+    "semantic_hash": "5ebd7f24511069f22c7628eb639499c7"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\auth\\presentation\\stores\\authStore.ts": {
+    "mtime": 1781701915.4210231,
+    "ast_hash": "b222bd0a44a2fd0d98e53319f8abb805",
+    "semantic_hash": "b222bd0a44a2fd0d98e53319f8abb805"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\auth\\usesCases\\useRegisterForm.ts": {
+    "mtime": 1781715821.3885722,
+    "ast_hash": "092790be9f2f57d8d3db8b560d2ac9c7",
+    "semantic_hash": "092790be9f2f57d8d3db8b560d2ac9c7"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\books\\application\\useBookStore.ts": {
+    "mtime": 1782048927.6195774,
+    "ast_hash": "e087ccfee8f9675b19743d2db131dce9",
+    "semantic_hash": "e087ccfee8f9675b19743d2db131dce9"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\books\\domain\\entities\\Book.ts": {
+    "mtime": 1782045243.189813,
+    "ast_hash": "26b1e627cd8aaa877f7d396d91eccc39",
+    "semantic_hash": "26b1e627cd8aaa877f7d396d91eccc39"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\books\\domain\\repositories\\BookRepository.ts": {
+    "mtime": 1782098354.6354415,
+    "ast_hash": "2175029c7147fb7e918ca4d90fef397a",
+    "semantic_hash": "2175029c7147fb7e918ca4d90fef397a"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\books\\infrastructure\\repositories\\AxiosBookRepository.ts": {
+    "mtime": 1782098358.2551258,
+    "ast_hash": "d197a1ed8d0c53886a720b8818f1a453",
+    "semantic_hash": "d197a1ed8d0c53886a720b8818f1a453"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\books\\presentation\\components\\BookForm.vue": {
+    "mtime": 1782047344.9866264,
+    "ast_hash": "6bcf13eedfb55348b6ee6b3439aaf2d0",
+    "semantic_hash": "6bcf13eedfb55348b6ee6b3439aaf2d0"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\domain\\AuthorEntity.ts": {
+    "mtime": 1781718060.52067,
+    "ast_hash": "5b51f887fcfb8335cdac0860f7376435",
+    "semantic_hash": "5b51f887fcfb8335cdac0860f7376435"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\domain\\BookEntity.ts": {
+    "mtime": 1782187635.0239418,
+    "ast_hash": "99787e68dff00395e7e623b94891d4c8",
+    "semantic_hash": "99787e68dff00395e7e623b94891d4c8"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\infrastructure\\AuthorApi.ts": {
+    "mtime": 1781718062.1367354,
+    "ast_hash": "146cdadd8e9c122d854365edb7f08f26",
+    "semantic_hash": "146cdadd8e9c122d854365edb7f08f26"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\infrastructure\\BookApi.ts": {
+    "mtime": 1781717690.3010957,
+    "ast_hash": "554827939287b107502a8d1c75624c52",
+    "semantic_hash": "554827939287b107502a8d1c75624c52"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\presentation\\layouts\\DashboardLayout.vue": {
+    "mtime": 1782276794.7790039,
+    "ast_hash": "bc96b4cc273f9ab66e408e4779ab5735",
+    "semantic_hash": "bc96b4cc273f9ab66e408e4779ab5735"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\presentation\\pages\\AuthorsPage.vue": {
+    "mtime": 1782103174.058975,
+    "ast_hash": "ce4d08d0ef0c54a6f5a264ccd9cd670a",
+    "semantic_hash": "ce4d08d0ef0c54a6f5a264ccd9cd670a"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\presentation\\pages\\BooksPage.vue": {
+    "mtime": 1782187659.1938875,
+    "ast_hash": "64e48ed85a1dfd126197c5dbacbb0d87",
+    "semantic_hash": "64e48ed85a1dfd126197c5dbacbb0d87"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\presentation\\pages\\DashboardOverview.vue": {
+    "mtime": 1782269826.3184903,
+    "ast_hash": "0968d2dedf7bf4f594842cc56dcc87c0",
+    "semantic_hash": "0968d2dedf7bf4f594842cc56dcc87c0"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\maintenance\\application\\stores\\useEquipmentStore.ts": {
+    "mtime": 1782277672.2541258,
+    "ast_hash": "fe6ccc1188ff9aceb8b62dcd65fcb2dd",
+    "semantic_hash": "fe6ccc1188ff9aceb8b62dcd65fcb2dd"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\maintenance\\infrastructure\\http\\axiosEquipment.ts": {
+    "mtime": 1782277639.0569713,
+    "ast_hash": "ad97c43469e9e588d5395bc991106d0d",
+    "semantic_hash": "ad97c43469e9e588d5395bc991106d0d"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\maintenance\\presentation\\components\\MaintenanceForm.vue": {
+    "mtime": 1782277020.8651242,
+    "ast_hash": "0b10f060f8da8829c9e27ec713f63cf2",
+    "semantic_hash": "0b10f060f8da8829c9e27ec713f63cf2"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\notes\\application\\useNoteStore.ts": {
+    "mtime": 1782132391.890267,
+    "ast_hash": "38e4c5aa5ebe440f0aa39fe682726032",
+    "semantic_hash": "38e4c5aa5ebe440f0aa39fe682726032"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\notes\\domain\\entities\\Note.ts": {
+    "mtime": 1782018988.104998,
+    "ast_hash": "576374d0b8153c2350bba216bfc7e1b4",
+    "semantic_hash": "576374d0b8153c2350bba216bfc7e1b4"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\notes\\domain\\repositories\\NoteRepository.ts": {
+    "mtime": 1782132310.6365428,
+    "ast_hash": "51473e261a20a5ba076342fe01888097",
+    "semantic_hash": "51473e261a20a5ba076342fe01888097"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\notes\\index.ts": {
+    "mtime": 1782187490.4470081,
+    "ast_hash": "8febaf027a170730026f7e4b0b205492",
+    "semantic_hash": "8febaf027a170730026f7e4b0b205492"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\notes\\infrastructure\\repositories\\AxiosNoteRepository.ts": {
+    "mtime": 1782132360.0102935,
+    "ast_hash": "f6707904313c6456be1fc6d8e43715cc",
+    "semantic_hash": "f6707904313c6456be1fc6d8e43715cc"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\notes\\presentation\\components\\NoteForm.vue": {
+    "mtime": 1782105082.0174654,
+    "ast_hash": "55b80da3b461c3589e5bc6f6f0fad17c",
+    "semantic_hash": "55b80da3b461c3589e5bc6f6f0fad17c"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\notes\\presentation\\components\\NoteList.vue": {
+    "mtime": 1782187568.6140468,
+    "ast_hash": "ac9319e02e21348e46c090d34df73db5",
+    "semantic_hash": "ac9319e02e21348e46c090d34df73db5"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\notes\\presentation\\components\\NotebookSpread.vue": {
+    "mtime": 1782187363.8917093,
+    "ast_hash": "f2aab231399cb1e0647a0dd633e66605",
+    "semantic_hash": "f2aab231399cb1e0647a0dd633e66605"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\topics\\application\\useTopicStore.ts": {
+    "mtime": 1782017997.6205437,
+    "ast_hash": "094c5020243dc01a62b8fd44d941c925",
+    "semantic_hash": "094c5020243dc01a62b8fd44d941c925"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\topics\\domain\\entities\\Topic.ts": {
+    "mtime": 1781836601.1784227,
+    "ast_hash": "2a110acb943404b7ec4ebcb00996d8c7",
+    "semantic_hash": "2a110acb943404b7ec4ebcb00996d8c7"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\topics\\domain\\repositories\\TopicRepository.ts": {
+    "mtime": 1781895031.6047096,
+    "ast_hash": "cf91b2f46b15a711564b4267f91dc9b5",
+    "semantic_hash": "cf91b2f46b15a711564b4267f91dc9b5"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\topics\\infrastructure\\repositories\\AxiosTopicRepository.ts": {
+    "mtime": 1782103820.528049,
+    "ast_hash": "e9a87a8f9f95fa681a14713942454a47",
+    "semantic_hash": "e9a87a8f9f95fa681a14713942454a47"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\topics\\infrastructure\\repositories\\TopicRepository.ts": {
+    "mtime": 1781836243.069127,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\topics\\presentation\\components\\TopicForm.vue": {
+    "mtime": 1782019266.8454933,
+    "ast_hash": "1bc5715423bd8dd838a0278451d7f497",
+    "semantic_hash": "1bc5715423bd8dd838a0278451d7f497"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\topics\\presentation\\components\\TopicList.vue": {
+    "mtime": 1782046603.4303632,
+    "ast_hash": "fe9bd3a4f93d2f800edfade544cb5378",
+    "semantic_hash": "fe9bd3a4f93d2f800edfade544cb5378"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\tracking\\presentation\\components\\UrlTracker.vue": {
+    "mtime": 1782096772.038555,
+    "ast_hash": "09f23c7d7d864d11950ab0d47c0154e3",
+    "semantic_hash": "09f23c7d7d864d11950ab0d47c0154e3"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\users\\presentation\\components\\UserList.vue": {
+    "mtime": 1782275276.0929391,
+    "ast_hash": "b4737a4cbf8a4bab7ae3ca83e8d6c660",
+    "semantic_hash": "b4737a4cbf8a4bab7ae3ca83e8d6c660"
+  },
+  "D:\\Vue\\alajandria-book\\src\\infrastructure\\http\\axiosInstance.ts": {
+    "mtime": 1782104553.3694344,
+    "ast_hash": "7771f3243cf477801e8a101df1e85301",
+    "semantic_hash": "7771f3243cf477801e8a101df1e85301"
+  },
+  "D:\\Vue\\alajandria-book\\src\\main.ts": {
+    "mtime": 1781715732.9458869,
+    "ast_hash": "a61b94aa3481a15a31b2701f6550e0cf",
+    "semantic_hash": "a61b94aa3481a15a31b2701f6550e0cf"
+  },
+  "D:\\Vue\\alajandria-book\\src\\router\\index.ts": {
+    "mtime": 1782276800.2753985,
+    "ast_hash": "935e9b2bb6c566bbdbbed3d36037c425",
+    "semantic_hash": "935e9b2bb6c566bbdbbed3d36037c425"
+  },
+  "D:\\Vue\\alajandria-book\\src\\utils\\components\\BaseInput.vue": {
+    "mtime": 1782102860.593547,
+    "ast_hash": "fd47aba9109b8a2021ae1b177ffe4b7d",
+    "semantic_hash": "fd47aba9109b8a2021ae1b177ffe4b7d"
+  },
+  "D:\\Vue\\alajandria-book\\src\\utils\\components\\BaseModal.vue": {
+    "mtime": 1782274856.5549843,
+    "ast_hash": "ac3ac569a3cc577333040d77dd7d9c82",
+    "semantic_hash": "ac3ac569a3cc577333040d77dd7d9c82"
+  },
+  "D:\\Vue\\alajandria-book\\src\\utils\\components\\ImageViewer.vue": {
+    "mtime": 1782100058.7255263,
+    "ast_hash": "f6d639e78f673a53e606759cc9707985",
+    "semantic_hash": "f6d639e78f673a53e606759cc9707985"
+  },
+  "D:\\Vue\\alajandria-book\\tsconfig.app.json": {
+    "mtime": 1782046583.0727255,
+    "ast_hash": "a439c4be12bc1d9c09f51b2419949c6e",
+    "semantic_hash": "a439c4be12bc1d9c09f51b2419949c6e"
+  },
+  "D:\\Vue\\alajandria-book\\tsconfig.json": {
+    "mtime": 1779738394.5934682,
+    "ast_hash": "a3d39fa780ebff65444de257f291ce6c",
+    "semantic_hash": "a3d39fa780ebff65444de257f291ce6c"
+  },
+  "D:\\Vue\\alajandria-book\\tsconfig.node.json": {
+    "mtime": 1779738394.6064513,
+    "ast_hash": "70bdd0a673bcfc0e828080b306e7c680",
+    "semantic_hash": "70bdd0a673bcfc0e828080b306e7c680"
+  },
+  "D:\\Vue\\alajandria-book\\vite.config.ts": {
+    "mtime": 1781701899.339389,
+    "ast_hash": "bb4cc11540addc259c471d945505dc8a",
+    "semantic_hash": "bb4cc11540addc259c471d945505dc8a"
+  },
+  "D:\\Vue\\alajandria-book\\.agents\\skills\\frontend-design\\LICENSE.txt": {
+    "mtime": 1781925210.7033741,
+    "ast_hash": "29256199be2a609aac596980ffc11996",
+    "semantic_hash": "29256199be2a609aac596980ffc11996"
+  },
+  "D:\\Vue\\alajandria-book\\.agents\\skills\\frontend-design\\SKILL.md": {
+    "mtime": 1781925210.707058,
+    "ast_hash": "f5c3db69b9c6a00578301dd0cbe90253",
+    "semantic_hash": "f5c3db69b9c6a00578301dd0cbe90253"
+  },
+  "D:\\Vue\\alajandria-book\\.agents\\skills\\vue\\GENERATION.md": {
+    "mtime": 1781925539.246935,
+    "ast_hash": "720aa73bd7ea72dbc2aeaa5c2d3467b7",
+    "semantic_hash": "720aa73bd7ea72dbc2aeaa5c2d3467b7"
+  },
+  "D:\\Vue\\alajandria-book\\.agents\\skills\\vue\\SKILL.md": {
+    "mtime": 1781925539.246935,
+    "ast_hash": "75a7fa0dd0f704462570d9d44cf4ed06",
+    "semantic_hash": "75a7fa0dd0f704462570d9d44cf4ed06"
+  },
+  "D:\\Vue\\alajandria-book\\.agents\\skills\\vue\\references\\advanced-patterns.md": {
+    "mtime": 1781925539.246935,
+    "ast_hash": "e396e4b5cd62d24d06ba08bbb9aefb72",
+    "semantic_hash": "e396e4b5cd62d24d06ba08bbb9aefb72"
+  },
+  "D:\\Vue\\alajandria-book\\.agents\\skills\\vue\\references\\core-new-apis.md": {
+    "mtime": 1781925539.246935,
+    "ast_hash": "ab5745ee8a789ebc71db23d4d4565cb2",
+    "semantic_hash": "ab5745ee8a789ebc71db23d4d4565cb2"
+  },
+  "D:\\Vue\\alajandria-book\\.agents\\skills\\vue\\references\\script-setup-macros.md": {
+    "mtime": 1781925539.2495062,
+    "ast_hash": "63b9a866ac71cc44d7d3b68e54e9da35",
+    "semantic_hash": "63b9a866ac71cc44d7d3b68e54e9da35"
+  },
+  "D:\\Vue\\alajandria-book\\README.md": {
+    "mtime": 1781719435.032427,
+    "ast_hash": "6d21324db9937b55d5821cdb99f8a2cf",
+    "semantic_hash": "6d21324db9937b55d5821cdb99f8a2cf"
+  },
+  "D:\\Vue\\alajandria-book\\docs\\API.md": {
+    "mtime": 1781719449.4468439,
+    "ast_hash": "79b8fd53adf4db9a47a151a64feff3f1",
+    "semantic_hash": "79b8fd53adf4db9a47a151a64feff3f1"
+  },
+  "D:\\Vue\\alajandria-book\\docs\\ARCHITECTURE.md": {
+    "mtime": 1781719443.8726108,
+    "ast_hash": "88d5564273f6f6192ba59a7fc354bbc4",
+    "semantic_hash": "88d5564273f6f6192ba59a7fc354bbc4"
+  },
+  "D:\\Vue\\alajandria-book\\docs\\DUNE-ALEXANDRIA.md": {
+    "mtime": 1781719464.1324947,
+    "ast_hash": "e3fc7144424200ac0b892e28c4b4595c",
+    "semantic_hash": "e3fc7144424200ac0b892e28c4b4595c"
+  },
+  "D:\\Vue\\alajandria-book\\index.html": {
+    "mtime": 1781701901.9730463,
+    "ast_hash": "75730883ac5e59ce4c4ec1b3b771a1a7",
+    "semantic_hash": "75730883ac5e59ce4c4ec1b3b771a1a7"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\tracking\\TRACKING_README.md": {
+    "mtime": 1782096798.4419985,
+    "ast_hash": "85da687b77e7d766f4725b886c36a757",
+    "semantic_hash": "85da687b77e7d766f4725b886c36a757"
+  },
+  "D:\\Vue\\alajandria-book\\public\\favicon.svg": {
+    "mtime": 1779738394.802066,
+    "ast_hash": "7e840862161341271697daa99a40d76b",
+    "semantic_hash": "7e840862161341271697daa99a40d76b"
+  },
+  "D:\\Vue\\alajandria-book\\public\\icons.svg": {
+    "mtime": 1779738394.856117,
+    "ast_hash": "3b4fcfcf393eca4d264dca4a4663bc37",
+    "semantic_hash": "3b4fcfcf393eca4d264dca4a4663bc37"
+  }
+}
