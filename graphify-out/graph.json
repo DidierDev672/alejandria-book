@@ -1,7 +1,61 @@
 {
   "directed": false,
   "multigraph": false,
-  "graph": {},
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "vue_reactivity_system",
+        "label": "Vue Reactivity System",
+        "nodes": [
+          "vue_references_core-new-apis_ref",
+          "vue_references_core-new-apis_shallowref",
+          "vue_references_core-new-apis_computed",
+          "vue_references_core-new-apis_reactive",
+          "vue_references_core-new-apis_watch",
+          "vue_references_core-new-apis_watcheffect",
+          "vue_references_core-new-apis_effectscope",
+          "vue_references_core-new-apis_composables"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.9,
+        "source_file": ".agents/skills/vue/references/core-new-apis.md"
+      },
+      {
+        "id": "vue_built_in_components",
+        "label": "Vue Built-in Components",
+        "nodes": [
+          "vue_references_advanced-patterns_transition",
+          "vue_references_advanced-patterns_teleport",
+          "vue_references_advanced-patterns_suspense",
+          "vue_references_advanced-patterns_keepalive",
+          "vue_references_advanced-patterns_v_memo",
+          "vue_references_advanced-patterns_custom_directives"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.9,
+        "source_file": ".agents/skills/vue/references/advanced-patterns.md"
+      },
+      {
+        "id": "dune_alexandria_metaphor",
+        "label": "Dune/Alexandria Metaphor",
+        "nodes": [
+          "docs_dune-alexandria_dune",
+          "docs_dune-alexandria_biblioteca_de_alejandria",
+          "docs_dune-alexandria_casa_atreides",
+          "docs_dune-alexandria_paul_atreides",
+          "docs_dune-alexandria_duke_leto_atreides",
+          "docs_dune-alexandria_knowledge_as_power",
+          "docs_dune-alexandria_preservation_of_knowledge"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.8,
+        "source_file": "docs/DUNE-ALEXANDRIA.md"
+      }
+    ]
+  },
   "nodes": [
     {
       "label": "package.json",
@@ -10,7 +64,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "package",
-      "community": 2,
+      "community": 0,
       "norm_label": "package.json"
     },
     {
@@ -20,7 +74,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "package_name",
-      "community": 2,
+      "community": 0,
       "norm_label": "name"
     },
     {
@@ -30,7 +84,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "package_private",
-      "community": 2,
+      "community": 0,
       "norm_label": "private"
     },
     {
@@ -40,7 +94,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "package_version",
-      "community": 2,
+      "community": 0,
       "norm_label": "version"
     },
     {
@@ -50,7 +104,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "package_type",
-      "community": 2,
+      "community": 0,
       "norm_label": "type"
     },
     {
@@ -60,7 +114,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "package_scripts",
-      "community": 2,
+      "community": 0,
       "norm_label": "scripts"
     },
     {
@@ -70,7 +124,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "package_scripts_dev",
-      "community": 2,
+      "community": 0,
       "norm_label": "dev"
     },
     {
@@ -80,7 +134,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "package_scripts_build",
-      "community": 2,
+      "community": 0,
       "norm_label": "build"
     },
     {
@@ -90,7 +144,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "package_scripts_preview",
-      "community": 2,
+      "community": 0,
       "norm_label": "preview"
     },
     {
@@ -100,7 +154,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "package_dependencies",
-      "community": 9,
+      "community": 0,
       "norm_label": "dependencies"
     },
     {
@@ -110,7 +164,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "package_dependencies_vueuse_motion",
-      "community": 9,
+      "community": 0,
       "norm_label": "@vueuse/motion"
     },
     {
@@ -120,7 +174,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "package_dependencies_axios",
-      "community": 9,
+      "community": 0,
       "norm_label": "axios"
     },
     {
@@ -130,7 +184,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "package_dependencies_dotenv",
-      "community": 9,
+      "community": 0,
       "norm_label": "dotenv"
     },
     {
@@ -140,7 +194,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "package_dependencies_motion",
-      "community": 9,
+      "community": 0,
       "norm_label": "motion"
     },
     {
@@ -150,7 +204,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "package_dependencies_motion_vue",
-      "community": 9,
+      "community": 0,
       "norm_label": "motion-vue"
     },
     {
@@ -160,7 +214,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "package_dependencies_pinia",
-      "community": 9,
+      "community": 0,
       "norm_label": "pinia"
     },
     {
@@ -170,7 +224,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "package_dependencies_vue",
-      "community": 9,
+      "community": 0,
       "norm_label": "vue"
     },
     {
@@ -180,7 +234,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "package_dependencies_vue_router",
-      "community": 9,
+      "community": 0,
       "norm_label": "vue-router"
     },
     {
@@ -190,7 +244,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "package_devdependencies",
-      "community": 2,
+      "community": 0,
       "norm_label": "devdependencies"
     },
     {
@@ -200,7 +254,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "package_devdependencies_tailwindcss_vite",
-      "community": 2,
+      "community": 0,
       "norm_label": "@tailwindcss/vite"
     },
     {
@@ -210,7 +264,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "package_devdependencies_types_node",
-      "community": 2,
+      "community": 0,
       "norm_label": "@types/node"
     },
     {
@@ -220,7 +274,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "package_devdependencies_vitejs_plugin_vue",
-      "community": 2,
+      "community": 0,
       "norm_label": "@vitejs/plugin-vue"
     },
     {
@@ -230,7 +284,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "package_devdependencies_vue_tsconfig",
-      "community": 2,
+      "community": 0,
       "norm_label": "@vue/tsconfig"
     },
     {
@@ -240,7 +294,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "package_devdependencies_tailwindcss",
-      "community": 2,
+      "community": 0,
       "norm_label": "tailwindcss"
     },
     {
@@ -250,7 +304,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "package_devdependencies_typescript",
-      "community": 2,
+      "community": 0,
       "norm_label": "typescript"
     },
     {
@@ -260,7 +314,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "package_devdependencies_vite",
-      "community": 2,
+      "community": 0,
       "norm_label": "vite"
     },
     {
@@ -270,7 +324,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "package_devdependencies_vue_tsc",
-      "community": 2,
+      "community": 0,
       "norm_label": "vue-tsc"
     },
     {
@@ -280,7 +334,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app",
-      "community": 13,
+      "community": 19,
       "norm_label": "app.vue"
     },
     {
@@ -290,7 +344,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "application_authservice",
-      "community": 1,
+      "community": 2,
       "norm_label": "authservice.ts"
     },
     {
@@ -300,7 +354,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "application_authservice_authservice",
-      "community": 1,
+      "community": 2,
       "norm_label": "authservice"
     },
     {
@@ -310,7 +364,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "application_authservice_authservice_constructor",
-      "community": 1,
+      "community": 2,
       "norm_label": ".constructor()"
     },
     {
@@ -320,7 +374,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "application_authservice_authservice_login",
-      "community": 1,
+      "community": 2,
       "norm_label": ".login()"
     },
     {
@@ -330,7 +384,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "application_authservice_authservice_logout",
-      "community": 1,
+      "community": 2,
       "norm_label": ".logout()"
     },
     {
@@ -340,7 +394,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "application_authservice_authservice_getstoreduser",
-      "community": 1,
+      "community": 2,
       "norm_label": ".getstoreduser()"
     },
     {
@@ -350,7 +404,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "application_authservice_authservice_getstoredtoken",
-      "community": 1,
+      "community": 2,
       "norm_label": ".getstoredtoken()"
     },
     {
@@ -360,7 +414,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "domain_authentity",
-      "community": 1,
+      "community": 2,
       "norm_label": "authentity.ts"
     },
     {
@@ -370,7 +424,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "domain_authentity_logincredentials",
-      "community": 1,
+      "community": 2,
       "norm_label": "logincredentials"
     },
     {
@@ -380,7 +434,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "domain_authentity_user",
-      "community": 1,
+      "community": 2,
       "norm_label": "user"
     },
     {
@@ -390,7 +444,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "domain_authentity_authresponse",
-      "community": 1,
+      "community": 2,
       "norm_label": "authresponse"
     },
     {
@@ -400,7 +454,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "domain_authrepository",
-      "community": 1,
+      "community": 2,
       "norm_label": "authrepository.ts"
     },
     {
@@ -410,7 +464,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "domain_authrepository_authrepository",
-      "community": 1,
+      "community": 2,
       "norm_label": "authrepository"
     },
     {
@@ -420,7 +474,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "domain_userentity",
-      "community": 10,
+      "community": 13,
       "norm_label": "userentity.ts"
     },
     {
@@ -430,7 +484,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "domain_userentity_userentity",
-      "community": 10,
+      "community": 13,
       "norm_label": "userentity"
     },
     {
@@ -440,7 +494,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "validators_uservalidator",
-      "community": 10,
+      "community": 13,
       "norm_label": "uservalidator.ts"
     },
     {
@@ -450,7 +504,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "validators_uservalidator_uservalidator",
-      "community": 10,
+      "community": 13,
       "norm_label": "uservalidator"
     },
     {
@@ -460,7 +514,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "validators_uservalidator_uservalidator_validate",
-      "community": 10,
+      "community": 13,
       "norm_label": ".validate()"
     },
     {
@@ -470,7 +524,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "validators_uservalidator_uservalidator_calculateage",
-      "community": 10,
+      "community": 13,
       "norm_label": ".calculateage()"
     },
     {
@@ -480,7 +534,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "infrastructure_authapi",
-      "community": 1,
+      "community": 2,
       "norm_label": "authapi.ts"
     },
     {
@@ -490,7 +544,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "infrastructure_authapi_authapi",
-      "community": 1,
+      "community": 2,
       "norm_label": "authapi"
     },
     {
@@ -500,7 +554,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "infrastructure_authapi_authapi_login",
-      "community": 1,
+      "community": 2,
       "norm_label": ".login()"
     },
     {
@@ -510,7 +564,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_userregisterform",
-      "community": 27,
+      "community": 39,
       "norm_label": "userregisterform.vue"
     },
     {
@@ -520,7 +574,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pages_loginpage",
-      "community": 31,
+      "community": 45,
       "norm_label": "loginpage.vue"
     },
     {
@@ -530,7 +584,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pages_registerform",
-      "community": 18,
+      "community": 30,
       "norm_label": "registerform.vue"
     },
     {
@@ -540,7 +594,7 @@
       "source_location": "L169",
       "_origin": "ast",
       "id": "pages_registerform_user_errors_showpassword_isloading_submitsuccess_handlesubmit_togglepasswordvisibility_clearfielderror",
-      "community": 18,
+      "community": 30,
       "norm_label": "{\n    user,\n    errors,\n    showpassword,\n    isloading,\n    submitsuccess,\n    handlesubmit,\n    togglepasswordvisibility,\n    clearfielderror,\n}"
     },
     {
@@ -550,7 +604,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "stores_authstore",
-      "community": 1,
+      "community": 2,
       "norm_label": "authstore.ts"
     },
     {
@@ -560,7 +614,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "stores_authstore_authservice",
-      "community": 1,
+      "community": 2,
       "norm_label": "authservice"
     },
     {
@@ -570,7 +624,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "stores_authstore_useauthstore",
-      "community": 1,
+      "community": 2,
       "norm_label": "useauthstore"
     },
     {
@@ -580,7 +634,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "usescases_useregisterform",
-      "community": 10,
+      "community": 13,
       "norm_label": "useregisterform.ts"
     },
     {
@@ -590,7 +644,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "usescases_useregisterform_useregisterform",
-      "community": 10,
+      "community": 13,
       "norm_label": "useregisterform()"
     },
     {
@@ -740,7 +794,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_bookform",
-      "community": 21,
+      "community": 34,
       "norm_label": "bookform.vue"
     },
     {
@@ -980,7 +1034,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "layouts_dashboardlayout",
-      "community": 28,
+      "community": 42,
       "norm_label": "dashboardlayout.vue"
     },
     {
@@ -990,7 +1044,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pages_authorspage",
-      "community": 29,
+      "community": 43,
       "norm_label": "authorspage.vue"
     },
     {
@@ -1000,7 +1054,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pages_bookspage",
-      "community": 17,
+      "community": 29,
       "norm_label": "bookspage.vue"
     },
     {
@@ -1010,7 +1064,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "pages_bookspage_if",
-      "community": 17,
+      "community": 29,
       "norm_label": "if()"
     },
     {
@@ -1020,8 +1074,128 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pages_dashboardoverview",
-      "community": 30,
+      "community": 44,
       "norm_label": "dashboardoverview.vue"
+    },
+    {
+      "label": "useExerciseStore.ts",
+      "file_type": "code",
+      "source_file": "src/features/exercise/application/stores/useExerciseStore.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "stores_useexercisestore",
+      "community": 23,
+      "norm_label": "useexercisestore.ts"
+    },
+    {
+      "label": "useExerciseStore",
+      "file_type": "code",
+      "source_file": "src/features/exercise/application/stores/useExerciseStore.ts",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "stores_useexercisestore_useexercisestore",
+      "community": 23,
+      "norm_label": "useexercisestore"
+    },
+    {
+      "label": "ExerciseStore",
+      "file_type": "code",
+      "source_file": "src/features/exercise/application/stores/useExerciseStore.ts",
+      "source_location": "L329",
+      "_origin": "ast",
+      "id": "stores_useexercisestore_exercisestore",
+      "community": 23,
+      "norm_label": "exercisestore"
+    },
+    {
+      "label": "axiosExercise.ts",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/http/axiosExercise.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "http_axiosexercise",
+      "community": 28,
+      "norm_label": "axiosexercise.ts"
+    },
+    {
+      "label": "axiosExercise",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/http/axiosExercise.ts",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "http_axiosexercise_axiosexercise",
+      "community": 28,
+      "norm_label": "axiosexercise"
+    },
+    {
+      "label": "exerciseService.ts",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "services_exerciseservice",
+      "community": 16,
+      "norm_label": "exerciseservice.ts"
+    },
+    {
+      "label": "Exercise",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "services_exerciseservice_exercise",
+      "community": 16,
+      "norm_label": "exercise"
+    },
+    {
+      "label": "CreateExerciseDTO",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "services_exerciseservice_createexercisedto",
+      "community": 16,
+      "norm_label": "createexercisedto"
+    },
+    {
+      "label": "UpdateExerciseDTO",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "services_exerciseservice_updateexercisedto",
+      "community": 16,
+      "norm_label": "updateexercisedto"
+    },
+    {
+      "label": "ExerciseFilters",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "services_exerciseservice_exercisefilters",
+      "community": 16,
+      "norm_label": "exercisefilters"
+    },
+    {
+      "label": "PaginatedResponse",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "services_exerciseservice_paginatedresponse",
+      "community": 16,
+      "norm_label": "paginatedresponse"
+    },
+    {
+      "label": "ExerciseService",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L56",
+      "_origin": "ast",
+      "id": "services_exerciseservice_exerciseservice",
+      "community": 16,
+      "norm_label": "exerciseservice"
     },
     {
       "label": "useEquipmentStore.ts",
@@ -1030,7 +1204,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "stores_useequipmentstore",
-      "community": 11,
+      "community": 14,
       "norm_label": "useequipmentstore.ts"
     },
     {
@@ -1040,7 +1214,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "stores_useequipmentstore_equipment",
-      "community": 11,
+      "community": 14,
       "norm_label": "equipment"
     },
     {
@@ -1050,7 +1224,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "stores_useequipmentstore_createequipmentdto",
-      "community": 11,
+      "community": 14,
       "norm_label": "createequipmentdto"
     },
     {
@@ -1060,7 +1234,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "stores_useequipmentstore_updateequipmentdto",
-      "community": 11,
+      "community": 14,
       "norm_label": "updateequipmentdto"
     },
     {
@@ -1070,7 +1244,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "stores_useequipmentstore_equipmentfilters",
-      "community": 11,
+      "community": 14,
       "norm_label": "equipmentfilters"
     },
     {
@@ -1080,7 +1254,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "stores_useequipmentstore_equipmentapiresponse",
-      "community": 11,
+      "community": 14,
       "norm_label": "equipmentapiresponse"
     },
     {
@@ -1090,7 +1264,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "stores_useequipmentstore_useequipmentstore",
-      "community": 11,
+      "community": 14,
       "norm_label": "useequipmentstore"
     },
     {
@@ -1100,7 +1274,7 @@
       "source_location": "L440",
       "_origin": "ast",
       "id": "stores_useequipmentstore_equipmentstore",
-      "community": 11,
+      "community": 14,
       "norm_label": "equipmentstore"
     },
     {
@@ -1110,7 +1284,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "http_axiosequipment",
-      "community": 16,
+      "community": 27,
       "norm_label": "axiosequipment.ts"
     },
     {
@@ -1120,7 +1294,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "http_axiosequipment_axiosequipment",
-      "community": 16,
+      "community": 27,
       "norm_label": "axiosequipment"
     },
     {
@@ -1130,8 +1304,18 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_maintenanceform",
-      "community": 23,
+      "community": 25,
       "norm_label": "maintenanceform.vue"
+    },
+    {
+      "label": "if()",
+      "file_type": "code",
+      "source_file": "src/features/maintenance/presentation/components/MaintenanceForm.vue",
+      "source_location": "L264",
+      "_origin": "ast",
+      "id": "components_maintenanceform_if",
+      "community": 25,
+      "norm_label": "if()"
     },
     {
       "label": "useNoteStore.ts",
@@ -1140,7 +1324,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "application_usenotestore",
-      "community": 0,
+      "community": 1,
       "norm_label": "usenotestore.ts"
     },
     {
@@ -1150,7 +1334,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "application_usenotestore_noterepository",
-      "community": 0,
+      "community": 1,
       "norm_label": "noterepository"
     },
     {
@@ -1160,7 +1344,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "application_usenotestore_usenotestore",
-      "community": 0,
+      "community": 1,
       "norm_label": "usenotestore"
     },
     {
@@ -1170,7 +1354,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "entities_note",
-      "community": 0,
+      "community": 1,
       "norm_label": "note.ts"
     },
     {
@@ -1180,7 +1364,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "entities_note_notetype",
-      "community": 0,
+      "community": 1,
       "norm_label": "notetype"
     },
     {
@@ -1190,7 +1374,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "entities_note_note",
-      "community": 0,
+      "community": 1,
       "norm_label": "note"
     },
     {
@@ -1200,7 +1384,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "entities_note_notefactory",
-      "community": 0,
+      "community": 1,
       "norm_label": "notefactory"
     },
     {
@@ -1210,7 +1394,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "entities_note_notefactory_createempty",
-      "community": 0,
+      "community": 1,
       "norm_label": ".createempty()"
     },
     {
@@ -1220,7 +1404,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "repositories_noterepository",
-      "community": 0,
+      "community": 1,
       "norm_label": "noterepository.ts"
     },
     {
@@ -1230,7 +1414,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "repositories_noterepository_noterepository",
-      "community": 0,
+      "community": 1,
       "norm_label": "noterepository"
     },
     {
@@ -1240,7 +1424,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "notes_index",
-      "community": 0,
+      "community": 1,
       "norm_label": "index.ts"
     },
     {
@@ -1250,7 +1434,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "repositories_axiosnoterepository",
-      "community": 0,
+      "community": 1,
       "norm_label": "axiosnoterepository.ts"
     },
     {
@@ -1260,7 +1444,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "repositories_axiosnoterepository_axiosnoterepository",
-      "community": 0,
+      "community": 1,
       "norm_label": "axiosnoterepository"
     },
     {
@@ -1270,7 +1454,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "repositories_axiosnoterepository_axiosnoterepository_create",
-      "community": 0,
+      "community": 1,
       "norm_label": ".create()"
     },
     {
@@ -1280,7 +1464,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "repositories_axiosnoterepository_axiosnoterepository_findall",
-      "community": 0,
+      "community": 1,
       "norm_label": ".findall()"
     },
     {
@@ -1290,7 +1474,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "repositories_axiosnoterepository_axiosnoterepository_update",
-      "community": 0,
+      "community": 1,
       "norm_label": ".update()"
     },
     {
@@ -1300,7 +1484,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "repositories_axiosnoterepository_axiosnoterepository_delete",
-      "community": 0,
+      "community": 1,
       "norm_label": ".delete()"
     },
     {
@@ -1310,7 +1494,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_noteform",
-      "community": 0,
+      "community": 1,
       "norm_label": "noteform.vue"
     },
     {
@@ -1320,7 +1504,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_notelist",
-      "community": 0,
+      "community": 1,
       "norm_label": "notelist.vue"
     },
     {
@@ -1330,7 +1514,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_notebookspread",
-      "community": 0,
+      "community": 1,
       "norm_label": "notebookspread.vue"
     },
     {
@@ -1480,7 +1664,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_topics_infrastructure_repositories_topicrepository_ts_repositories_topicrepository",
-      "community": 32,
+      "community": 48,
       "norm_label": "topicrepository.ts"
     },
     {
@@ -1490,7 +1674,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_topicform",
-      "community": 24,
+      "community": 36,
       "norm_label": "topicform.vue"
     },
     {
@@ -1500,7 +1684,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_topiclist",
-      "community": 15,
+      "community": 26,
       "norm_label": "topiclist.vue"
     },
     {
@@ -1510,7 +1694,7 @@
       "source_location": "L185",
       "_origin": "ast",
       "id": "components_topiclist_gettopicemoji",
-      "community": 15,
+      "community": 26,
       "norm_label": "gettopicemoji()"
     },
     {
@@ -1520,7 +1704,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_urltracker",
-      "community": 25,
+      "community": 37,
       "norm_label": "urltracker.vue"
     },
     {
@@ -1530,7 +1714,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_userlist",
-      "community": 26,
+      "community": 38,
       "norm_label": "userlist.vue"
     },
     {
@@ -1540,7 +1724,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "http_axiosinstance",
-      "community": 12,
+      "community": 18,
       "norm_label": "axiosinstance.ts"
     },
     {
@@ -1550,7 +1734,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "http_axiosinstance_axiosinstance",
-      "community": 12,
+      "community": 18,
       "norm_label": "axiosinstance"
     },
     {
@@ -1560,7 +1744,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "http_axiosinstance_hasactivesession",
-      "community": 12,
+      "community": 18,
       "norm_label": "hasactivesession()"
     },
     {
@@ -1570,7 +1754,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "http_axiosinstance_getauthtoken",
-      "community": 12,
+      "community": 18,
       "norm_label": "getauthtoken()"
     },
     {
@@ -1580,7 +1764,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "http_axiosinstance_setauthtoken",
-      "community": 12,
+      "community": 18,
       "norm_label": "setauthtoken()"
     },
     {
@@ -1590,7 +1774,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "http_axiosinstance_clearsession",
-      "community": 12,
+      "community": 18,
       "norm_label": "clearsession()"
     },
     {
@@ -1600,7 +1784,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_main",
-      "community": 13,
+      "community": 19,
       "norm_label": "main.ts"
     },
     {
@@ -1610,7 +1794,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_main_app",
-      "community": 13,
+      "community": 19,
       "norm_label": "app"
     },
     {
@@ -1620,7 +1804,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "router_index",
-      "community": 13,
+      "community": 19,
       "norm_label": "index.ts"
     },
     {
@@ -1630,7 +1814,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "router_index_router",
-      "community": 13,
+      "community": 19,
       "norm_label": "router"
     },
     {
@@ -1640,7 +1824,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_baseinput",
-      "community": 19,
+      "community": 32,
       "norm_label": "baseinput.vue"
     },
     {
@@ -1650,7 +1834,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_basemodal",
-      "community": 20,
+      "community": 33,
       "norm_label": "basemodal.vue"
     },
     {
@@ -1660,7 +1844,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_imageviewer",
-      "community": 22,
+      "community": 35,
       "norm_label": "imageviewer.vue"
     },
     {
@@ -1810,7 +1994,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tsconfig",
-      "community": 14,
+      "community": 24,
       "norm_label": "tsconfig.json"
     },
     {
@@ -1820,7 +2004,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "tsconfig_files",
-      "community": 14,
+      "community": 24,
       "norm_label": "files"
     },
     {
@@ -1830,7 +2014,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "tsconfig_references",
-      "community": 14,
+      "community": 24,
       "norm_label": "references"
     },
     {
@@ -2020,8 +2204,563 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "vite_config",
-      "community": 33,
+      "community": 49,
       "norm_label": "vite.config.ts"
+    },
+    {
+      "label": "Apache License 2.0",
+      "file_type": "document",
+      "source_file": ".agents/skills/frontend-design/LICENSE.txt",
+      "id": "frontend-design_license",
+      "community": 40,
+      "norm_label": "apache license 2.0"
+    },
+    {
+      "label": "Frontend Design Skill",
+      "file_type": "document",
+      "source_file": ".agents/skills/frontend-design/SKILL.md",
+      "id": "frontend-design_skill",
+      "community": 41,
+      "norm_label": "frontend design skill"
+    },
+    {
+      "label": "Vue Skill Generation Info",
+      "file_type": "document",
+      "source_file": ".agents/skills/vue/GENERATION.md",
+      "id": "vue_generation",
+      "community": 50,
+      "norm_label": "vue skill generation info"
+    },
+    {
+      "label": "Vue Skill",
+      "file_type": "document",
+      "source_file": ".agents/skills/vue/SKILL.md",
+      "author": "Anthony Fu",
+      "id": "vue_skill",
+      "community": 21,
+      "norm_label": "vue skill"
+    },
+    {
+      "label": "Vue Advanced Patterns Reference",
+      "file_type": "document",
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md",
+      "id": "vue_references_advanced-patterns",
+      "community": 17,
+      "norm_label": "vue advanced patterns reference"
+    },
+    {
+      "label": "Vue Core New APIs Reference",
+      "file_type": "document",
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "id": "vue_references_core-new-apis",
+      "community": 11,
+      "norm_label": "vue core new apis reference"
+    },
+    {
+      "label": "Vue Script Setup Macros Reference",
+      "file_type": "document",
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "id": "vue_references_script-setup-macros",
+      "community": 15,
+      "norm_label": "vue script setup macros reference"
+    },
+    {
+      "label": "Alejandria Book README",
+      "file_type": "document",
+      "source_file": "README.md",
+      "id": "alajandria-book_readme",
+      "community": 22,
+      "norm_label": "alejandria book readme"
+    },
+    {
+      "label": "API Atreides Documentation",
+      "file_type": "document",
+      "source_file": "docs/API.md",
+      "id": "docs_api",
+      "community": 10,
+      "norm_label": "api atreides documentation"
+    },
+    {
+      "label": "Architecture Documentation",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "id": "docs_architecture",
+      "community": 9,
+      "norm_label": "architecture documentation"
+    },
+    {
+      "label": "Dune Alexandria Essay",
+      "file_type": "document",
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "id": "docs_dune-alexandria",
+      "community": 12,
+      "norm_label": "dune alexandria essay"
+    },
+    {
+      "label": "index.html Entry Point",
+      "file_type": "code",
+      "source_file": "index.html",
+      "id": "alajandria-book_index",
+      "community": 31,
+      "norm_label": "index.html entry point"
+    },
+    {
+      "label": "Tracking System Documentation",
+      "file_type": "document",
+      "source_file": "src/features/tracking/TRACKING_README.md",
+      "id": "tracking_tracking_readme",
+      "community": 20,
+      "norm_label": "tracking system documentation"
+    },
+    {
+      "label": "Favicon SVG",
+      "file_type": "image",
+      "source_file": "public/favicon.svg",
+      "id": "public_favicon",
+      "community": 46,
+      "norm_label": "favicon svg"
+    },
+    {
+      "label": "Social Icons SVG",
+      "file_type": "image",
+      "source_file": "public/icons.svg",
+      "id": "public_icons",
+      "community": 47,
+      "norm_label": "social icons svg"
+    },
+    {
+      "label": "Vue 3 Composition API",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/SKILL.md",
+      "author": "Anthony Fu",
+      "id": "vue_skill_vue_3_composition_api",
+      "community": 21,
+      "norm_label": "vue 3 composition api"
+    },
+    {
+      "label": "Script Setup Macros",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/SKILL.md",
+      "author": "Anthony Fu",
+      "id": "vue_skill_script_setup_macros",
+      "community": 21,
+      "norm_label": "script setup macros"
+    },
+    {
+      "label": "Reactivity System",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "id": "vue_references_core-new-apis_reactivity_system",
+      "community": 21,
+      "norm_label": "reactivity system"
+    },
+    {
+      "label": "Transition Component",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md",
+      "id": "vue_references_advanced-patterns_transition",
+      "community": 17,
+      "norm_label": "transition component"
+    },
+    {
+      "label": "Teleport Component",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md",
+      "id": "vue_references_advanced-patterns_teleport",
+      "community": 17,
+      "norm_label": "teleport component"
+    },
+    {
+      "label": "Suspense Component",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md",
+      "id": "vue_references_advanced-patterns_suspense",
+      "community": 17,
+      "norm_label": "suspense component"
+    },
+    {
+      "label": "KeepAlive Component",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md",
+      "id": "vue_references_advanced-patterns_keepalive",
+      "community": 17,
+      "norm_label": "keepalive component"
+    },
+    {
+      "label": "v-memo Directive",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md",
+      "id": "vue_references_advanced-patterns_v_memo",
+      "community": 17,
+      "norm_label": "v-memo directive"
+    },
+    {
+      "label": "Custom Directives",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md",
+      "id": "vue_references_advanced-patterns_custom_directives",
+      "community": 17,
+      "norm_label": "custom directives"
+    },
+    {
+      "label": "ref Function",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "id": "vue_references_core-new-apis_ref",
+      "community": 11,
+      "norm_label": "ref function"
+    },
+    {
+      "label": "shallowRef Function",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "id": "vue_references_core-new-apis_shallowref",
+      "community": 11,
+      "norm_label": "shallowref function"
+    },
+    {
+      "label": "computed Function",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "id": "vue_references_core-new-apis_computed",
+      "community": 11,
+      "norm_label": "computed function"
+    },
+    {
+      "label": "reactive Function",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "id": "vue_references_core-new-apis_reactive",
+      "community": 11,
+      "norm_label": "reactive function"
+    },
+    {
+      "label": "watch Function",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "id": "vue_references_core-new-apis_watch",
+      "community": 11,
+      "norm_label": "watch function"
+    },
+    {
+      "label": "watchEffect Function",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "id": "vue_references_core-new-apis_watcheffect",
+      "community": 11,
+      "norm_label": "watcheffect function"
+    },
+    {
+      "label": "effectScope Function",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "id": "vue_references_core-new-apis_effectscope",
+      "community": 11,
+      "norm_label": "effectscope function"
+    },
+    {
+      "label": "Composables Pattern",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "id": "vue_references_core-new-apis_composables",
+      "community": 11,
+      "norm_label": "composables pattern"
+    },
+    {
+      "label": "defineProps Macro",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "id": "vue_references_script-setup-macros_defineprops",
+      "community": 15,
+      "norm_label": "defineprops macro"
+    },
+    {
+      "label": "defineEmits Macro",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "id": "vue_references_script-setup-macros_defineemits",
+      "community": 15,
+      "norm_label": "defineemits macro"
+    },
+    {
+      "label": "defineModel Macro",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "id": "vue_references_script-setup-macros_definemodel",
+      "community": 15,
+      "norm_label": "definemodel macro"
+    },
+    {
+      "label": "defineExpose Macro",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "id": "vue_references_script-setup-macros_defineexpose",
+      "community": 15,
+      "norm_label": "defineexpose macro"
+    },
+    {
+      "label": "defineOptions Macro",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "id": "vue_references_script-setup-macros_defineoptions",
+      "community": 15,
+      "norm_label": "defineoptions macro"
+    },
+    {
+      "label": "defineSlots Macro",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "id": "vue_references_script-setup-macros_defineslots",
+      "community": 15,
+      "norm_label": "defineslots macro"
+    },
+    {
+      "label": "Generic Components",
+      "file_type": "concept",
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "id": "vue_references_script-setup-macros_generic_components",
+      "community": 15,
+      "norm_label": "generic components"
+    },
+    {
+      "label": "Clean Architecture",
+      "file_type": "concept",
+      "source_file": "docs/ARCHITECTURE.md",
+      "id": "docs_architecture_clean_architecture",
+      "community": 9,
+      "norm_label": "clean architecture"
+    },
+    {
+      "label": "Feature-based Architecture",
+      "file_type": "concept",
+      "source_file": "docs/ARCHITECTURE.md",
+      "id": "docs_architecture_feature_based_architecture",
+      "community": 9,
+      "norm_label": "feature-based architecture"
+    },
+    {
+      "label": "Presentation Layer",
+      "file_type": "concept",
+      "source_file": "docs/ARCHITECTURE.md",
+      "id": "docs_architecture_presentation_layer",
+      "community": 9,
+      "norm_label": "presentation layer"
+    },
+    {
+      "label": "Application Layer",
+      "file_type": "concept",
+      "source_file": "docs/ARCHITECTURE.md",
+      "id": "docs_architecture_application_layer",
+      "community": 9,
+      "norm_label": "application layer"
+    },
+    {
+      "label": "Domain Layer",
+      "file_type": "concept",
+      "source_file": "docs/ARCHITECTURE.md",
+      "id": "docs_architecture_domain_layer",
+      "community": 9,
+      "norm_label": "domain layer"
+    },
+    {
+      "label": "Infrastructure Layer",
+      "file_type": "concept",
+      "source_file": "docs/ARCHITECTURE.md",
+      "id": "docs_architecture_infrastructure_layer",
+      "community": 9,
+      "norm_label": "infrastructure layer"
+    },
+    {
+      "label": "Axios Instance",
+      "file_type": "concept",
+      "source_file": "docs/ARCHITECTURE.md",
+      "id": "docs_architecture_axiosinstance",
+      "community": 9,
+      "norm_label": "axios instance"
+    },
+    {
+      "label": "Pinia State Management",
+      "file_type": "concept",
+      "source_file": "README.md",
+      "id": "alajandria-book_readme_pinia",
+      "community": 22,
+      "norm_label": "pinia state management"
+    },
+    {
+      "label": "Vue Router",
+      "file_type": "concept",
+      "source_file": "README.md",
+      "id": "alajandria-book_readme_vue_router",
+      "community": 22,
+      "norm_label": "vue router"
+    },
+    {
+      "label": "Navigation Guard",
+      "file_type": "concept",
+      "source_file": "docs/ARCHITECTURE.md",
+      "id": "docs_architecture_navigation_guard",
+      "community": 9,
+      "norm_label": "navigation guard"
+    },
+    {
+      "label": "Auth Store",
+      "file_type": "concept",
+      "source_file": "docs/ARCHITECTURE.md",
+      "id": "docs_architecture_authstore",
+      "community": 9,
+      "norm_label": "auth store"
+    },
+    {
+      "label": "API Atreides",
+      "file_type": "concept",
+      "source_file": "docs/API.md",
+      "id": "docs_api_api_atreides",
+      "community": 10,
+      "norm_label": "api atreides"
+    },
+    {
+      "label": "AuthApi",
+      "file_type": "concept",
+      "source_file": "docs/API.md",
+      "id": "docs_api_authapi",
+      "community": 10,
+      "norm_label": "authapi"
+    },
+    {
+      "label": "BookApi",
+      "file_type": "concept",
+      "source_file": "docs/API.md",
+      "id": "docs_api_bookapi",
+      "community": 10,
+      "norm_label": "bookapi"
+    },
+    {
+      "label": "AuthorApi",
+      "file_type": "concept",
+      "source_file": "docs/API.md",
+      "id": "docs_api_authorapi",
+      "community": 10,
+      "norm_label": "authorapi"
+    },
+    {
+      "label": "User Entity",
+      "file_type": "concept",
+      "source_file": "docs/API.md",
+      "id": "docs_api_user_entity",
+      "community": 10,
+      "norm_label": "user entity"
+    },
+    {
+      "label": "Book Entity",
+      "file_type": "concept",
+      "source_file": "docs/API.md",
+      "id": "docs_api_book_entity",
+      "community": 10,
+      "norm_label": "book entity"
+    },
+    {
+      "label": "Author Entity",
+      "file_type": "concept",
+      "source_file": "docs/API.md",
+      "id": "docs_api_author_entity",
+      "community": 10,
+      "norm_label": "author entity"
+    },
+    {
+      "label": "ApiError Interface",
+      "file_type": "concept",
+      "source_file": "docs/API.md",
+      "id": "docs_api_apierror",
+      "community": 10,
+      "norm_label": "apierror interface"
+    },
+    {
+      "label": "Dune Novel",
+      "file_type": "concept",
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "id": "docs_dune-alexandria_dune",
+      "community": 12,
+      "norm_label": "dune novel"
+    },
+    {
+      "label": "Biblioteca de Alexandria",
+      "file_type": "concept",
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "id": "docs_dune-alexandria_biblioteca_de_alejandria",
+      "community": 12,
+      "norm_label": "biblioteca de alexandria"
+    },
+    {
+      "label": "Casa Atreides",
+      "file_type": "concept",
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "id": "docs_dune-alexandria_casa_atreides",
+      "community": 12,
+      "norm_label": "casa atreides"
+    },
+    {
+      "label": "Paul Atreides",
+      "file_type": "concept",
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "id": "docs_dune-alexandria_paul_atreides",
+      "community": 12,
+      "norm_label": "paul atreides"
+    },
+    {
+      "label": "Duke Leto Atreides",
+      "file_type": "concept",
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "id": "docs_dune-alexandria_duke_leto_atreides",
+      "community": 12,
+      "norm_label": "duke leto atreides"
+    },
+    {
+      "label": "Knowledge as Power",
+      "file_type": "concept",
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "id": "docs_dune-alexandria_knowledge_as_power",
+      "community": 12,
+      "norm_label": "knowledge as power"
+    },
+    {
+      "label": "Preservation of Knowledge",
+      "file_type": "concept",
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "id": "docs_dune-alexandria_preservation_of_knowledge",
+      "community": 12,
+      "norm_label": "preservation of knowledge"
+    },
+    {
+      "label": "UrlTracker Component",
+      "file_type": "concept",
+      "source_file": "src/features/tracking/TRACKING_README.md",
+      "id": "tracking_tracking_readme_urltracker",
+      "community": 20,
+      "norm_label": "urltracker component"
+    },
+    {
+      "label": "Grabify Tracking System",
+      "file_type": "concept",
+      "source_file": "src/features/tracking/TRACKING_README.md",
+      "id": "tracking_tracking_readme_grabify",
+      "community": 20,
+      "norm_label": "grabify tracking system"
+    },
+    {
+      "label": "Visitor Tracking System",
+      "file_type": "concept",
+      "source_file": "src/features/tracking/TRACKING_README.md",
+      "id": "tracking_tracking_readme_tracking_system",
+      "community": 20,
+      "norm_label": "visitor tracking system"
+    },
+    {
+      "label": "Visitor Tracking",
+      "file_type": "concept",
+      "source_file": "src/features/tracking/TRACKING_README.md",
+      "id": "tracking_tracking_readme_visitor_tracking",
+      "community": 20,
+      "norm_label": "visitor tracking"
     }
   ],
   "links": [
@@ -3569,6 +4308,96 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/features/exercise/application/stores/useExerciseStore.ts",
+      "source_location": "L329",
+      "weight": 1.0,
+      "source": "stores_useexercisestore",
+      "target": "stores_useexercisestore_exercisestore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/exercise/application/stores/useExerciseStore.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "stores_useexercisestore",
+      "target": "stores_useexercisestore_useexercisestore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/exercise/infrastructure/http/axiosExercise.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "http_axiosexercise",
+      "target": "http_axiosexercise_axiosexercise",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "services_exerciseservice",
+      "target": "services_exerciseservice_createexercisedto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "services_exerciseservice",
+      "target": "services_exerciseservice_exercise",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "services_exerciseservice",
+      "target": "services_exerciseservice_exercisefilters",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "services_exerciseservice",
+      "target": "services_exerciseservice_exerciseservice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "services_exerciseservice",
+      "target": "services_exerciseservice_paginatedresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "services_exerciseservice",
+      "target": "services_exerciseservice_updateexercisedto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/features/maintenance/application/stores/useEquipmentStore.ts",
       "source_location": "L19",
       "weight": 1.0,
@@ -3644,6 +4473,16 @@
       "weight": 1.0,
       "source": "http_axiosequipment",
       "target": "http_axiosequipment_axiosequipment",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/maintenance/presentation/components/MaintenanceForm.vue",
+      "source_location": "L264",
+      "weight": 1.0,
+      "source": "components_maintenanceform",
+      "target": "components_maintenanceform_if",
       "confidence_score": 1.0
     },
     {
@@ -4716,7 +5555,600 @@
       "source": "tsconfig_node_compileroptions",
       "target": "tsconfig_node_compileroptions_verbatimmodulesyntax",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/SKILL.md",
+      "weight": 1.0,
+      "source": "vue_skill",
+      "target": "vue_references_core-new-apis_reactivity_system"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/SKILL.md",
+      "weight": 1.0,
+      "source": "vue_skill",
+      "target": "vue_skill_script_setup_macros"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/SKILL.md",
+      "weight": 1.0,
+      "source": "vue_skill",
+      "target": "vue_skill_vue_3_composition_api"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md",
+      "weight": 1.0,
+      "source": "vue_references_advanced-patterns",
+      "target": "vue_references_advanced-patterns_custom_directives"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md",
+      "weight": 1.0,
+      "source": "vue_references_advanced-patterns",
+      "target": "vue_references_advanced-patterns_keepalive"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md",
+      "weight": 1.0,
+      "source": "vue_references_advanced-patterns",
+      "target": "vue_references_advanced-patterns_suspense"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md",
+      "weight": 1.0,
+      "source": "vue_references_advanced-patterns",
+      "target": "vue_references_advanced-patterns_teleport"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md",
+      "weight": 1.0,
+      "source": "vue_references_advanced-patterns",
+      "target": "vue_references_advanced-patterns_transition"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md",
+      "weight": 1.0,
+      "source": "vue_references_advanced-patterns",
+      "target": "vue_references_advanced-patterns_v_memo"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "weight": 1.0,
+      "source": "vue_references_core-new-apis",
+      "target": "vue_references_core-new-apis_composables"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "weight": 1.0,
+      "source": "vue_references_core-new-apis",
+      "target": "vue_references_core-new-apis_computed"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "weight": 1.0,
+      "source": "vue_references_core-new-apis",
+      "target": "vue_references_core-new-apis_effectscope"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "weight": 1.0,
+      "source": "vue_references_core-new-apis",
+      "target": "vue_references_core-new-apis_reactive"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "weight": 1.0,
+      "source": "vue_references_core-new-apis",
+      "target": "vue_references_core-new-apis_ref"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "weight": 1.0,
+      "source": "vue_references_core-new-apis",
+      "target": "vue_references_core-new-apis_shallowref"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "weight": 1.0,
+      "source": "vue_references_core-new-apis",
+      "target": "vue_references_core-new-apis_watch"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "weight": 1.0,
+      "source": "vue_references_core-new-apis",
+      "target": "vue_references_core-new-apis_watcheffect"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "weight": 1.0,
+      "source": "vue_references_script-setup-macros",
+      "target": "vue_references_script-setup-macros_defineemits"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "weight": 1.0,
+      "source": "vue_references_script-setup-macros",
+      "target": "vue_references_script-setup-macros_defineexpose"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "weight": 1.0,
+      "source": "vue_references_script-setup-macros",
+      "target": "vue_references_script-setup-macros_definemodel"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "weight": 1.0,
+      "source": "vue_references_script-setup-macros",
+      "target": "vue_references_script-setup-macros_defineoptions"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "weight": 1.0,
+      "source": "vue_references_script-setup-macros",
+      "target": "vue_references_script-setup-macros_defineprops"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "weight": 1.0,
+      "source": "vue_references_script-setup-macros",
+      "target": "vue_references_script-setup-macros_defineslots"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/vue/references/script-setup-macros.md",
+      "weight": 1.0,
+      "source": "vue_references_script-setup-macros",
+      "target": "vue_references_script-setup-macros_generic_components"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "weight": 1.0,
+      "source": "alajandria-book_readme",
+      "target": "alajandria-book_readme_pinia"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "weight": 1.0,
+      "source": "alajandria-book_readme",
+      "target": "alajandria-book_readme_vue_router"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/API.md",
+      "weight": 1.0,
+      "source": "docs_api",
+      "target": "docs_api_api_atreides"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/API.md",
+      "weight": 1.0,
+      "source": "docs_api",
+      "target": "docs_api_apierror"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/API.md",
+      "weight": 1.0,
+      "source": "docs_api",
+      "target": "docs_api_authapi"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/API.md",
+      "weight": 1.0,
+      "source": "docs_api",
+      "target": "docs_api_author_entity"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/API.md",
+      "weight": 1.0,
+      "source": "docs_api",
+      "target": "docs_api_authorapi"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/API.md",
+      "weight": 1.0,
+      "source": "docs_api",
+      "target": "docs_api_book_entity"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/API.md",
+      "weight": 1.0,
+      "source": "docs_api",
+      "target": "docs_api_bookapi"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/API.md",
+      "weight": 1.0,
+      "source": "docs_api",
+      "target": "docs_api_user_entity"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/ARCHITECTURE.md",
+      "weight": 1.0,
+      "source": "docs_architecture",
+      "target": "docs_architecture_application_layer"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/ARCHITECTURE.md",
+      "weight": 1.0,
+      "source": "docs_architecture",
+      "target": "docs_architecture_authstore"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/ARCHITECTURE.md",
+      "weight": 1.0,
+      "source": "docs_architecture",
+      "target": "docs_architecture_axiosinstance"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/ARCHITECTURE.md",
+      "weight": 1.0,
+      "source": "docs_architecture",
+      "target": "docs_architecture_clean_architecture"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/ARCHITECTURE.md",
+      "weight": 1.0,
+      "source": "docs_architecture",
+      "target": "docs_architecture_domain_layer"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/ARCHITECTURE.md",
+      "weight": 1.0,
+      "source": "docs_architecture",
+      "target": "docs_architecture_feature_based_architecture"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/ARCHITECTURE.md",
+      "weight": 1.0,
+      "source": "docs_architecture",
+      "target": "docs_architecture_infrastructure_layer"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/ARCHITECTURE.md",
+      "weight": 1.0,
+      "source": "docs_architecture",
+      "target": "docs_architecture_navigation_guard"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/ARCHITECTURE.md",
+      "weight": 1.0,
+      "source": "docs_architecture",
+      "target": "docs_architecture_presentation_layer"
+    },
+    {
+      "relation": "cites",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "weight": 1.0,
+      "source": "docs_dune-alexandria",
+      "target": "docs_dune-alexandria_biblioteca_de_alejandria"
+    },
+    {
+      "relation": "cites",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "weight": 1.0,
+      "source": "docs_dune-alexandria",
+      "target": "docs_dune-alexandria_casa_atreides"
+    },
+    {
+      "relation": "cites",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "weight": 1.0,
+      "source": "docs_dune-alexandria",
+      "target": "docs_dune-alexandria_duke_leto_atreides"
+    },
+    {
+      "relation": "cites",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "weight": 1.0,
+      "source": "docs_dune-alexandria",
+      "target": "docs_dune-alexandria_dune"
+    },
+    {
+      "relation": "cites",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "weight": 1.0,
+      "source": "docs_dune-alexandria",
+      "target": "docs_dune-alexandria_knowledge_as_power"
+    },
+    {
+      "relation": "cites",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "weight": 1.0,
+      "source": "docs_dune-alexandria",
+      "target": "docs_dune-alexandria_paul_atreides"
+    },
+    {
+      "relation": "cites",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "weight": 1.0,
+      "source": "docs_dune-alexandria",
+      "target": "docs_dune-alexandria_preservation_of_knowledge"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/tracking/TRACKING_README.md",
+      "weight": 1.0,
+      "source": "tracking_tracking_readme",
+      "target": "tracking_tracking_readme_grabify"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/tracking/TRACKING_README.md",
+      "weight": 1.0,
+      "source": "tracking_tracking_readme",
+      "target": "tracking_tracking_readme_tracking_system"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/tracking/TRACKING_README.md",
+      "weight": 1.0,
+      "source": "tracking_tracking_readme",
+      "target": "tracking_tracking_readme_urltracker"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/tracking/TRACKING_README.md",
+      "weight": 1.0,
+      "source": "tracking_tracking_readme",
+      "target": "tracking_tracking_readme_visitor_tracking"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "weight": 1.0,
+      "source": "vue_references_core-new-apis_ref",
+      "target": "vue_references_core-new-apis_computed"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "weight": 1.0,
+      "source": "vue_references_core-new-apis_ref",
+      "target": "vue_references_core-new-apis_reactive"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": ".agents/skills/vue/references/core-new-apis.md",
+      "weight": 1.0,
+      "source": "vue_references_core-new-apis_ref",
+      "target": "vue_references_core-new-apis_shallowref"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docs/ARCHITECTURE.md",
+      "weight": 1.0,
+      "source": "docs_architecture_clean_architecture",
+      "target": "docs_architecture_feature_based_architecture"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "weight": 1.0,
+      "source": "docs_dune-alexandria_biblioteca_de_alejandria",
+      "target": "docs_dune-alexandria_casa_atreides"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/DUNE-ALEXANDRIA.md",
+      "weight": 1.0,
+      "source": "docs_dune-alexandria_knowledge_as_power",
+      "target": "docs_dune-alexandria_preservation_of_knowledge"
     }
   ],
-  "hyperedges": []
+  "hyperedges": [
+    {
+      "id": "vue_reactivity_system",
+      "label": "Vue Reactivity System",
+      "nodes": [
+        "vue_references_core-new-apis_ref",
+        "vue_references_core-new-apis_shallowref",
+        "vue_references_core-new-apis_computed",
+        "vue_references_core-new-apis_reactive",
+        "vue_references_core-new-apis_watch",
+        "vue_references_core-new-apis_watcheffect",
+        "vue_references_core-new-apis_effectscope",
+        "vue_references_core-new-apis_composables"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": ".agents/skills/vue/references/core-new-apis.md"
+    },
+    {
+      "id": "vue_built_in_components",
+      "label": "Vue Built-in Components",
+      "nodes": [
+        "vue_references_advanced-patterns_transition",
+        "vue_references_advanced-patterns_teleport",
+        "vue_references_advanced-patterns_suspense",
+        "vue_references_advanced-patterns_keepalive",
+        "vue_references_advanced-patterns_v_memo",
+        "vue_references_advanced-patterns_custom_directives"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": ".agents/skills/vue/references/advanced-patterns.md"
+    },
+    {
+      "id": "dune_alexandria_metaphor",
+      "label": "Dune/Alexandria Metaphor",
+      "nodes": [
+        "docs_dune-alexandria_dune",
+        "docs_dune-alexandria_biblioteca_de_alejandria",
+        "docs_dune-alexandria_casa_atreides",
+        "docs_dune-alexandria_paul_atreides",
+        "docs_dune-alexandria_duke_leto_atreides",
+        "docs_dune-alexandria_knowledge_as_power",
+        "docs_dune-alexandria_preservation_of_knowledge"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "docs/DUNE-ALEXANDRIA.md"
+    }
+  ],
+  "built_at_commit": "5686ed52ae53e77d722cf6c64d67cde68b1f7ec8"
 }

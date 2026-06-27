@@ -91,6 +91,12 @@ const router = createRouter({
           component: () =>
             import("@/features/maintenance/presentation/components/MaintenanceForm.vue"),
         },
+        {
+          path: "coliseo/equipment/list",
+          name: "equipment-list",
+          component: () =>
+            import("@/features/maintenance/presentation/components/EquipmentPage.vue"),
+        },
       ],
     },
   ],
