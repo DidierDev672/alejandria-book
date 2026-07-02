@@ -39,6 +39,7 @@ La app permite a usuarios autenticados gestionar un catálogo completo de libros
 | [Axios](https://axios-http.com/) | ^1.18 | Cliente HTTP con interceptores |
 | [Tailwind CSS](https://tailwindcss.com/) | ^4.3 | Estilos utility-first |
 | [@vueuse/motion](https://motion.vueuse.org/) | ^3.0 | Animaciones y transiciones |
+| [Supabase](https://supabase.com/) | ^2.x | Backend-as-a-Service (auth, DB, storage) |
 
 ---
 
@@ -227,13 +228,19 @@ Crea un archivo `.env` en la raíz del proyecto (usa `.env.example` como plantil
 | Variable | Descripción | Ejemplo |
 |----------|-------------|---------|
 | `VITE_API_ATREIDES` | URL base del backend REST | `http://localhost:8080` |
+| `VITE_SUPABASE_URL` | URL del proyecto Supabase | `https://xxx.supabase.co` |
+| `VITE_SUPABASE_ANON_KEY` | Anon key de Supabase | `eyJhbGciOiJIUzI1NiIs...` |
 
 ```env
 # .env
 VITE_API_ATREIDES=http://localhost:8080
+
+# Supabase
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key-here
 ```
 
-> ⚠️ Las variables `VITE_*` se exponen al cliente. **Nunca** pongas secrets aquí.
+> ⚠️ Las variables `VITE_*` se exponen al cliente. **Nunca** pongas secrets aquí. El `anon key` de Supabase es seguro para el cliente ya que las reglas de seguridad se controlan en el backend (Row Level Security).
 
 ---
 

@@ -11,8 +11,23 @@ La **API Atreides** es el backend de la biblioteca digital de la Casa Atreides. 
 | Variable | Descripción | Valor por defecto |
 |----------|-------------|-------------------|
 | `VITE_API_ATREIDES` | URL base del backend | `http://localhost:8080` |
+| `VITE_SUPABASE_URL` | URL del proyecto Supabase | `https://xxx.supabase.co` |
+| `VITE_SUPABASE_ANON_KEY` | Anon key de Supabase | `eyJhbGciOiJIUzI1NiIs...` |
 
-Definida en `.env` en la raíz del proyecto. Solo variables con prefijo `VITE_` son accesibles desde el código cliente.
+Definidas en `.env` en la raíz del proyecto. Solo variables con prefijo `VITE_` son accesibles desde el código cliente.
+
+### Supabase
+
+El proyecto utiliza Supabase como Backend-as-a-Service para:
+- **Autenticación**: Gestión de usuarios y sesiones
+- **Base de datos**: PostgreSQL gestionado
+- **Storage**: Almacenamiento de archivos (imágenes, videos)
+
+Configuración requerida en el dashboard de Supabase:
+1. Crear proyecto en [supabase.com](https://supabase.com)
+- Ir a **Settings → API**
+- Copiar `Project URL` y `anon public` key
+- Configurar en `.env`
 
 ---
 
@@ -234,6 +249,111 @@ Elimina un autor.
 
 ---
 
+### Ejercicios
+
+Ejercicios vinculados a equipamiento del gimnasio.
+
+#### `GET /exercises`
+
+Lista ejercicios con filtros opcionales.
+
+**Query params:**
+- `equipment_id` - Filtrar por equipo
+- `muscle_group` - Filtrar por grupo muscular
+- `difficulty` - Filtrar por dificultad
+
+**Response 200:**
+
+```json
+{
+  "data": [
+    {
+      "id": "EX20260627001",
+      "name": "Press de banca",
+      "muscleGroup": "Pectorales",
+      "difficulty": "INTERMEDIATE",
+      "video": "https://...",
+      "equipmentId": "EQ001",
+      "createdAt": "2024-01-01T00:00:00Z"
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 1
+  }
+}
+```
+
+**Implementación frontend:** `axiosExercise.get('', { params })`
+
+---
+
+#### `GET /exercises/:id`
+
+Obtiene un ejercicio por identificador.
+
+**Implementación frontend:** `ExerciseService.getById(id)`
+
+---
+
+#### `POST /exercises`
+
+Crea un nuevo ejercicio. Acepta JSON o `multipart/form-data` (para subir video).
+
+**Request body (JSON):**
+
+```json
+{
+  "equipmentId": "EQ001",
+  "name": "Press de banca",
+  "muscleGroup": "Pectorales",
+  "difficulty": "INTERMEDIATE"
+}
+```
+
+**Request body (FormData con video):**
+
+```javascript
+const formData = new FormData()
+formData.append('equipmentId', 'EQ001')
+formData.append('name', 'Press de banca')
+formData.append('muscleGroup', 'Pectorales')
+formData.append('difficulty', 'INTERMEDIATE')
+formData.append('video', file) // File object
+```
+
+**Implementación frontend:** `axiosExercise.post('', payload)`
+
+---
+
+#### `PUT /exercises/:id`
+
+Actualiza un ejercicio existente.
+
+**Request body:**
+
+```json
+{
+  "name": "Press de banca inclinado",
+  "muscleGroup": "Pectorales",
+  "difficulty": "ADVANCED"
+}
+```
+
+**Implementación frontend:** `ExerciseService.update(id, payload)`
+
+---
+
+#### `DELETE /exercises/:id`
+
+Elimina un ejercicio vinculado a un equipo.
+
+**Implementación frontend:** `axiosExercise.delete('/{id}')`
+
+---
+
 ## Modelos de datos (TypeScript)
 
 ### User
@@ -289,6 +409,29 @@ interface Author {
 }
 ```
 
+### Exercise
+
+```typescript
+interface Exercise {
+  id: string
+  name: string
+  muscleGroup: string
+  difficulty: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED'
+  video?: string
+  equipmentId: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+interface CreateExercisePayload {
+  equipmentId: string
+  name: string
+  muscleGroup: string
+  difficulty: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED'
+  video?: File | string
+}
+```
+
 ### Error estándar
 
 ```typescript
@@ -306,8 +449,10 @@ interface ApiError {
 | `AuthApi` | `src/features/auth/infrastructure/AuthApi.ts` | `login()` |
 | `BookApi` | `src/features/dashboard/infrastructure/BookApi.ts` | `getAll`, `getById`, `create`, `update`, `remove` |
 | `AuthorApi` | `src/features/dashboard/infrastructure/AuthorApi.ts` | `getAll`, `getById`, `create`, `update`, `remove` |
+| `ExerciseService` | `src/features/exercise/infrastructure/services/exerciseService.ts` | `getAll`, `getById`, `create`, `update`, `delete`, `getByEquipmentId`, `uploadVideo` |
 
-Todas utilizan `axiosInstance` importado desde `@/infrastructure/http/axiosInstance`.
+- `AuthApi`, `BookApi`, `AuthorApi` utilizan `axiosInstance` importado desde `@/infrastructure/http/axiosInstance`
+- `ExerciseService` utiliza `axiosExercise` importado desde `@/features/exercise/infrastructure/http/axiosExercise` (usa proxy Vite)
 
 ---
 

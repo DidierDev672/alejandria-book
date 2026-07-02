@@ -10,17 +10,26 @@ const sidebarOpen = ref(false)
 
 const userName = computed(() => authStore.user?.name_full || 'Usuario')
 
-const navItems = [
-  { label: 'Dashboard', icon: 'grid', route: '/dashboard' },
+// Item simple Dashboard
+const dashboardItem = { label: 'Dashboard', icon: 'grid', route: '/dashboard' }
+
+// Dropdown Alejandría
+const alejandriaOpen = ref(false)
+const alejandriaItems = [
   { label: 'Libros', icon: 'book', route: '/dashboard/books' },
   { label: 'Crear Libro', icon: 'book-plus', route: '/dashboard/books/create' },
   { label: 'Autores', icon: 'users', route: '/dashboard/authors' },
-  { label: 'Bitácora de Notas', icon: 'note-list', route: '/dashboard/notes' },
-  { label: 'Crear Nota', icon: 'note', route: '/dashboard/note' },
+  { label: 'Crear nota', icon: 'note', route: '/dashboard/note' },
+  { label: 'Bitácora de notas', icon: 'note-list', route: '/dashboard/notes' },
   { label: 'Crear Tema', icon: 'topic', route: '/dashboard/topic' },
-  { label: 'Lista de temas', icon: 'topic', route: '/dashboard/topics' },
-  { label: 'Usuarios', icon: 'user-list', route: '/dashboard/users' },
-  { label: 'Crear usuario', icon: 'user-plus', route: '/dashboard/users/create' }
+  { label: 'Lista de temas', icon: 'topic-list', route: '/dashboard/topics' }
+]
+
+// Dropdown Usuario
+const usuarioOpen = ref(false)
+const usuarioItems = [
+  { label: 'Crear usuarios', icon: 'user-plus', route: '/dashboard/users/create' },
+  { label: 'Usuarios', icon: 'user-list', route: '/dashboard/users' }
 ]
 
 // Dropdown Coliseo
@@ -29,6 +38,14 @@ const coliseoItems = [
   { label: 'Crear equipo', icon: 'equipment', route: '/dashboard/coliseo/equipment/create' },
   { label: 'Lista de equipos', icon: 'equipment-list', route: '/dashboard/coliseo/equipment/list' }
 ]
+
+function toggleAlejandria() {
+  alejandriaOpen.value = !alejandriaOpen.value
+}
+
+function toggleUsuario() {
+  usuarioOpen.value = !usuarioOpen.value
+}
 
 function toggleColiseo() {
   coliseoOpen.value = !coliseoOpen.value
@@ -83,73 +100,174 @@ function logout() {
 
       <!-- Nav -->
       <nav class="relative flex-1 space-y-0.5 overflow-y-auto p-4">
-        <button v-for="item in navItems" :key="item.route" type="button"
+        <!-- Dashboard Item Simple -->
+        <button v-motion :initial="{ opacity: 0, x: -20 }" :enter="{ opacity: 1, x: 0 }"
+          :transition="{ duration: 400, delay: 0, ease: [0.16, 1, 0.3, 1] }" type="button"
           class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200"
-          :class="route.path === item.route
+          :class="route.path === dashboardItem.route
             ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/10 text-amber-500 shadow-sm ring-1 ring-amber-500/20'
-            : 'text-stone-400 hover:bg-stone-800 hover:text-amber-100'" @click="navigateTo(item.route)">
+            : 'text-stone-400 hover:bg-stone-800 hover:text-amber-100'" @click="navigateTo(dashboardItem.route)">
           <!-- Indicador activo -->
-          <span v-if="route.path === item.route"
+          <span v-if="route.path === dashboardItem.route"
             class="absolute left-0 h-7 w-1 rounded-r-full bg-gradient-to-b from-amber-400 to-orange-500" />
 
-          <!-- Iconos -->
-          <svg v-if="item.icon === 'grid'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="1.8">
+          <!-- Icono Grid -->
+          <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
             <path stroke-linecap="round" stroke-linejoin="round"
               d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
           </svg>
-          <svg v-else-if="item.icon === 'book'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
-          <svg v-else-if="item.icon === 'book-plus'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M20 12h-4m2-2v4" />
-          </svg>
-          <svg v-else-if="item.icon === 'users'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-          </svg>
-          <svg v-else-if="item.icon === 'note-list'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6M9 16h6" />
-          </svg>
-          <svg v-else-if="item.icon === 'note'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-          </svg>
-          <svg v-else-if="item.icon === 'topic'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-          </svg>
-          <svg v-else-if="item.icon === 'user-list'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-          </svg>
-          <svg v-else-if="item.icon === 'user-plus'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-          </svg>
-          {{ item.label }}
+          {{ dashboardItem.label }}
         </button>
 
-        <!-- Dropdown Coliseo -->
-        <div class="space-y-0.5">
-          <button
-            type="button"
+        <!-- ═══ DROPDOWN ALEJANDRÍA ═══ -->
+        <div v-motion :initial="{ opacity: 0, x: -20 }" :enter="{ opacity: 1, x: 0 }"
+          :transition="{ duration: 400, delay: 50, ease: [0.16, 1, 0.3, 1] }" class="space-y-0.5">
+          <button type="button"
             class="flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 text-stone-400 hover:bg-stone-800 hover:text-amber-100"
-            @click="toggleColiseo"
-          >
+            @click="toggleAlejandria">
+            <div class="flex items-center gap-3">
+              <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              <span>Alejandría</span>
+            </div>
+            <svg class="h-4 w-4 shrink-0 transition-transform duration-300" :class="{ 'rotate-180': alejandriaOpen }"
+              fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <!-- Subitems de Alejandría con Motion staggered -->
+          <Transition enter-active-class="transition-all duration-300 ease-out"
+            enter-from-class="opacity-0 -translate-y-2" enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 translate-y-0"
+            leave-to-class="opacity-0 -translate-y-2">
+            <div v-if="alejandriaOpen" class="ml-4 space-y-0.5 border-l border-amber-500/20 pl-3">
+              <button v-for="(item, index) in alejandriaItems" :key="item.route" v-motion
+                :initial="{ opacity: 0, x: -15 }" :enter="{ opacity: 1, x: 0 }"
+                :transition="{ duration: 300, delay: index * 60, ease: [0.16, 1, 0.3, 1] }" type="button"
+                class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200"
+                :class="route.path === item.route
+                  ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/10 text-amber-500 shadow-sm ring-1 ring-amber-500/20'
+                  : 'text-stone-400 hover:bg-stone-800 hover:text-amber-100'" @click="navigateTo(item.route)">
+                <!-- Indicador activo -->
+                <span v-if="route.path === item.route"
+                  class="absolute left-0 h-7 w-1 rounded-r-full bg-gradient-to-b from-amber-400 to-orange-500" />
+
+                <!-- Icono Libro -->
+                <svg v-if="item.icon === 'book'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <!-- Icono Book Plus -->
+                <svg v-else-if="item.icon === 'book-plus'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20 12h-4m2-2v4" />
+                </svg>
+                <!-- Icono Users -->
+                <svg v-else-if="item.icon === 'users'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                </svg>
+                <!-- Icono Note -->
+                <svg v-else-if="item.icon === 'note'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <!-- Icono Note List -->
+                <svg v-else-if="item.icon === 'note-list'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6M9 16h6" />
+                </svg>
+                <!-- Icono Topic -->
+                <svg v-else-if="item.icon === 'topic'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+                <!-- Icono Topic List -->
+                <svg v-else-if="item.icon === 'topic-list'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                  <circle cx="9" cy="6" r="1.5" fill="currentColor" />
+                  <circle cx="9" cy="10" r="1.5" fill="currentColor" />
+                  <circle cx="9" cy="14" r="1.5" fill="currentColor" />
+                  <circle cx="9" cy="18" r="1.5" fill="currentColor" />
+                </svg>
+                {{ item.label }}
+              </button>
+            </div>
+          </Transition>
+        </div>
+
+        <!-- ═══ DROPDOWN USUARIO ═══ -->
+        <div v-motion :initial="{ opacity: 0, x: -20 }" :enter="{ opacity: 1, x: 0 }"
+          :transition="{ duration: 400, delay: 100, ease: [0.16, 1, 0.3, 1] }" class="space-y-0.5">
+          <button type="button"
+            class="flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 text-stone-400 hover:bg-stone-800 hover:text-amber-100"
+            @click="toggleUsuario">
+            <div class="flex items-center gap-3">
+              <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <span>Usuario</span>
+            </div>
+            <svg class="h-4 w-4 shrink-0 transition-transform duration-300" :class="{ 'rotate-180': usuarioOpen }"
+              fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <!-- Subitems de Usuario con Motion staggered -->
+          <Transition enter-active-class="transition-all duration-300 ease-out"
+            enter-from-class="opacity-0 -translate-y-2" enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 translate-y-0"
+            leave-to-class="opacity-0 -translate-y-2">
+            <div v-if="usuarioOpen" class="ml-4 space-y-0.5 border-l border-amber-500/20 pl-3">
+              <button v-for="(item, index) in usuarioItems" :key="item.route" v-motion :initial="{ opacity: 0, x: -15 }"
+                :enter="{ opacity: 1, x: 0 }"
+                :transition="{ duration: 300, delay: index * 80, ease: [0.16, 1, 0.3, 1] }" type="button"
+                class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200"
+                :class="route.path === item.route
+                  ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/10 text-amber-500 shadow-sm ring-1 ring-amber-500/20'
+                  : 'text-stone-400 hover:bg-stone-800 hover:text-amber-100'" @click="navigateTo(item.route)">
+                <!-- Indicador activo -->
+                <span v-if="route.path === item.route"
+                  class="absolute left-0 h-7 w-1 rounded-r-full bg-gradient-to-b from-amber-400 to-orange-500" />
+
+                <!-- Icono User Plus -->
+                <svg v-if="item.icon === 'user-plus'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                </svg>
+                <!-- Icono User List -->
+                <svg v-else-if="item.icon === 'user-list'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                {{ item.label }}
+              </button>
+            </div>
+          </Transition>
+        </div>
+
+        <!-- ═══ DROPDOWN COLISEO ═══ -->
+        <div v-motion :initial="{ opacity: 0, x: -20 }" :enter="{ opacity: 1, x: 0 }"
+          :transition="{ duration: 400, delay: 150, ease: [0.16, 1, 0.3, 1] }" class="space-y-0.5">
+          <button type="button"
+            class="flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 text-stone-400 hover:bg-stone-800 hover:text-amber-100"
+            @click="toggleColiseo">
             <div class="flex items-center gap-3">
               <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -157,38 +275,25 @@ function logout() {
               </svg>
               <span>Coliseo</span>
             </div>
-            <svg
-              class="h-4 w-4 shrink-0 transition-transform duration-300"
-              :class="{ 'rotate-180': coliseoOpen }"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
+            <svg class="h-4 w-4 shrink-0 transition-transform duration-300" :class="{ 'rotate-180': coliseoOpen }"
+              fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
 
-          <!-- Subitems de Coliseo -->
-          <Transition
-            enter-active-class="transition-all duration-300 ease-out"
-            enter-from-class="opacity-0 -translate-y-2"
-            enter-to-class="opacity-100 translate-y-0"
-            leave-active-class="transition-all duration-200 ease-in"
-            leave-from-class="opacity-100 translate-y-0"
-            leave-to-class="opacity-0 -translate-y-2"
-          >
+          <!-- Subitems de Coliseo con Motion staggered -->
+          <Transition enter-active-class="transition-all duration-300 ease-out"
+            enter-from-class="opacity-0 -translate-y-2" enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 translate-y-0"
+            leave-to-class="opacity-0 -translate-y-2">
             <div v-if="coliseoOpen" class="ml-4 space-y-0.5 border-l border-amber-500/20 pl-3">
-              <button
-                v-for="item in coliseoItems"
-                :key="item.route"
-                type="button"
+              <button v-for="(item, index) in coliseoItems" :key="item.route" v-motion :initial="{ opacity: 0, x: -15 }"
+                :enter="{ opacity: 1, x: 0 }"
+                :transition="{ duration: 300, delay: index * 80, ease: [0.16, 1, 0.3, 1] }" type="button"
                 class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200"
                 :class="route.path === item.route
                   ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/10 text-amber-500 shadow-sm ring-1 ring-amber-500/20'
-                  : 'text-stone-400 hover:bg-stone-800 hover:text-amber-100'"
-                @click="navigateTo(item.route)"
-              >
+                  : 'text-stone-400 hover:bg-stone-800 hover:text-amber-100'" @click="navigateTo(item.route)">
                 <!-- Indicador activo -->
                 <span v-if="route.path === item.route"
                   class="absolute left-0 h-7 w-1 rounded-r-full bg-gradient-to-b from-amber-400 to-orange-500" />

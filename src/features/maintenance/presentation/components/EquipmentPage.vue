@@ -3,8 +3,10 @@ import axiosInstance from '@/infrastructure/http/axiosInstance'
 import axiosExercise from '@/features/exercise/infrastructure/http/axiosExercise'
 import { useEquipmentStore } from '@/stores/equipmentStore.js'
 import BaseErrorDisplay from '@/utils/components/BaseErrorDisplay.vue'
+import BaseLoading from '@/utils/components/BaseLoading.vue'
 import CustomVideoPlayer from '@/utils/components/CustomVideoPlayer.vue'
 import EmptyBox from '@/utils/components/EmptyBox.vue'
+import { useVideoUpload, SupabaseVideoRepository, getSupabaseVideoConfig } from '@/features/video'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref } from 'vue'
 
@@ -74,6 +76,39 @@ const exerciseLoadError = ref(null)
 const isDeleteExerciseModalOpen = ref(false)
 const exerciseToDelete = ref(null)
 const isDeletingExercise = ref(false)
+
+// ============================================================
+// STATE - LOADING (para subida a Supabase + API)
+// ============================================================
+const isLoading = ref(false)
+const loadingText = ref('')
+
+// ============================================================
+// STATE - VIDEO UPLOAD ERROR
+// ============================================================
+const videoUploadError = ref({
+  show: false,
+  title: 'Error al subir el video',
+  message: 'No se pudo subir el video al almacenamiento. Por favor, intenta nuevamente.',
+  isRetrying: false
+})
+
+// ============================================================
+// SUPABASE VIDEO UPLOAD SETUP
+// ============================================================
+const repository = new SupabaseVideoRepository(getSupabaseVideoConfig())
+
+// Usuario temporal (en producción obtener del auth store)
+const currentUserId = ref('user-system-001')
+
+const {
+  state: uploadState,
+  uploadVideoOnly,
+  resetState: resetUploadState
+} = useVideoUpload({
+  repository,
+  currentUserId: currentUserId.value
+})
 
 // ============================================================
 // STATE - VIDEO FILE UPLOAD
@@ -466,11 +501,14 @@ const resetExerciseForm = () => {
   // Reset de archivo de video
   selectedVideoFile.value = null
   videoFilePreview.value = null
+
+  // Reset del estado de subida de Supabase
+  resetUploadState()
 }
 
 /**
  * Envía el formulario de ejercicio al backend
- * POST /exercises/ (proxied to http://localhost:8080)
+ * Flujo: 1) Subir video a Supabase Storage (solo storage, sin BD) → 2) Enviar URL a API
  */
 const submitExercise = async () => {
   if (!selectedEquipment.value?.id) {
@@ -478,43 +516,109 @@ const submitExercise = async () => {
     return
   }
 
-  isSubmittingExercise.value = true
-  exerciseError.value = null
+  // Validar campos requeridos
+  if (!exerciseForm.value.name || !exerciseForm.value.muscle_group) {
+    exerciseError.value = 'Complete todos los campos obligatorios'
+    return
+  }
+
+  // Mostrar loading con BaseLoading
+  isLoading.value = true
+  loadingText.value = selectedVideoFile.value ? 'Subiendo video...' : 'Guardando ejercicio...'
+
+  let videoUrl = null
 
   try {
+    // PASO 1: Subir video a Supabase Storage (solo storage, sin crear registro en BD)
     if (selectedVideoFile.value) {
-      const formData = new FormData()
-      formData.append('equipmentId', selectedEquipment.value.id)
-      formData.append('name', exerciseForm.value.name)
-      formData.append('muscleGroup', exerciseForm.value.muscle_group)
-      formData.append('difficulty', exerciseForm.value.difficulty)
-      formData.append('video', selectedVideoFile.value)
+      loadingText.value = 'Subiendo video a almacenamiento...'
 
-      await axiosExercise.post('', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
-    } else {
-      await axiosExercise.post('', {
-        equipmentId: selectedEquipment.value.id,
-        name: exerciseForm.value.name,
-        muscleGroup: exerciseForm.value.muscle_group,
-        difficulty: exerciseForm.value.difficulty,
-      })
+      try {
+        // Crear payload para subida
+        const uploadPayload = {
+          title: `Ejercicio: ${exerciseForm.value.name}`,
+          description: `Video del ejercicio ${exerciseForm.value.name} para equipo ${selectedEquipment.value.name}`,
+          file: selectedVideoFile.value
+        }
+
+        // Subir video con tracking de progreso (solo a storage, sin tabla videos)
+        const uploadResult = await uploadVideoOnly(uploadPayload)
+
+        if (!uploadResult) {
+          throw new Error(uploadState.error || 'Error al subir el video')
+        }
+
+        videoUrl = uploadResult.url
+        console.log('[EquipmentPage] Video subido a Supabase Storage:', videoUrl)
+      } catch (uploadErr) {
+        console.error('[EquipmentPage] Error al subir video a Supabase:', uploadErr)
+        videoUploadError.value.show = true
+        videoUploadError.value.message = uploadErr.message || 'No se pudo subir el video al almacenamiento. Por favor, intenta nuevamente.'
+        isLoading.value = false
+        return // Detener el proceso si falla la subida del video
+      }
     }
+
+    // PASO 2: Enviar datos del ejercicio a la API con la URL del video
+    loadingText.value = 'Guardando ejercicio...'
+
+    const exerciseData = {
+      equipmentId: selectedEquipment.value.id,
+      name: exerciseForm.value.name,
+      muscleGroup: exerciseForm.value.muscle_group,
+      difficulty: exerciseForm.value.difficulty,
+      video: videoUrl // URL de Supabase Storage o null si no hay video
+    }
+
+    await axiosExercise.post('', exerciseData)
+
+    console.log('[EquipmentPage] Ejercicio guardado exitosamente en API')
+
+    // Ocultar error si existía previamente
+    videoUploadError.value.show = false
 
     // Recargar la lista de ejercicios del equipo
     if (selectedEquipment.value?.id) {
       await fetchEquipmentExercises(selectedEquipment.value.id)
     }
 
+    // Cerrar modales y resetear
     closeAddExerciseModal()
-    console.log('Ejercicio agregado exitosamente')
+    resetUploadState()
+
   } catch (err) {
+    console.error('[EquipmentPage] Error en proceso de guardado:', err)
     exerciseError.value = err.response?.data?.error || err.message || 'Error al crear el ejercicio'
-    console.error('[EquipmentPage] Error al crear ejercicio:', err)
+
+    // Si falló después de subir el video, informar pero no perder el error
+    if (videoUrl) {
+      console.warn('[EquipmentPage] El video se subió a Storage pero falló el registro en API:', videoUrl)
+    }
   } finally {
-    isSubmittingExercise.value = false
+    isLoading.value = false
+    videoUploadError.value.isRetrying = false
   }
+}
+
+/**
+ * Maneja el reintento de subida de video
+ */
+const retryVideoUpload = () => {
+  videoUploadError.value.isRetrying = true
+  videoUploadError.value.show = false
+  // Reintentar todo el proceso
+  submitExercise()
+}
+
+/**
+ * Cierra el modal de error de subida de video
+ */
+const closeVideoUploadError = () => {
+  videoUploadError.value.show = false
+  videoUploadError.value.isRetrying = false
+  isLoading.value = false
+  // Resetear el archivo de video seleccionado para permitir seleccionar otro
+  removeVideoFile()
 }
 </script>
 
@@ -1077,6 +1181,21 @@ const submitExercise = async () => {
               </div>
             </div>
 
+            <!-- Error de subida de video a Supabase -->
+            <div v-if="videoUploadError.show" class="mx-6 mt-4">
+              <BaseErrorDisplay
+                :title="videoUploadError.title"
+                :message="videoUploadError.message"
+                mode="container"
+                action-text="Reintentar"
+                show-secondary-action
+                secondary-action-text="Cancelar"
+                :is-retrying="videoUploadError.isRetrying"
+                @retry="retryVideoUpload"
+                @secondary-action="closeVideoUploadError"
+              />
+            </div>
+
             <div v-if="exerciseError" class="mx-6 mt-4">
               <BaseErrorDisplay :title="'Error al guardar el ejercicio'" :message="exerciseError" mode="container"
                 action-text="Reintentar" @retry="submitExercise" />
@@ -1245,6 +1364,17 @@ const submitExercise = async () => {
         </div>
       </div>
     </Teleport>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- LOADING: Subida Supabase + API (BaseLoading) -->
+    <!-- ══════════════════════════════════════ -->
+    <BaseLoading
+      :is-loading="isLoading"
+      :full-screen="true"
+      type="spinner"
+      color="text-amber-600"
+      :text="loadingText"
+    />
 
     <!-- ══════════════════════════════════════ -->
     <!-- MODAL: CONFIRMAR ELIMINACIÓN -->

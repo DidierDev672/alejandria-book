@@ -279,6 +279,72 @@ En términos de *Dune*: el guard es el **escudo personal** de la biblioteca — 
 5. Sincronizar navigation guard con `authStore`
 6. Introducir tests unitarios (Vitest) para dominio y servicios
 7. Extraer componentes UI reutilizables (`components/shared/`)
+8. Integrar Supabase Auth para autenticación
+9. Migrar endpoints a Supabase Edge Functions
+
+---
+
+## Integración con Supabase
+
+### Variables de entorno
+
+```env
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key-here
+```
+
+### Uso actual
+
+- **Auth**: El proyecto actualmente usa un backend custom (`API Atreides`) para autenticación
+- **Supabase**: Está configurado para uso futuro como BaaS
+
+### Plan de migración
+
+1. Configurar Supabase Auth con JWT
+2. Migrar tablas a PostgreSQL en Supabase
+3. Configurar Row Level Security (RLS)
+4. Migrar Storage para archivos multimedia
+
+---
+
+## Módulo de Ejercicios
+
+### Estructura
+
+```
+exercise/
+├── domain/
+│   └── Exercise.ts           # Entidad Exercise
+├── infrastructure/
+│   ├── http/
+│   │   └── axiosExercise.ts  # Instancia axios con proxy
+│   └── services/
+│       └── exerciseService.ts # CRUD completo
+├── application/
+│   └── stores/
+│       └── useExerciseStore.ts
+└── presentation/
+    └── components/
+        └── ExerciseList.vue
+```
+
+### Proxy Vite
+
+El módulo de ejercicios usa `axiosExercise` con `baseURL: '/exercises'` que pasa por el proxy de Vite:
+
+```typescript
+// vite.config.ts
+server: {
+  proxy: {
+    '/exercises': {
+      target: 'http://localhost:8080',
+      changeOrigin: true,
+    }
+  }
+}
+```
+
+Esto evita problemas de CORS en desarrollo.
 
 ---
 

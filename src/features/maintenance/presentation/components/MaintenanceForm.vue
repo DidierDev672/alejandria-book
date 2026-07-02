@@ -2,6 +2,7 @@
 import { useExerciseStore } from '@/features/exercise/application/stores/useExerciseStore'
 import type { CreateExerciseDTO } from '@/features/exercise/infrastructure/services/exerciseService'
 import BaseModal from '@/utils/components/BaseModal.vue'
+import ImageViewer from '@/utils/components/ImageViewer.vue'
 import { storeToRefs } from 'pinia'
 import { computed, reactive, ref } from 'vue'
 
@@ -20,6 +21,7 @@ interface MaintenanceForm {
   type: string
   status: 'active' | 'inactive' | 'pending' | ''
   lastMaintenance: string
+  imageUrl: string
 }
 
 interface FormErrors {
@@ -28,6 +30,7 @@ interface FormErrors {
   type: string
   status: string
   lastMaintenance: string
+  image: string
 }
 
 interface Exercise {
@@ -47,6 +50,7 @@ const form = reactive<MaintenanceForm>({
   type: '',
   status: '',
   lastMaintenance: '',
+  imageUrl: '',
 })
 
 const errors = reactive<FormErrors>({
@@ -55,7 +59,20 @@ const errors = reactive<FormErrors>({
   type: '',
   status: '',
   lastMaintenance: '',
+  image: '',
 })
+
+// ============================================================
+// ESTADO REACTIVO - IMAGEN DEL EQUIPO
+// ============================================================
+const selectedImageFile = ref<File | null>(null)
+const imagePreviewUrl = ref<string>('')
+const showImageViewer = ref(false)
+const fileInputRef = ref<HTMLInputElement | null>(null)
+const isDraggingImage = ref(false)
+
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024 // 5MB
 
 const isSubmitting = ref(false)
 const showSuccessMessage = ref(false)
@@ -190,12 +207,110 @@ const resetForm = () => {
   form.type = ''
   form.status = ''
   form.lastMaintenance = ''
+  form.imageUrl = ''
 
   errors.id = ''
   errors.name = ''
   errors.type = ''
   errors.status = ''
   errors.lastMaintenance = ''
+  errors.image = ''
+
+  // Limpiar imagen
+  clearImage()
+}
+
+// ============================================================
+// MANEJO DE IMAGEN DEL EQUIPO
+// ============================================================
+
+const validateImageFile = (file: File): boolean => {
+  errors.image = ''
+
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    errors.image = 'Formato no válido. Use: JPG, PNG, WebP o GIF'
+    return false
+  }
+
+  if (file.size > MAX_IMAGE_SIZE) {
+    errors.image = `Imagen muy grande. Máximo: ${(MAX_IMAGE_SIZE / 1024 / 1024).toFixed(0)}MB`
+    return false
+  }
+
+  return true
+}
+
+const handleImageSelect = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  if (input.files && input.files[0]) {
+    const file = input.files[0]
+    processImageFile(file)
+  }
+}
+
+const handleImageDragEnter = (event: DragEvent) => {
+  event.preventDefault()
+  isDraggingImage.value = true
+}
+
+const handleImageDragLeave = (event: DragEvent) => {
+  event.preventDefault()
+  isDraggingImage.value = false
+}
+
+const handleImageDrop = (event: DragEvent) => {
+  event.preventDefault()
+  isDraggingImage.value = false
+
+  if (event.dataTransfer?.files && event.dataTransfer.files[0]) {
+    const file = event.dataTransfer.files[0]
+    processImageFile(file)
+  }
+}
+
+const processImageFile = (file: File) => {
+  if (!validateImageFile(file)) {
+    return
+  }
+
+  selectedImageFile.value = file
+
+  // Crear URL de previsualización
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    imagePreviewUrl.value = e.target?.result as string
+    form.imageUrl = imagePreviewUrl.value // Guardar en el formulario
+  }
+  reader.readAsDataURL(file)
+}
+
+const clearImage = () => {
+  selectedImageFile.value = null
+  imagePreviewUrl.value = ''
+  form.imageUrl = ''
+  errors.image = ''
+
+  if (fileInputRef.value) {
+    fileInputRef.value.value = ''
+  }
+}
+
+const openImageViewer = () => {
+  if (imagePreviewUrl.value) {
+    showImageViewer.value = true
+  }
+}
+
+const closeImageViewer = () => {
+  showImageViewer.value = false
+}
+
+const formatFileSize = (bytes: number): string => {
+  if (bytes === 0) return '0 B'
+  const k = 1024
+  const sizes = ['B', 'KB', 'MB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i]
 }
 
 // ============================================================
@@ -660,6 +775,115 @@ const saveExercises = async (): Promise<void> => {
             </Transition>
           </div>
 
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <!-- CAMPO: IMAGEN DEL EQUIPO (con previsualización) -->
+          <!-- ═══════════════════════════════════════════════════════════ -->
+          <div v-motion :initial="{ opacity: 0, x: -20 }" :enter="{ opacity: 1, x: 0 }"
+            :transition="{ duration: 400, delay: 850 }" class="space-y-3">
+            <label class="block text-sm font-semibold text-stone-700">
+              Imagen del Equipo
+              <span class="text-stone-400 font-normal">(opcional)</span>
+            </label>
+
+            <!-- Área de Drag & Drop o Previsualización -->
+            <div v-if="!imagePreviewUrl"
+              :class="[
+                'relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-6 transition-all duration-300 cursor-pointer',
+                isDraggingImage
+                  ? 'border-amber-500 bg-amber-100/50'
+                  : 'border-amber-300/60 bg-amber-50/30 hover:border-amber-400 hover:bg-amber-50/50'
+              ]"
+              @dragenter="handleImageDragEnter"
+              @dragleave="handleImageDragLeave"
+              @dragover.prevent
+              @drop="handleImageDrop"
+              @click="fileInputRef?.click()"
+            >
+              <input
+                ref="fileInputRef"
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                class="hidden"
+                @change="handleImageSelect"
+              />
+
+              <!-- Icono de imagen -->
+              <div class="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 text-amber-500">
+                <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+
+              <p class="text-center text-sm text-stone-600">
+                Arrastra una imagen o <span class="font-medium text-amber-600 underline">haz clic para seleccionar</span>
+              </p>
+              <p class="mt-1 text-xs text-stone-400">JPG, PNG, WebP o GIF hasta 5MB</p>
+            </div>
+
+            <!-- Previsualización de imagen seleccionada -->
+            <div v-else class="relative overflow-hidden rounded-xl border-2 border-amber-200/60 bg-amber-50/30 p-3">
+              <div class="flex gap-4">
+                <!-- Thumbnail clickeable para abrir visor -->
+                <div
+                  class="group relative h-32 w-32 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border border-amber-200 bg-white shadow-sm transition hover:shadow-md"
+                  @click="openImageViewer"
+                >
+                  <img
+                    :src="imagePreviewUrl"
+                    alt="Previsualización del equipo"
+                    class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                  />
+                  <!-- Overlay con icono de expandir -->
+                  <div class="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/30">
+                    <svg class="h-8 w-8 text-white opacity-0 transition group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Información del archivo -->
+                <div class="flex flex-1 flex-col justify-between py-1">
+                  <div>
+                    <p class="text-sm font-medium text-stone-800">{{ selectedImageFile?.name }}</p>
+                    <p class="text-xs text-stone-500">
+                      {{ selectedImageFile ? formatFileSize(selectedImageFile.size) : '' }}
+                    </p>
+                    <p class="mt-2 text-xs text-amber-600">
+                      Haz clic en la imagen para ver en pantalla completa
+                    </p>
+                  </div>
+
+                  <!-- Botón eliminar -->
+                  <button
+                    type="button"
+                    class="self-start flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-rose-500 transition hover:bg-rose-50"
+                    @click="clearImage"
+                  >
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Eliminar imagen
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mensaje de error -->
+            <Transition enter-active-class="transition-all duration-300 ease-out"
+              enter-from-class="opacity-0 -translate-y-2" enter-to-class="opacity-100 translate-y-0"
+              leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 translate-y-0"
+              leave-to-class="opacity-0 -translate-y-2">
+              <p v-if="errors.image" class="text-xs sm:text-sm text-rose-500 flex items-center gap-1.5">
+                <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {{ errors.image }}
+              </p>
+            </Transition>
+          </div>
+
           <!-- Botones de Acción -->
           <div v-motion :initial="{ opacity: 0, y: 20 }" :enter="{ opacity: 1, y: 0 }"
             :transition="{ duration: 400, delay: 900 }"
@@ -1005,6 +1229,16 @@ const saveExercises = async (): Promise<void> => {
         </button>
       </template>
     </BaseModal>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- VISOR DE IMAGEN EN PANTALLA COMPLETA -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <ImageViewer
+      :is-open="showImageViewer"
+      :images="[imagePreviewUrl]"
+      :initial-index="0"
+      @close="closeImageViewer"
+    />
   </section>
 </template>
 
