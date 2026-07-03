@@ -13,6 +13,7 @@
     "@vueuse/motion": "^3.0.3",
     "axios": "^1.18.0",
     "dotenv": "^17.4.2",
+    "marked": "^18.0.5",
     "motion": "^12.40.0",
     "motion-vue": "^0.0.1",
     "pinia": "^3.0.4",

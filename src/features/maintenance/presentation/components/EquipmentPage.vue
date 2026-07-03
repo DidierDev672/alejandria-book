@@ -8,7 +8,7 @@ import CustomVideoPlayer from '@/utils/components/CustomVideoPlayer.vue'
 import EmptyBox from '@/utils/components/EmptyBox.vue'
 import { useVideoUpload, SupabaseVideoRepository, getSupabaseVideoConfig } from '@/features/video'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 // ============================================================
 // STORE
@@ -91,6 +91,24 @@ const videoUploadError = ref({
   title: 'Error al subir el video',
   message: 'No se pudo subir el video al almacenamiento. Por favor, intenta nuevamente.',
   isRetrying: false
+})
+
+// ============================================================
+// STATE - URL CONFIRMATION MODAL
+// ============================================================
+const showUrlConfirmationModal = ref(false)
+const confirmedVideoUrl = ref('')
+const originalSupabaseUrl = ref('') // Guardar la URL original de Supabase para poder restaurar
+const isTestingUrl = ref(false)
+const urlTestError = ref('')
+const isConfirmingUrl = ref(false)
+const pendingVideoStoragePath = ref('') // Para poder eliminar si se rechaza
+
+// Watcher para depurar cambios en la URL confirmada
+watch(confirmedVideoUrl, (newVal, oldVal) => {
+  console.log('[EquipmentPage] 👁️ WATCH - confirmedVideoUrl cambió:')
+  console.log('  De:', oldVal)
+  console.log('  A:', newVal)
 })
 
 // ============================================================
@@ -508,7 +526,7 @@ const resetExerciseForm = () => {
 
 /**
  * Envía el formulario de ejercicio al backend
- * Flujo: 1) Subir video a Supabase Storage (solo storage, sin BD) → 2) Enviar URL a API
+ * Flujo: 1) Subir video a Supabase Storage → 2) Confirmar URL → 3) Enviar a API
  */
 const submitExercise = async () => {
   if (!selectedEquipment.value?.id) {
@@ -522,53 +540,95 @@ const submitExercise = async () => {
     return
   }
 
+  // Si no hay video, enviar directamente (sin confirmación de URL)
+  if (!selectedVideoFile.value) {
+    await saveExerciseToAPI(null)
+    return
+  }
+
   // Mostrar loading con BaseLoading
   isLoading.value = true
-  loadingText.value = selectedVideoFile.value ? 'Subiendo video...' : 'Guardando ejercicio...'
-
-  let videoUrl = null
+  loadingText.value = 'Subiendo video...'
 
   try {
-    // PASO 1: Subir video a Supabase Storage (solo storage, sin crear registro en BD)
-    if (selectedVideoFile.value) {
-      loadingText.value = 'Subiendo video a almacenamiento...'
+    // PASO 1: Subir video a Supabase Storage
+    loadingText.value = 'Subiendo video a almacenamiento...'
 
-      try {
-        // Crear payload para subida
-        const uploadPayload = {
-          title: `Ejercicio: ${exerciseForm.value.name}`,
-          description: `Video del ejercicio ${exerciseForm.value.name} para equipo ${selectedEquipment.value.name}`,
-          file: selectedVideoFile.value
-        }
-
-        // Subir video con tracking de progreso (solo a storage, sin tabla videos)
-        const uploadResult = await uploadVideoOnly(uploadPayload)
-
-        if (!uploadResult) {
-          throw new Error(uploadState.error || 'Error al subir el video')
-        }
-
-        videoUrl = uploadResult.url
-        console.log('[EquipmentPage] Video subido a Supabase Storage:', videoUrl)
-      } catch (uploadErr) {
-        console.error('[EquipmentPage] Error al subir video a Supabase:', uploadErr)
-        videoUploadError.value.show = true
-        videoUploadError.value.message = uploadErr.message || 'No se pudo subir el video al almacenamiento. Por favor, intenta nuevamente.'
-        isLoading.value = false
-        return // Detener el proceso si falla la subida del video
-      }
+    // Crear payload para subida
+    const uploadPayload = {
+      title: `Ejercicio: ${exerciseForm.value.name}`,
+      description: `Video del ejercicio ${exerciseForm.value.name} para equipo ${selectedEquipment.value.name}`,
+      file: selectedVideoFile.value
     }
 
-    // PASO 2: Enviar datos del ejercicio a la API con la URL del video
-    loadingText.value = 'Guardando ejercicio...'
+    // Subir video con tracking de progreso
+    const uploadResult = await uploadVideoOnly(uploadPayload)
 
+    if (!uploadResult) {
+      throw new Error(uploadState.error || 'Error al subir el video')
+    }
+
+    // Guardar URL y storage path para posible eliminación
+    const rawUrl = uploadResult.url
+
+    // Validar que la URL es válida
+    if (!rawUrl || typeof rawUrl !== 'string') {
+      throw new Error('La URL retornada por Supabase es inválida: ' + JSON.stringify(rawUrl))
+    }
+
+    // Limpiar la URL si es necesario (eliminar espacios, etc.)
+    const cleanUrl = rawUrl.trim()
+
+    // Guardar tanto la URL limpia como la original
+    confirmedVideoUrl.value = cleanUrl
+    originalSupabaseUrl.value = cleanUrl // Guardar copia de la URL original
+    pendingVideoStoragePath.value = uploadResult.storagePath
+
+    console.log('[EquipmentPage] ✅ URL RAW de Supabase:', rawUrl)
+    console.log('[EquipmentPage] ✅ URL limpia asignada:', cleanUrl)
+    console.log('[EquipmentPage] ✅ URL original guardada:', originalSupabaseUrl.value)
+    console.log('[EquipmentPage] ✅ Storage path:', pendingVideoStoragePath.value)
+    console.log('[EquipmentPage] ✅ File name:', uploadResult.fileName)
+
+    // Ocultar loading y mostrar modal de confirmación
+    isLoading.value = false
+    showUrlConfirmationModal.value = true
+
+  } catch (uploadErr) {
+    console.error('[EquipmentPage] Error al subir video a Supabase:', uploadErr)
+    videoUploadError.value.show = true
+    videoUploadError.value.message = uploadErr.message || 'No se pudo subir el video al almacenamiento. Por favor, intenta nuevamente.'
+    isLoading.value = false
+  }
+}
+
+/**
+ * Guarda el ejercicio en la API (PASO FINAL)
+ */
+const saveExerciseToAPI = async (videoUrl) => {
+  isConfirmingUrl.value = true
+  loadingText.value = 'Guardando ejercicio...'
+
+  console.log('[EquipmentPage] 🎯 saveExerciseToAPI llamado')
+
+  // USAR la URL editada por el usuario (trim para limpiar espacios)
+  const finalVideoUrl = videoUrl ? videoUrl.trim() : null
+
+  console.log('[EquipmentPage] ✅ URL FINAL a enviar (después de trim):', finalVideoUrl)
+  console.log('[EquipmentPage] ✅ URL original de Supabase:', originalSupabaseUrl.value)
+  console.log('[EquipmentPage] ✅ ¿URL fue editada por usuario?', finalVideoUrl !== originalSupabaseUrl.value)
+
+  try {
     const exerciseData = {
       equipmentId: selectedEquipment.value.id,
       name: exerciseForm.value.name,
       muscleGroup: exerciseForm.value.muscle_group,
       difficulty: exerciseForm.value.difficulty,
-      video: videoUrl // URL de Supabase Storage o null si no hay video
+      video: finalVideoUrl // URL editada por el usuario o null
     }
+
+    console.log('[EquipmentPage] 📦 Datos a enviar a API:', JSON.stringify(exerciseData, null, 2))
+    console.log('[EquipmentPage] 🚀 ENVIANDO A API - video:', exerciseData.video)
 
     await axiosExercise.post('', exerciseData)
 
@@ -576,6 +636,9 @@ const submitExercise = async () => {
 
     // Ocultar error si existía previamente
     videoUploadError.value.show = false
+
+    // Cerrar modal de confirmación si está abierto
+    showUrlConfirmationModal.value = false
 
     // Recargar la lista de ejercicios del equipo
     if (selectedEquipment.value?.id) {
@@ -585,18 +648,160 @@ const submitExercise = async () => {
     // Cerrar modales y resetear
     closeAddExerciseModal()
     resetUploadState()
+    resetUrlConfirmation()
 
   } catch (err) {
     console.error('[EquipmentPage] Error en proceso de guardado:', err)
     exerciseError.value = err.response?.data?.error || err.message || 'Error al crear el ejercicio'
 
-    // Si falló después de subir el video, informar pero no perder el error
-    if (videoUrl) {
-      console.warn('[EquipmentPage] El video se subió a Storage pero falló el registro en API:', videoUrl)
+    // Si falló después de confirmar la URL, mantener el modal abierto para reintentar
+    if (showUrlConfirmationModal.value) {
+      urlTestError.value = 'Error al guardar en la API. Puedes reintentar o cancelar.'
     }
   } finally {
     isLoading.value = false
-    videoUploadError.value.isRetrying = false
+    isConfirmingUrl.value = false
+  }
+}
+
+/**
+ * Copia la URL actual al portapapeles
+ */
+const copyVideoUrl = async () => {
+  try {
+    await navigator.clipboard.writeText(confirmedVideoUrl.value)
+    alert('✅ URL copiada al portapapeles:\n\n' + confirmedVideoUrl.value)
+  } catch (err) {
+    console.error('[EquipmentPage] Error copiando URL:', err)
+    // Fallback para navegadores que no soportan clipboard API
+    const textArea = document.createElement('textarea')
+    textArea.value = confirmedVideoUrl.value
+    document.body.appendChild(textArea)
+    textArea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textArea)
+    alert('✅ URL copiada al portapapeles')
+  }
+}
+
+/**
+ * Resetea la URL a la original de Supabase
+ */
+const resetToOriginalUrl = () => {
+  if (originalSupabaseUrl.value) {
+    confirmedVideoUrl.value = originalSupabaseUrl.value
+    console.log('[EquipmentPage] 🔄 URL restaurada a original:', originalSupabaseUrl.value)
+  } else {
+    alert('No hay URL original guardada')
+  }
+}
+
+/**
+ * Confirma la URL y procede a guardar en la API
+ */
+const confirmVideoUrl = async () => {
+  console.log('[EquipmentPage] 🚀 confirmVideoUrl llamado')
+  console.log('[EquipmentPage] 📤 URL a enviar a API:', confirmedVideoUrl.value)
+
+  // Validar que la URL no esté vacía si se subió un video
+  if (!confirmedVideoUrl.value.trim()) {
+    const proceedWithoutVideo = window.confirm(
+      '⚠️ La URL está vacía.\n\n' +
+      '¿Deseas guardar el ejercicio SIN video?\n\n' +
+      'Presiona "Aceptar" para guardar sin video, o "Cancelar" para agregar una URL.'
+    )
+    if (!proceedWithoutVideo) {
+      console.log('[EquipmentPage] ❌ Usuario decidió agregar URL')
+      return
+    }
+  }
+
+  // Confirmación visual para el usuario mostrando la URL exacta que se enviará
+  const displayUrl = confirmedVideoUrl.value || '(sin video)'
+  const confirmMessage = `¿Confirmas que quieres enviar esta URL a la API?\n\n${displayUrl}\n\n⚠️ Esta es la URL EXACTA que se almacenará en la base de datos.`
+
+  if (!window.confirm(confirmMessage)) {
+    console.log('[EquipmentPage] ❌ Usuario canceló la confirmación')
+    return
+  }
+
+  await saveExerciseToAPI(confirmedVideoUrl.value.trim() || null)
+}
+
+/**
+ * Prueba la URL del video (abre en nueva pestaña)
+ */
+const testVideoUrl = () => {
+  isTestingUrl.value = true
+  urlTestError.value = ''
+
+  // Abrir URL en nueva pestaña para probar
+  const testWindow = window.open(confirmedVideoUrl.value, '_blank')
+
+  if (!testWindow || testWindow.closed || typeof testWindow.closed === 'undefined') {
+    urlTestError.value = 'El navegador bloqueó la ventana emergente. Por favor, permite popups para probar la URL.'
+  }
+
+  isTestingUrl.value = false
+}
+
+/**
+ * Rechaza la URL y elimina el video de Supabase para reintentar
+ */
+const rejectVideoUrl = async () => {
+  if (!confirmedVideoUrl.value) return
+
+  isConfirmingUrl.value = true
+  loadingText.value = 'Eliminando video temporal...'
+
+  try {
+    // Eliminar el video de Supabase Storage
+    console.log('[EquipmentPage] Eliminando video rechazado de Storage:', pendingVideoStoragePath.value)
+
+    // Usar el repositorio para eliminar
+    await repository.deleteVideo('', pendingVideoStoragePath.value)
+
+    console.log('[EquipmentPage] Video temporal eliminado exitosamente')
+
+  } catch (deleteErr) {
+    console.warn('[EquipmentPage] No se pudo eliminar el video temporal:', deleteErr)
+    // Continuar de todos modos - no es crítico
+  }
+
+  // Resetear estados
+  resetUrlConfirmation()
+  showUrlConfirmationModal.value = false
+  isConfirmingUrl.value = false
+  isLoading.value = false
+
+  // Limpiar archivo seleccionado para permitir subir otro
+  removeVideoFile()
+
+  // Mostrar mensaje al usuario
+  alert('Video rechazado. Puedes seleccionar otro archivo e intentar nuevamente.')
+}
+
+/**
+ * Resetea el estado de confirmación de URL
+ */
+const resetUrlConfirmation = () => {
+  confirmedVideoUrl.value = ''
+  originalSupabaseUrl.value = ''
+  pendingVideoStoragePath.value = ''
+  urlTestError.value = ''
+  isTestingUrl.value = false
+}
+
+/**
+ * Cierra el modal de confirmación de URL (cancelar todo)
+ */
+const closeUrlConfirmationModal = async () => {
+  // Si hay un video pendiente, intentar eliminarlo
+  if (pendingVideoStoragePath.value) {
+    await rejectVideoUrl()
+  } else {
+    resetUrlConfirmation()
+    showUrlConfirmationModal.value = false
   }
 }
 
@@ -1129,6 +1334,172 @@ const closeVideoUploadError = () => {
               <button @click="closeViewModal"
                 class="px-5 py-2.5 text-sm font-semibold text-stone-600 bg-white border-2 border-stone-200 rounded-xl hover:border-amber-200 hover:bg-amber-50 transition-all duration-200 active:scale-[0.98]">
                 Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- MODAL: CONFIRMACIÓN DE URL DEL VIDEO -->
+    <!-- ══════════════════════════════════════ -->
+    <Teleport to="body">
+      <div v-if="showUrlConfirmationModal" class="fixed inset-0 z-[55] overflow-y-auto" role="dialog" aria-modal="true">
+        <div v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :leave="{ opacity: 0 }"
+          :transition="{ duration: 0.3 }" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm"
+          @click="closeUrlConfirmationModal" />
+
+        <div class="flex min-h-full items-center justify-center p-4">
+          <div v-motion :initial="{ opacity: 0, scale: 0.95, y: 20 }" :enter="{ opacity: 1, scale: 1, y: 0 }"
+            :leave="{ opacity: 0, scale: 0.95, y: 20 }" :transition="{ duration: 0.3, ease: 'easeOut' }"
+            class="relative w-full max-w-lg overflow-hidden rounded-3xl bg-white shadow-2xl shadow-black/20">
+
+            <!-- Línea de acento superior -->
+            <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-teal-500 to-emerald-400" />
+
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-emerald-500 to-teal-600 px-6 py-5">
+              <div class="flex items-center gap-3">
+                <div class="rounded-xl bg-white/20 p-2">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-serif text-xl font-bold text-white">Video Subido Exitosamente</h3>
+                  <p class="text-emerald-100 text-sm">Verifica la URL antes de continuar</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="px-6 py-6 space-y-5">
+              <!-- URL del video -->
+              <div class="space-y-2">
+                <label class="block text-sm font-semibold text-stone-700">
+                  URL del Video
+                  <span class="text-amber-600 font-normal">(editable)</span>
+                </label>
+                <div class="relative">
+                  <input
+                    v-model="confirmedVideoUrl"
+                    type="text"
+                    class="w-full px-4 py-3 bg-white border-2 border-amber-300 rounded-xl text-sm text-stone-700 font-mono break-all pr-24 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                    placeholder="https://..."
+                  />
+                  <!-- Botones de acción -->
+                  <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                    <!-- Resetear a URL original -->
+                    <button
+                      @click="resetToOriginalUrl"
+                      class="p-2 text-stone-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      title="Restaurar URL original de Supabase"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                    </button>
+                    <!-- Copiar URL -->
+                    <button
+                      @click="copyVideoUrl"
+                      class="p-2 text-stone-400 hover:text-amber-600 hover:bg-amber-100 rounded-lg transition-colors"
+                      title="Copiar URL al portapapeles"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <p class="text-xs text-stone-500">
+                  Puedes editar esta URL manualmente si es necesario, o pegar la URL de Supabase que conozcas.
+                </p>
+
+                <!-- Info de la URL que se enviará -->
+                <div class="mt-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+                  <h5 class="text-xs font-semibold text-emerald-800 mb-1 flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    URL que se enviará a la API:
+                  </h5>
+                  <p class="text-xs text-emerald-700 font-mono break-all bg-white p-2 rounded border border-emerald-100">
+                    {{ confirmedVideoUrl || 'Sin URL - se enviará null' }}
+                  </p>
+                </div>
+
+                <!-- Mensaje de validación -->
+                <div v-if="!confirmedVideoUrl" class="p-2 bg-rose-50 border border-rose-200 rounded-lg">
+                  <p class="text-xs text-rose-700 flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <strong>Atención:</strong> No hay URL configurada. El ejercicio se guardará sin video.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Error de prueba -->
+              <div v-if="urlTestError" class="p-3 bg-rose-50 border border-rose-200 rounded-xl">
+                <p class="text-sm text-rose-600 flex items-center gap-2">
+                  <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {{ urlTestError }}
+                </p>
+              </div>
+
+              <!-- Botón probar URL -->
+              <button @click="testVideoUrl" :disabled="isTestingUrl"
+                class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded-xl transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                {{ isTestingUrl ? 'Abriendo...' : 'Probar URL en nueva pestaña' }}
+              </button>
+
+              <!-- Instrucciones -->
+              <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                <h4 class="font-semibold text-amber-800 text-sm mb-2 flex items-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  ¿La URL funciona correctamente?
+                </h4>
+                <ul class="text-sm text-amber-700 space-y-1 list-disc list-inside">
+                  <li>Si el video se reproduce: haz clic en <strong>"Aceptar y Guardar"</strong></li>
+                  <li>Si hay error: haz clic en <strong>"Rechazar y Reintentar"</strong></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="bg-stone-50 border-t border-stone-100 px-6 py-5 flex flex-col sm:flex-row gap-3">
+              <button @click="rejectVideoUrl" :disabled="isConfirmingUrl"
+                class="order-2 sm:order-1 flex-1 flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold text-rose-600 bg-white border-2 border-rose-200 rounded-xl hover:bg-rose-50 transition-colors disabled:opacity-50">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Rechazar y Reintentar
+              </button>
+
+              <button @click="confirmVideoUrl" :disabled="isConfirmingUrl"
+                class="order-1 sm:order-2 flex-1 flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl shadow-lg shadow-emerald-500/20 hover:shadow-xl transition-all disabled:opacity-50">
+                <svg v-if="isConfirmingUrl" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                  <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                {{ isConfirmingUrl ? 'Guardando...' : 'Aceptar y Guardar' }}
               </button>
             </div>
           </div>

@@ -36,7 +36,8 @@ const usuarioItems = [
 const coliseoOpen = ref(false)
 const coliseoItems = [
   { label: 'Crear equipo', icon: 'equipment', route: '/dashboard/coliseo/equipment/create' },
-  { label: 'Lista de equipos', icon: 'equipment-list', route: '/dashboard/coliseo/equipment/list' }
+  { label: 'Lista de equipos', icon: 'equipment-list', route: '/dashboard/coliseo/equipment/list' },
+  { label: 'Historial de ejercicios', icon: 'exercise-list', route: '/dashboard/coliseo/exercises' }
 ]
 
 function toggleAlejandria() {
@@ -310,6 +311,12 @@ function logout() {
                   stroke="currentColor" stroke-width="1.8">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+                <!-- Icono historial de ejercicios -->
+                <svg v-else-if="item.icon === 'exercise-list'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
                 {{ item.label }}
               </button>

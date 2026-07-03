@@ -3,160 +3,226 @@
  * Maneja subidas resumibles para archivos grandes
  */
 
-import { createClient, type SupabaseClient } from '@supabase/supabase-js'
-import { v4 as uuidv4 } from 'uuid'
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { v4 as uuidv4 } from "uuid";
 import type {
   Video,
   VideoUploadPayload,
-  VideoUploadProgress
-} from '../../domain/entities/VideoEntity'
-import type { VideoRepository, UploadProgressCallback } from '../../domain/repositories/VideoRepository'
+  VideoUploadProgress,
+} from "../../domain/entities/VideoEntity";
+import type {
+  VideoRepository,
+  UploadProgressCallback,
+} from "../../domain/repositories/VideoRepository";
 
 export interface SupabaseConfig {
-  url: string
-  anonKey: string
-  bucketName: string
+  url: string;
+  anonKey: string;
+  bucketName: string;
 }
 
 export class SupabaseVideoRepository implements VideoRepository {
-  private client: SupabaseClient
-  private bucketName: string
+  private client: SupabaseClient;
+  private bucketName: string;
 
   constructor(config: SupabaseConfig) {
-    this.client = createClient(config.url, config.anonKey)
-    this.bucketName = config.bucketName
+    this.client = createClient(config.url, config.anonKey);
+    this.bucketName = config.bucketName;
+  }
+
+  /**
+   * Verifica si el bucket existe, y lo crea si no
+   * Usar con precaución - requiere permisos de admin
+   */
+  async ensureBucketExists(): Promise<void> {
+    try {
+      // Intentar obtener información del bucket
+      const { data: buckets, error } = await this.client.storage.listBuckets();
+
+      if (error) {
+        console.warn("[SupabaseVideoRepository] No se pudo listar buckets:", error.message);
+        return;
+      }
+
+      const bucketExists = buckets?.some((b) => b.name === this.bucketName);
+
+      if (!bucketExists) {
+        console.log(`[SupabaseVideoRepository] Creando bucket '${this.bucketName}'...`);
+
+        const { error: createError } = await this.client.storage.createBucket(
+          this.bucketName,
+          {
+            public: true, // Bucket público para URLs accesibles
+            fileSizeLimit: 2 * 1024 * 1024 * 1024, // 2GB límite
+          },
+        );
+
+        if (createError) {
+          console.error(
+            `[SupabaseVideoRepository] Error creando bucket '${this.bucketName}':`,
+            createError.message,
+          );
+          throw new Error(
+            `No se pudo crear el bucket '${this.bucketName}'. ` +
+              "Asegúrate de tener permisos de administrador en Supabase.",
+          );
+        }
+
+        console.log(`[SupabaseVideoRepository] Bucket '${this.bucketName}' creado exitosamente`);
+      } else {
+        console.log(`[SupabaseVideoRepository] Bucket '${this.bucketName}' ya existe`);
+      }
+    } catch (err) {
+      console.warn("[SupabaseVideoRepository] Error verificando bucket:", err);
+      // No lanzar error - dejar que la subida falle si realmente no existe
+    }
   }
 
   async uploadVideo(
     payload: VideoUploadPayload,
-    onProgress?: UploadProgressCallback
+    onProgress?: UploadProgressCallback,
   ): Promise<{ url: string; storagePath: string; fileName: string }> {
+    // Asegurar que el bucket existe antes de subir
+    await this.ensureBucketExists();
+
     // Generar nombre único usando UUID
-    const fileExtension = this.getFileExtension(payload.file.name)
-    const uniqueFileName = `${uuidv4()}.${fileExtension}`
-    // Usar 'video' como carpeta dentro del bucket
-    const storagePath = `video/${uniqueFileName}`
+    const fileExtension = this.getFileExtension(payload.file.name);
+    const uniqueFileName = `${uuidv4()}.${fileExtension}`;
+    // Guardar directamente en el bucket (sin subcarpeta inicial)
+    const storagePath = uniqueFileName;
 
     // Para archivos grandes (> 10MB), usar subida resumible
-    const CHUNK_SIZE = 10 * 1024 * 1024 // 10MB chunks
-    const fileSize = payload.file.size
+    const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB chunks
+    const fileSize = payload.file.size;
 
-    let uploadResult
+    let uploadResult;
 
     if (fileSize > CHUNK_SIZE) {
       uploadResult = await this.uploadWithResumable(
         payload.file,
         storagePath,
         CHUNK_SIZE,
-        onProgress
-      )
+        onProgress,
+      );
     } else {
+      console.log("Uploading file:", payload.file.name);
+      console.log("Path:", storagePath);
       uploadResult = await this.uploadSimple(
         payload.file,
         storagePath,
-        onProgress
-      )
+        onProgress,
+      );
     }
 
     // Obtener URL pública
     const { data: publicUrlData } = this.client.storage
       .from(this.bucketName)
-      .getPublicUrl(storagePath)
+      .getPublicUrl(storagePath);
+
+    console.log("[SupabaseVideoRepository] URL pública generada:", publicUrlData.publicUrl);
+    console.log("[SupabaseVideoRepository] Storage path:", storagePath);
+    console.log("[SupabaseVideoRepository] Bucket:", this.bucketName);
 
     return {
       url: publicUrlData.publicUrl,
       storagePath,
-      fileName: uniqueFileName
-    }
+      fileName: uniqueFileName,
+    };
   }
 
   private async uploadSimple(
     file: File,
     path: string,
-    onProgress?: UploadProgressCallback
+    onProgress?: UploadProgressCallback,
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest()
+      const xhr = new XMLHttpRequest();
 
-      xhr.upload.addEventListener('progress', (event) => {
+      xhr.upload.addEventListener("progress", (event) => {
         if (event.lengthComputable && onProgress) {
           onProgress({
             loaded: event.loaded,
             total: event.total,
-            percentage: Math.round((event.loaded / event.total) * 100)
-          })
+            percentage: Math.round((event.loaded / event.total) * 100),
+          });
         }
-      })
+      });
 
-      xhr.addEventListener('load', async () => {
+      xhr.addEventListener("load", async () => {
         if (xhr.status >= 200 && xhr.status < 300) {
-          resolve()
+          resolve();
         } else {
-          reject(new Error(`Upload failed with status ${xhr.status}`))
+          reject(new Error(`Upload failed with status ${xhr.status}`));
         }
-      })
+      });
 
-      xhr.addEventListener('error', () => {
-        reject(new Error('Network error during upload'))
-      })
+      xhr.addEventListener("error", () => {
+        reject(new Error("Network error during upload"));
+      });
 
-      xhr.addEventListener('abort', () => {
-        reject(new Error('Upload aborted'))
-      })
+      xhr.addEventListener("abort", () => {
+        reject(new Error("Upload aborted"));
+      });
 
       // Usar el método de Supabase con XMLHttpRequest para tracking de progreso
+      console.log("Uploading file:", file.name);
+      console.log("Path:", path);
       this.client.storage
         .from(this.bucketName)
-        .upload(path, file, {
-          cacheControl: '3600',
+        .upload("video", file, {
+          cacheControl: "3600",
           upsert: false,
-          contentType: file.type
+          contentType: file.type,
         })
         .then(() => resolve())
-        .catch(reject)
-    })
+        .catch(reject);
+    });
   }
 
   private async uploadWithResumable(
     file: File,
     path: string,
     chunkSize: number,
-    onProgress?: UploadProgressCallback
+    onProgress?: UploadProgressCallback,
   ): Promise<void> {
-    const totalChunks = Math.ceil(file.size / chunkSize)
-    let uploadedChunks = 0
+    const totalChunks = Math.ceil(file.size / chunkSize);
+    let uploadedChunks = 0;
+
+    console.log("Uploading with resumable:", file.name);
+    console.log("Path:", path);
+    console.log("Total chunks:", totalChunks);
 
     for (let i = 0; i < totalChunks; i++) {
-      const start = i * chunkSize
-      const end = Math.min(start + chunkSize, file.size)
-      const chunk = file.slice(start, end)
+      const start = i * chunkSize;
+      const end = Math.min(start + chunkSize, file.size);
+      const chunk = file.slice(start, end);
 
       // Subir chunk usando arraybuffer
-      const arrayBuffer = await chunk.arrayBuffer()
-      const chunkPath = `${path}.part${i}`
+      const arrayBuffer = await chunk.arrayBuffer();
+      const chunkPath = `${path}.part${i}`;
 
       const { error } = await this.client.storage
         .from(this.bucketName)
         .upload(chunkPath, arrayBuffer, {
-          cacheControl: '3600',
+          cacheControl: "3600",
           upsert: true,
-          contentType: file.type
-        })
+          contentType: file.type,
+        });
 
       if (error) {
         // Limpiar chunks parciales en caso de error
-        await this.cleanupPartialUpload(path, totalChunks)
-        throw new Error(`Error uploading chunk ${i}: ${error.message}`)
+        await this.cleanupPartialUpload(path, totalChunks);
+        throw new Error(`Error uploading chunk ${i}: ${error.message}`);
       }
 
-      uploadedChunks++
+      uploadedChunks++;
 
       if (onProgress) {
         onProgress({
           loaded: end,
           total: file.size,
-          percentage: Math.round((uploadedChunks / totalChunks) * 100)
-        })
+          percentage: Math.round((uploadedChunks / totalChunks) * 100),
+        });
       }
     }
 
@@ -165,34 +231,37 @@ export class SupabaseVideoRepository implements VideoRepository {
     const { error } = await this.client.storage
       .from(this.bucketName)
       .upload(path, file, {
-        cacheControl: '3600',
+        cacheControl: "3600",
         upsert: false,
-        contentType: file.type
-      })
+        contentType: file.type,
+      });
 
     if (error) {
-      await this.cleanupPartialUpload(path, totalChunks)
-      throw new Error(`Error finalizing upload: ${error.message}`)
+      await this.cleanupPartialUpload(path, totalChunks);
+      throw new Error(`Error finalizing upload: ${error.message}`);
     }
 
     // Limpiar chunks temporales
-    await this.cleanupPartialUpload(path, totalChunks)
+    await this.cleanupPartialUpload(path, totalChunks);
   }
 
-  private async cleanupPartialUpload(basePath: string, totalChunks: number): Promise<void> {
+  private async cleanupPartialUpload(
+    basePath: string,
+    totalChunks: number,
+  ): Promise<void> {
     for (let i = 0; i < totalChunks; i++) {
-      const chunkPath = `${basePath}.part${i}`
-      await this.client.storage.from(this.bucketName).remove([chunkPath])
+      const chunkPath = `${basePath}.part${i}`;
+      await this.client.storage.from(this.bucketName).remove([chunkPath]);
     }
   }
 
   async createVideoRecord(
-    videoData: Omit<Video, 'id' | 'createdAt' | 'updatedAt'>
+    videoData: Omit<Video, "id" | "createdAt" | "updatedAt">,
   ): Promise<Video> {
-    const now = new Date().toISOString()
+    const now = new Date().toISOString();
 
     const { data, error } = await this.client
-      .from('videos')
+      .from("videos")
       .insert({
         title: videoData.title,
         description: videoData.description,
@@ -206,67 +275,67 @@ export class SupabaseVideoRepository implements VideoRepository {
         created_by: videoData.createdBy,
         metadata: videoData.metadata,
         created_at: now,
-        updated_at: now
+        updated_at: now,
       })
       .select()
-      .single()
+      .single();
 
     if (error) {
-      throw new Error(`Error creating video record: ${error.message}`)
+      throw new Error(`Error creating video record: ${error.message}`);
     }
 
-    return this.mapDatabaseToEntity(data)
+    return this.mapDatabaseToEntity(data);
   }
 
   async deleteVideo(videoId: string, storagePath: string): Promise<void> {
     // Eliminar del storage
     const { error: storageError } = await this.client.storage
       .from(this.bucketName)
-      .remove([storagePath])
+      .remove([storagePath]);
 
     if (storageError) {
-      console.error('Error deleting from storage:', storageError)
+      console.error("Error deleting from storage:", storageError);
     }
 
     // Eliminar de la base de datos
     const { error: dbError } = await this.client
-      .from('videos')
+      .from("videos")
       .delete()
-      .eq('id', videoId)
+      .eq("id", videoId);
 
     if (dbError) {
-      throw new Error(`Error deleting video record: ${dbError.message}`)
+      throw new Error(`Error deleting video record: ${dbError.message}`);
     }
   }
 
   async getVideoById(videoId: string): Promise<Video | null> {
     const { data, error } = await this.client
-      .from('videos')
+      .from("videos")
       .select()
-      .eq('id', videoId)
-      .single()
+      .eq("id", videoId)
+      .single();
 
     if (error) {
-      if (error.code === 'PGRST116') return null // Not found
-      throw new Error(`Error fetching video: ${error.message}`)
+      if (error.code === "PGRST116") return null; // Not found
+      throw new Error(`Error fetching video: ${error.message}`);
     }
 
-    return this.mapDatabaseToEntity(data)
+    return this.mapDatabaseToEntity(data);
   }
 
   async listVideos(limit = 20, offset = 0): Promise<Video[]> {
     const { data, error } = await this.client
-      .from('videos')
+      .from("videos")
       .select()
-      .order('created_at', { ascending: false })
+      .order("created_at", { ascending: false })
       .limit(limit)
-      .range(offset, offset + limit - 1)
+      .range(offset, offset + limit - 1);
 
     if (error) {
-      throw new Error(`Error listing videos: ${error.message}`)
+      throw new Error(`Error listing videos: ${error.message}`);
     }
 
-    return (data || []).map(this.mapDatabaseToEntity)
+    return (data || []).map(this.mapDatabaseToEntity);
   }
 
   private mapDatabaseToEntity(data: any): Video {
@@ -284,12 +353,12 @@ export class SupabaseVideoRepository implements VideoRepository {
       createdAt: data.created_at,
       updatedAt: data.updated_at,
       createdBy: data.created_by,
-      metadata: data.metadata
-    }
+      metadata: data.metadata,
+    };
   }
 
   private getFileExtension(fileName: string): string {
-    const match = fileName.match(/\.([^.]+)$/)
-    return match ? match[1].toLowerCase() : 'mp4'
+    const match = fileName.match(/\.([^.]+)$/);
+    return match ? match[1].toLowerCase() : "mp4";
   }
 }

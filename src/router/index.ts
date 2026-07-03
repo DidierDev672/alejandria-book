@@ -97,6 +97,12 @@ const router = createRouter({
           component: () =>
             import("@/features/maintenance/presentation/components/EquipmentPage.vue"),
         },
+        {
+          path: "coliseo/exercises",
+          name: "exercise-list",
+          component: () =>
+            import("@/features/exercise/presentation/pages/ExerciseListPage.vue"),
+        },
       ],
     },
   ],

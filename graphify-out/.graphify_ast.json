@@ -1,0 +1,1974 @@
+{
+  "nodes": [
+    {
+      "id": "application_authservice_authservice",
+      "label": "AuthService",
+      "file_type": "code",
+      "source_file": "src/features/auth/application/AuthService.ts",
+      "source_location": "L4",
+      "_origin": "ast"
+    },
+    {
+      "id": "domain_authentity_logincredentials",
+      "label": "LoginCredentials",
+      "file_type": "code",
+      "source_file": "src/features/auth/domain/AuthEntity.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "domain_authentity_user",
+      "label": "User",
+      "file_type": "code",
+      "source_file": "src/features/auth/domain/AuthEntity.ts",
+      "source_location": "L6",
+      "_origin": "ast"
+    },
+    {
+      "id": "domain_authentity_authresponse",
+      "label": "AuthResponse",
+      "file_type": "code",
+      "source_file": "src/features/auth/domain/AuthEntity.ts",
+      "source_location": "L16",
+      "_origin": "ast"
+    },
+    {
+      "id": "domain_authrepository_authrepository",
+      "label": "AuthRepository",
+      "file_type": "code",
+      "source_file": "src/features/auth/domain/AuthRepository.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "domain_userentity_userentity",
+      "label": "UserEntity",
+      "file_type": "code",
+      "source_file": "src/features/auth/domain/UserEntity.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "validators_uservalidator_uservalidator",
+      "label": "UserValidator",
+      "file_type": "code",
+      "source_file": "src/features/auth/domain/validators/UserValidator.ts",
+      "source_location": "L2",
+      "_origin": "ast"
+    },
+    {
+      "id": "infrastructure_authapi_authapi",
+      "label": "AuthApi",
+      "file_type": "code",
+      "source_file": "src/features/auth/infrastructure/AuthApi.ts",
+      "source_location": "L5",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_book_book",
+      "label": "Book",
+      "file_type": "code",
+      "source_file": "src/features/books/domain/entities/Book.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_book_bookfactory",
+      "label": "BookFactory",
+      "file_type": "code",
+      "source_file": "src/features/books/domain/entities/Book.ts",
+      "source_location": "L13",
+      "_origin": "ast"
+    },
+    {
+      "id": "repositories_bookrepository_bookrepository",
+      "label": "BookRepository",
+      "file_type": "code",
+      "source_file": "src/features/books/domain/repositories/BookRepository.ts",
+      "source_location": "L4",
+      "_origin": "ast"
+    },
+    {
+      "id": "repositories_axiosbookrepository_axiosbookrepository",
+      "label": "AxiosBookRepository",
+      "file_type": "code",
+      "source_file": "src/features/books/infrastructure/repositories/AxiosBookRepository.ts",
+      "source_location": "L5",
+      "_origin": "ast"
+    },
+    {
+      "id": "domain_authorentity_author",
+      "label": "Author",
+      "file_type": "code",
+      "source_file": "src/features/dashboard/domain/AuthorEntity.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "domain_authorentity_createauthorpayload",
+      "label": "CreateAuthorPayload",
+      "file_type": "code",
+      "source_file": "src/features/dashboard/domain/AuthorEntity.ts",
+      "source_location": "L11",
+      "_origin": "ast"
+    },
+    {
+      "id": "domain_authorentity_updateauthorpayload",
+      "label": "UpdateAuthorPayload",
+      "file_type": "code",
+      "source_file": "src/features/dashboard/domain/AuthorEntity.ts",
+      "source_location": "L18",
+      "_origin": "ast"
+    },
+    {
+      "id": "domain_bookentity_book",
+      "label": "Book",
+      "file_type": "code",
+      "source_file": "src/features/dashboard/domain/BookEntity.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "domain_bookentity_createbookpayload",
+      "label": "CreateBookPayload",
+      "file_type": "code",
+      "source_file": "src/features/dashboard/domain/BookEntity.ts",
+      "source_location": "L13",
+      "_origin": "ast"
+    },
+    {
+      "id": "domain_bookentity_updatebookpayload",
+      "label": "UpdateBookPayload",
+      "file_type": "code",
+      "source_file": "src/features/dashboard/domain/BookEntity.ts",
+      "source_location": "L22",
+      "_origin": "ast"
+    },
+    {
+      "id": "domain_bookentity_apierror",
+      "label": "ApiError",
+      "file_type": "code",
+      "source_file": "src/features/dashboard/domain/BookEntity.ts",
+      "source_location": "L24",
+      "_origin": "ast"
+    },
+    {
+      "id": "infrastructure_authorapi_authorapi",
+      "label": "AuthorApi",
+      "file_type": "code",
+      "source_file": "src/features/dashboard/infrastructure/AuthorApi.ts",
+      "source_location": "L4",
+      "_origin": "ast"
+    },
+    {
+      "id": "infrastructure_bookapi_bookapi",
+      "label": "BookApi",
+      "file_type": "code",
+      "source_file": "src/features/dashboard/infrastructure/BookApi.ts",
+      "source_location": "L4",
+      "_origin": "ast"
+    },
+    {
+      "id": "stores_useexercisestore_exercisestore",
+      "label": "ExerciseStore",
+      "file_type": "code",
+      "source_file": "src/features/exercise/application/stores/useExerciseStore.ts",
+      "source_location": "L329",
+      "_origin": "ast"
+    },
+    {
+      "id": "services_exerciseservice_exercise",
+      "label": "Exercise",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L7",
+      "_origin": "ast"
+    },
+    {
+      "id": "services_exerciseservice_createexercisedto",
+      "label": "CreateExerciseDTO",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L18",
+      "_origin": "ast"
+    },
+    {
+      "id": "services_exerciseservice_updateexercisedto",
+      "label": "UpdateExerciseDTO",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L26",
+      "_origin": "ast"
+    },
+    {
+      "id": "services_exerciseservice_exercisefilters",
+      "label": "ExerciseFilters",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L33",
+      "_origin": "ast"
+    },
+    {
+      "id": "services_exerciseservice_paginatedresponse",
+      "label": "PaginatedResponse",
+      "file_type": "code",
+      "source_file": "src/features/exercise/infrastructure/services/exerciseService.ts",
+      "source_location": "L42",
+      "_origin": "ast"
+    },
+    {
+      "id": "stores_useequipmentliststore_equipment",
+      "label": "Equipment",
+      "file_type": "code",
+      "source_file": "src/features/maintenance/application/stores/useEquipmentListStore.ts",
+      "source_location": "L9",
+      "_origin": "ast"
+    },
+    {
+      "id": "stores_useequipmentliststore_equipmentliststore",
+      "label": "EquipmentListStore",
+      "file_type": "code",
+      "source_file": "src/features/maintenance/application/stores/useEquipmentListStore.ts",
+      "source_location": "L119",
+      "_origin": "ast"
+    },
+    {
+      "id": "stores_useequipmentstore_equipment",
+      "label": "Equipment",
+      "file_type": "code",
+      "source_file": "src/features/maintenance/application/stores/useEquipmentStore.ts",
+      "source_location": "L9",
+      "_origin": "ast"
+    },
+    {
+      "id": "stores_useequipmentstore_createequipmentdto",
+      "label": "CreateEquipmentDTO",
+      "file_type": "code",
+      "source_file": "src/features/maintenance/application/stores/useEquipmentStore.ts",
+      "source_location": "L19",
+      "_origin": "ast"
+    },
+    {
+      "id": "stores_useequipmentstore_updateequipmentdto",
+      "label": "UpdateEquipmentDTO",
+      "file_type": "code",
+      "source_file": "src/features/maintenance/application/stores/useEquipmentStore.ts",
+      "source_location": "L26",
+      "_origin": "ast"
+    },
+    {
+      "id": "stores_useequipmentstore_equipmentfilters",
+      "label": "EquipmentFilters",
+      "file_type": "code",
+      "source_file": "src/features/maintenance/application/stores/useEquipmentStore.ts",
+      "source_location": "L33",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_note_notetype",
+      "label": "NoteType",
+      "file_type": "code",
+      "source_file": "src/features/notes/domain/entities/Note.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_note_note",
+      "label": "Note",
+      "file_type": "code",
+      "source_file": "src/features/notes/domain/entities/Note.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_note_notefactory",
+      "label": "NoteFactory",
+      "file_type": "code",
+      "source_file": "src/features/notes/domain/entities/Note.ts",
+      "source_location": "L16",
+      "_origin": "ast"
+    },
+    {
+      "id": "repositories_noterepository_noterepository",
+      "label": "NoteRepository",
+      "file_type": "code",
+      "source_file": "src/features/notes/domain/repositories/NoteRepository.ts",
+      "source_location": "L7",
+      "_origin": "ast"
+    },
+    {
+      "id": "repositories_axiosnoterepository_axiosnoterepository",
+      "label": "AxiosNoteRepository",
+      "file_type": "code",
+      "source_file": "src/features/notes/infrastructure/repositories/AxiosNoteRepository.ts",
+      "source_location": "L9",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_topic_topictype",
+      "label": "TopicType",
+      "file_type": "code",
+      "source_file": "src/features/topics/domain/entities/Topic.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_topic_topic",
+      "label": "Topic",
+      "file_type": "code",
+      "source_file": "src/features/topics/domain/entities/Topic.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_topic_topicfactory",
+      "label": "TopicFactory",
+      "file_type": "code",
+      "source_file": "src/features/topics/domain/entities/Topic.ts",
+      "source_location": "L12",
+      "_origin": "ast"
+    },
+    {
+      "id": "repositories_topicrepository_topicrepository",
+      "label": "TopicRepository",
+      "file_type": "code",
+      "source_file": "src/features/topics/domain/repositories/TopicRepository.ts",
+      "source_location": "L4",
+      "_origin": "ast"
+    },
+    {
+      "id": "repositories_axiostopicrepository_axiostopicrepository",
+      "label": "AxiosTopicRepository",
+      "file_type": "code",
+      "source_file": "src/features/topics/infrastructure/repositories/AxiosTopicRepository.ts",
+      "source_location": "L5",
+      "_origin": "ast"
+    },
+    {
+      "id": "application_videoservice_videoserviceconfig",
+      "label": "VideoServiceConfig",
+      "file_type": "code",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L14",
+      "_origin": "ast"
+    },
+    {
+      "id": "application_videoservice_videoservice",
+      "label": "VideoService",
+      "file_type": "code",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L18",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_videoentity_video",
+      "label": "Video",
+      "file_type": "code",
+      "source_file": "src/features/video/domain/entities/VideoEntity.ts",
+      "source_location": "L6",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_videoentity_videometadata",
+      "label": "VideoMetadata",
+      "file_type": "code",
+      "source_file": "src/features/video/domain/entities/VideoEntity.ts",
+      "source_location": "L23",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_videoentity_videouploadpayload",
+      "label": "VideoUploadPayload",
+      "file_type": "code",
+      "source_file": "src/features/video/domain/entities/VideoEntity.ts",
+      "source_location": "L31",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_videoentity_videouploadprogress",
+      "label": "VideoUploadProgress",
+      "file_type": "code",
+      "source_file": "src/features/video/domain/entities/VideoEntity.ts",
+      "source_location": "L38",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_videoentity_videouploadstate",
+      "label": "VideoUploadState",
+      "file_type": "code",
+      "source_file": "src/features/video/domain/entities/VideoEntity.ts",
+      "source_location": "L44",
+      "_origin": "ast"
+    },
+    {
+      "id": "entities_videoentity_videovalidator",
+      "label": "VideoValidator",
+      "file_type": "code",
+      "source_file": "src/features/video/domain/entities/VideoEntity.ts",
+      "source_location": "L52",
+      "_origin": "ast"
+    },
+    {
+      "id": "repositories_videorepository_uploadprogresscallback",
+      "label": "UploadProgressCallback",
+      "file_type": "code",
+      "source_file": "src/features/video/domain/repositories/VideoRepository.ts",
+      "source_location": "L8",
+      "_origin": "ast"
+    },
+    {
+      "id": "repositories_videorepository_videorepository",
+      "label": "VideoRepository",
+      "file_type": "code",
+      "source_file": "src/features/video/domain/repositories/VideoRepository.ts",
+      "source_location": "L12",
+      "_origin": "ast"
+    },
+    {
+      "id": "config_supabase_getsupabasevideoconfig",
+      "label": "getSupabaseVideoConfig",
+      "file_type": "code",
+      "source_file": "src/features/video/infrastructure/config/supabase.ts",
+      "source_location": "L19",
+      "_origin": "ast"
+    },
+    {
+      "id": "repositories_supabasevideorepository_supabaseconfig",
+      "label": "SupabaseConfig",
+      "file_type": "code",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L18",
+      "_origin": "ast"
+    },
+    {
+      "id": "repositories_supabasevideorepository_supabasevideorepository",
+      "label": "SupabaseVideoRepository",
+      "file_type": "code",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L24",
+      "_origin": "ast"
+    },
+    {
+      "id": "composables_usevideoupload_usevideoupload",
+      "label": "useVideoUpload",
+      "file_type": "code",
+      "source_file": "src/features/video/presentation/composables/useVideoUpload.ts",
+      "source_location": "L41",
+      "_origin": "ast"
+    },
+    {
+      "id": "composables_usevideoupload_usevideouploadqueue",
+      "label": "useVideoUploadQueue",
+      "file_type": "code",
+      "source_file": "src/features/video/presentation/composables/useVideoUpload.ts",
+      "source_location": "L222",
+      "_origin": "ast"
+    },
+    {
+      "id": "http_axiosinstance_hasactivesession",
+      "label": "hasActiveSession",
+      "file_type": "code",
+      "source_file": "src/infrastructure/http/axiosInstance.ts",
+      "source_location": "L63",
+      "_origin": "ast"
+    },
+    {
+      "id": "http_axiosinstance_getauthtoken",
+      "label": "getAuthToken",
+      "file_type": "code",
+      "source_file": "src/infrastructure/http/axiosInstance.ts",
+      "source_location": "L68",
+      "_origin": "ast"
+    },
+    {
+      "id": "http_axiosinstance_setauthtoken",
+      "label": "setAuthToken",
+      "file_type": "code",
+      "source_file": "src/infrastructure/http/axiosInstance.ts",
+      "source_location": "L73",
+      "_origin": "ast"
+    },
+    {
+      "id": "http_axiosinstance_clearsession",
+      "label": "clearSession",
+      "file_type": "code",
+      "source_file": "src/infrastructure/http/axiosInstance.ts",
+      "source_location": "L78",
+      "_origin": "ast"
+    }
+  ],
+  "edges": [
+    {
+      "source": "notes_index",
+      "target": "entities_note",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/index.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "notes_index",
+      "target": "repositories_noterepository",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/index.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "notes_index",
+      "target": "application_usenotestore",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/index.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "notes_index",
+      "target": "repositories_axiosnoterepository",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/index.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "notes_index",
+      "target": "components_noteform",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/index.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "notes_index",
+      "target": "components_notelist",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/index.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "notes_index",
+      "target": "components_notebookspread",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/index.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "video_index",
+      "target": "entities_videoentity",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/index.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "video_index",
+      "target": "repositories_videorepository",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/index.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "video_index",
+      "target": "application_videoservice",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/index.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "video_index",
+      "target": "repositories_supabasevideorepository",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/index.ts",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "video_index",
+      "target": "config_supabase",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/index.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "video_index",
+      "target": "composables_usevideoupload",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/index.ts",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "video_index",
+      "target": "components_videouploadform",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/index.ts",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "application_authservice",
+      "target": "domain_authrepository_authrepository",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/application/AuthService.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "application_authservice",
+      "target": "domain_authentity_logincredentials",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/application/AuthService.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "application_authservice",
+      "target": "domain_authentity_authresponse",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/application/AuthService.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "domain_authrepository",
+      "target": "domain_authentity_logincredentials",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/domain/AuthRepository.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "domain_authrepository",
+      "target": "domain_authentity_authresponse",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/domain/AuthRepository.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "validators_uservalidator",
+      "target": "domain_userentity_userentity",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/domain/validators/UserValidator.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authapi",
+      "target": "domain_authrepository_authrepository",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/infrastructure/AuthApi.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authapi",
+      "target": "domain_authentity_logincredentials",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/infrastructure/AuthApi.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authapi",
+      "target": "domain_authentity_authresponse",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/infrastructure/AuthApi.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "stores_authstore",
+      "target": "domain_authentity_logincredentials",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/presentation/stores/authStore.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "stores_authstore",
+      "target": "domain_authentity_user",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/presentation/stores/authStore.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "stores_authstore",
+      "target": "application_authservice_authservice",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/presentation/stores/authStore.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "stores_authstore",
+      "target": "infrastructure_authapi_authapi",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/presentation/stores/authStore.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "usescases_useregisterform",
+      "target": "domain_userentity_userentity",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/usesCases/useRegisterForm.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "usescases_useregisterform",
+      "target": "validators_uservalidator_uservalidator",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/usesCases/useRegisterForm.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "application_usebookstore",
+      "target": "entities_book_book",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/application/useBookStore.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "application_usebookstore",
+      "target": "repositories_axiosbookrepository_axiosbookrepository",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/application/useBookStore.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_bookrepository",
+      "target": "entities_book_book",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/domain/repositories/BookRepository.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosbookrepository",
+      "target": "repositories_bookrepository_bookrepository",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/infrastructure/repositories/AxiosBookRepository.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosbookrepository",
+      "target": "entities_book_book",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/infrastructure/repositories/AxiosBookRepository.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authorapi",
+      "target": "domain_authorentity_author",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/AuthorApi.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authorapi",
+      "target": "domain_authorentity_createauthorpayload",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/AuthorApi.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authorapi",
+      "target": "domain_authorentity_updateauthorpayload",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/AuthorApi.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_bookapi",
+      "target": "domain_bookentity_book",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/BookApi.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_bookapi",
+      "target": "domain_bookentity_createbookpayload",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/BookApi.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_bookapi",
+      "target": "domain_bookentity_updatebookpayload",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/BookApi.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "application_usenotestore",
+      "target": "entities_note_note",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/application/useNoteStore.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "application_usenotestore",
+      "target": "repositories_axiosnoterepository_axiosnoterepository",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/application/useNoteStore.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_noterepository",
+      "target": "entities_note_note",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/domain/repositories/NoteRepository.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosnoterepository",
+      "target": "repositories_noterepository_noterepository",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/infrastructure/repositories/AxiosNoteRepository.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosnoterepository",
+      "target": "entities_note_note",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/infrastructure/repositories/AxiosNoteRepository.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "application_usetopicstore",
+      "target": "entities_topic_topic",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/topics/application/useTopicStore.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "application_usetopicstore",
+      "target": "repositories_axiostopicrepository_axiostopicrepository",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/topics/application/useTopicStore.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_topicrepository",
+      "target": "entities_topic_topic",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/topics/domain/repositories/TopicRepository.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiostopicrepository",
+      "target": "repositories_topicrepository_topicrepository",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/topics/infrastructure/repositories/AxiosTopicRepository.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiostopicrepository",
+      "target": "entities_topic_topic",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/topics/infrastructure/repositories/AxiosTopicRepository.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice",
+      "target": "entities_videoentity_video",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice",
+      "target": "entities_videoentity_videouploadpayload",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice",
+      "target": "entities_videoentity_videouploadstate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice",
+      "target": "entities_videoentity_videovalidator",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice",
+      "target": "repositories_videorepository_videorepository",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice",
+      "target": "repositories_videorepository_uploadprogresscallback",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_videorepository",
+      "target": "entities_videoentity_video",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/domain/repositories/VideoRepository.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_videorepository",
+      "target": "entities_videoentity_videouploadpayload",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/domain/repositories/VideoRepository.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_videorepository",
+      "target": "entities_videoentity_videouploadprogress",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/domain/repositories/VideoRepository.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "config_supabase",
+      "target": "repositories_supabasevideorepository_supabaseconfig",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/config/supabase.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository",
+      "target": "entities_videoentity_video",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository",
+      "target": "entities_videoentity_videouploadpayload",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository",
+      "target": "entities_videoentity_videouploadprogress",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository",
+      "target": "repositories_videorepository_videorepository",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository",
+      "target": "repositories_videorepository_uploadprogresscallback",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "composables_usevideoupload",
+      "target": "entities_videoentity_video",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/presentation/composables/useVideoUpload.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "composables_usevideoupload",
+      "target": "entities_videoentity_videouploadpayload",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/presentation/composables/useVideoUpload.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "composables_usevideoupload",
+      "target": "entities_videoentity_videouploadstate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/presentation/composables/useVideoUpload.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "composables_usevideoupload",
+      "target": "entities_videoentity_videouploadprogress",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/presentation/composables/useVideoUpload.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "composables_usevideoupload",
+      "target": "application_videoservice_videoservice",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/presentation/composables/useVideoUpload.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "composables_usevideoupload",
+      "target": "repositories_videorepository_videorepository",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/presentation/composables/useVideoUpload.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "application_authservice_authservice_constructor",
+      "target": "domain_authrepository_authrepository",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/application/AuthService.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "application_authservice_authservice_login",
+      "target": "domain_authentity_logincredentials",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/application/AuthService.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "application_authservice_authservice_login",
+      "target": "domain_authentity_authresponse",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/application/AuthService.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "domain_authrepository_authrepository_login",
+      "target": "domain_authentity_logincredentials",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/domain/AuthRepository.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "domain_authrepository_authrepository_login",
+      "target": "domain_authentity_authresponse",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/domain/AuthRepository.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "validators_uservalidator_uservalidator_validate",
+      "target": "domain_userentity_userentity",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/domain/validators/UserValidator.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authapi_authapi",
+      "target": "domain_authrepository_authrepository",
+      "relation": "implements",
+      "context": "type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/infrastructure/AuthApi.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authapi_authapi_login",
+      "target": "domain_authentity_logincredentials",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/infrastructure/AuthApi.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authapi_authapi_login",
+      "target": "domain_authentity_authresponse",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/infrastructure/AuthApi.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_bookrepository_bookrepository_save",
+      "target": "entities_book_book",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/domain/repositories/BookRepository.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_bookrepository_bookrepository_save",
+      "target": "entities_book_book",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/domain/repositories/BookRepository.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_bookrepository_bookrepository_findall",
+      "target": "entities_book_book",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/domain/repositories/BookRepository.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_bookrepository_bookrepository_update",
+      "target": "entities_book_book",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/domain/repositories/BookRepository.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosbookrepository_axiosbookrepository",
+      "target": "repositories_bookrepository_bookrepository",
+      "relation": "implements",
+      "context": "type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/infrastructure/repositories/AxiosBookRepository.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosbookrepository_axiosbookrepository_findall",
+      "target": "entities_book_book",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/infrastructure/repositories/AxiosBookRepository.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosbookrepository_axiosbookrepository_save",
+      "target": "entities_book_book",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/infrastructure/repositories/AxiosBookRepository.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosbookrepository_axiosbookrepository_save",
+      "target": "entities_book_book",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/infrastructure/repositories/AxiosBookRepository.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosbookrepository_axiosbookrepository_update",
+      "target": "entities_book_book",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/books/infrastructure/repositories/AxiosBookRepository.ts",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "domain_authorentity_updateauthorpayload",
+      "target": "domain_authorentity_createauthorpayload",
+      "relation": "inherits",
+      "context": "type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/domain/AuthorEntity.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "domain_bookentity_updatebookpayload",
+      "target": "domain_bookentity_createbookpayload",
+      "relation": "inherits",
+      "context": "type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/domain/BookEntity.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authorapi_authorapi_getall",
+      "target": "domain_authorentity_author",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/AuthorApi.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authorapi_authorapi_getbyid",
+      "target": "domain_authorentity_author",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/AuthorApi.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authorapi_authorapi_create",
+      "target": "domain_authorentity_createauthorpayload",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/AuthorApi.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authorapi_authorapi_create",
+      "target": "domain_authorentity_author",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/AuthorApi.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authorapi_authorapi_update",
+      "target": "domain_authorentity_updateauthorpayload",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/AuthorApi.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_authorapi_authorapi_update",
+      "target": "domain_authorentity_author",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/AuthorApi.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_bookapi_bookapi_getall",
+      "target": "domain_bookentity_book",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/BookApi.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_bookapi_bookapi_getbyid",
+      "target": "domain_bookentity_book",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/BookApi.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_bookapi_bookapi_create",
+      "target": "domain_bookentity_createbookpayload",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/BookApi.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_bookapi_bookapi_create",
+      "target": "domain_bookentity_book",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/BookApi.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_bookapi_bookapi_update",
+      "target": "domain_bookentity_updatebookpayload",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/BookApi.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure_bookapi_bookapi_update",
+      "target": "domain_bookentity_book",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/dashboard/infrastructure/BookApi.ts",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_noterepository_noterepository_create",
+      "target": "entities_note_note",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/domain/repositories/NoteRepository.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_noterepository_noterepository_create",
+      "target": "entities_note_note",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/domain/repositories/NoteRepository.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_noterepository_noterepository_findall",
+      "target": "entities_note_note",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/domain/repositories/NoteRepository.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_noterepository_noterepository_update",
+      "target": "entities_note_note",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/domain/repositories/NoteRepository.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_noterepository_noterepository_update",
+      "target": "entities_note_note",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/domain/repositories/NoteRepository.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosnoterepository_axiosnoterepository",
+      "target": "repositories_noterepository_noterepository",
+      "relation": "implements",
+      "context": "type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/infrastructure/repositories/AxiosNoteRepository.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosnoterepository_axiosnoterepository_create",
+      "target": "entities_note_note",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/infrastructure/repositories/AxiosNoteRepository.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosnoterepository_axiosnoterepository_create",
+      "target": "entities_note_note",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/infrastructure/repositories/AxiosNoteRepository.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosnoterepository_axiosnoterepository_findall",
+      "target": "entities_note_note",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/infrastructure/repositories/AxiosNoteRepository.ts",
+      "source_location": "L34",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosnoterepository_axiosnoterepository_update",
+      "target": "entities_note_note",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/infrastructure/repositories/AxiosNoteRepository.ts",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiosnoterepository_axiosnoterepository_update",
+      "target": "entities_note_note",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/notes/infrastructure/repositories/AxiosNoteRepository.ts",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_topicrepository_topicrepository_save",
+      "target": "entities_topic_topic",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/topics/domain/repositories/TopicRepository.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_topicrepository_topicrepository_save",
+      "target": "entities_topic_topic",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/topics/domain/repositories/TopicRepository.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_topicrepository_topicrepository_findall",
+      "target": "entities_topic_topic",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/topics/domain/repositories/TopicRepository.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiostopicrepository_axiostopicrepository",
+      "target": "repositories_topicrepository_topicrepository",
+      "relation": "implements",
+      "context": "type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/topics/infrastructure/repositories/AxiosTopicRepository.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiostopicrepository_axiostopicrepository_findall",
+      "target": "entities_topic_topic",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/topics/infrastructure/repositories/AxiosTopicRepository.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiostopicrepository_axiostopicrepository_save",
+      "target": "entities_topic_topic",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/topics/infrastructure/repositories/AxiosTopicRepository.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_axiostopicrepository_axiostopicrepository_save",
+      "target": "entities_topic_topic",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/topics/infrastructure/repositories/AxiosTopicRepository.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice_videoservice_constructor",
+      "target": "repositories_videorepository_videorepository",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice_videoservice_uploadvideo",
+      "target": "entities_videoentity_videouploadpayload",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice_videoservice_uploadvideo",
+      "target": "repositories_videorepository_uploadprogresscallback",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice_videoservice_uploadvideo",
+      "target": "entities_videoentity_video",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice_videoservice_uploadvideoonly",
+      "target": "entities_videoentity_videouploadpayload",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L71",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice_videoservice_uploadvideoonly",
+      "target": "repositories_videorepository_uploadprogresscallback",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L71",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice_videoservice_getvideo",
+      "target": "entities_videoentity_video",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L94",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice_videoservice_listvideos",
+      "target": "entities_videoentity_video",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L101",
+      "weight": 1.0
+    },
+    {
+      "source": "application_videoservice_videoservice_createinitialstate",
+      "target": "entities_videoentity_videouploadstate",
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/application/VideoService.ts",
+      "source_location": "L108",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_videorepository_videorepository_uploadvideo",
+      "target": "entities_videoentity_videouploadpayload",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/domain/repositories/VideoRepository.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_videorepository_videorepository_createvideorecord",
+      "target": "entities_videoentity_video",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/domain/repositories/VideoRepository.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_videorepository_videorepository_getvideobyid",
+      "target": "entities_videoentity_video",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/domain/repositories/VideoRepository.ts",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_videorepository_videorepository_listvideos",
+      "target": "entities_videoentity_video",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/domain/repositories/VideoRepository.ts",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository_supabasevideorepository",
+      "target": "repositories_videorepository_videorepository",
+      "relation": "implements",
+      "context": "type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository_supabasevideorepository_uploadvideo",
+      "target": "entities_videoentity_videouploadpayload",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository_supabasevideorepository_uploadvideo",
+      "target": "repositories_videorepository_uploadprogresscallback",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository_supabasevideorepository_uploadsimple",
+      "target": "repositories_videorepository_uploadprogresscallback",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository_supabasevideorepository_uploadwithresumable",
+      "target": "repositories_videorepository_uploadprogresscallback",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L130",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository_supabasevideorepository_createvideorecord",
+      "target": "entities_videoentity_video",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L206",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository_supabasevideorepository_getvideobyid",
+      "target": "entities_videoentity_video",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L259",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository_supabasevideorepository_listvideos",
+      "target": "entities_videoentity_video",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L274",
+      "weight": 1.0
+    },
+    {
+      "source": "repositories_supabasevideorepository_supabasevideorepository_mapdatabasetoentity",
+      "target": "entities_videoentity_video",
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts",
+      "source_location": "L289",
+      "weight": 1.0
+    },
+    {
+      "source": "composables_usevideoupload_usevideouploadoptions",
+      "target": "repositories_videorepository_videorepository",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/presentation/composables/useVideoUpload.ts",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "composables_usevideoupload_usevideouploadreturn",
+      "target": "entities_videoentity_videouploadstate",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/presentation/composables/useVideoUpload.ts",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "composables_usevideoupload_usevideouploadreturn",
+      "target": "entities_videoentity_videouploadpayload",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/presentation/composables/useVideoUpload.ts",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "composables_usevideoupload_usevideouploadreturn",
+      "target": "entities_videoentity_video",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/video/presentation/composables/useVideoUpload.ts",
+      "source_location": "L30",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}
