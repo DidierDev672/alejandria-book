@@ -29,6 +29,8 @@ D:\Vue\alajandria-book\src\features\dashboard\presentation\pages\DashboardOvervi
 D:\Vue\alajandria-book\src\features\exercise\application\stores\useExerciseStore.ts
 D:\Vue\alajandria-book\src\features\exercise\infrastructure\http\axiosExercise.ts
 D:\Vue\alajandria-book\src\features\exercise\infrastructure\services\exerciseService.ts
+D:\Vue\alajandria-book\src\features\exercise\presentation\pages\ExerciseCreatePage.vue
+D:\Vue\alajandria-book\src\features\exercise\presentation\pages\ExerciseListPage.vue
 D:\Vue\alajandria-book\src\features\maintenance\application\stores\useEquipmentListStore.ts
 D:\Vue\alajandria-book\src\features\maintenance\application\stores\useEquipmentStore.ts
 D:\Vue\alajandria-book\src\features\maintenance\infrastructure\http\axiosEquipment.ts
@@ -64,13 +66,16 @@ D:\Vue\alajandria-book\src\features\video\infrastructure\repositories\SupabaseVi
 D:\Vue\alajandria-book\src\features\video\presentation\components\VideoUploadForm.vue
 D:\Vue\alajandria-book\src\features\video\presentation\composables\useVideoUpload.ts
 D:\Vue\alajandria-book\src\infrastructure\http\axiosInstance.ts
+D:\Vue\alajandria-book\src\lib\supabase.ts
 D:\Vue\alajandria-book\src\main.ts
 D:\Vue\alajandria-book\src\router\index.ts
+D:\Vue\alajandria-book\src\stores\chatStore.ts
 D:\Vue\alajandria-book\src\stores\equipmentStore.js
 D:\Vue\alajandria-book\src\utils\components\BaseErrorDisplay.vue
 D:\Vue\alajandria-book\src\utils\components\BaseInput.vue
 D:\Vue\alajandria-book\src\utils\components\BaseLoading.vue
 D:\Vue\alajandria-book\src\utils\components\BaseModal.vue
+D:\Vue\alajandria-book\src\utils\components\BaseTextarea.vue
 D:\Vue\alajandria-book\src\utils\components\CustomVideoPlayer.vue
 D:\Vue\alajandria-book\src\utils\components\EmptyBox.vue
 D:\Vue\alajandria-book\src\utils\components\ImageViewer.vue

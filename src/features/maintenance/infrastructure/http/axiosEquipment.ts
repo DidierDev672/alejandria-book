@@ -1,22 +1,25 @@
-import axiosInstance from "@/infrastructure/http/axiosInstance";
+import axios from "axios";
+import { SESSION_EXPIRED_EVENT } from "@/infrastructure/http/axiosInstance";
 
-/**
- * Instancia de Axios configurada para el módulo de Equipment
- * Reutiliza los interceptores del axiosInstance central
- */
-const axiosEquipment = axiosInstance.create({
+const axiosEquipment = axios.create({
   baseURL: "/equipment",
   timeout: 10000,
+  headers: { "Content-Type": "application/json" },
 });
 
-// Debug interceptor para desarrollo
 axiosEquipment.interceptors.request.use(
   (config) => {
+    const token = localStorage.getItem("auth_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     if (import.meta.env.DEV) {
       console.log(
         `[Equipment API] ${config.method?.toUpperCase()} ${config.url}`,
         config.params || config.data || "",
       );
+      console.log(`[Equipment API] Token presente: ${!!token}`);
     }
     return config;
   },
@@ -39,8 +42,23 @@ axiosEquipment.interceptors.response.use(
   (error) => {
     const status = error.response?.status;
     const errorMessage = error.response?.data?.error || error.message;
+    const errorCode = error.response?.data?.code;
 
     switch (status) {
+      case 401:
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("auth_user");
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent(SESSION_EXPIRED_EVENT, {
+              detail: { message: errorMessage, code: errorCode },
+            }),
+          );
+          if (!window.location.pathname.includes("/login")) {
+            window.location.href = "/login?error=session_expired";
+          }
+        }
+        break;
       case 403:
         console.error("[Equipment API] Acceso denegado:", errorMessage);
         break;

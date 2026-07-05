@@ -40,7 +40,7 @@ export interface EquipmentFilters {
 // STORE DEFINITION
 // ============================================================
 
-export const useEquipmentStore = defineStore('equipment', () => {
+export const useEquipmentStore = defineStore('maintenance-equipment', () => {
   // ==========================================================
   // STATE (Variables Reactivas)
   // ==========================================================

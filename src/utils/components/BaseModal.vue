@@ -160,7 +160,7 @@ onUnmounted(() => {
                 </div>
 
                 <!-- Divider -->
-                <div class="h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent" />
+                <div class="h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent"></div>
 
                 <!-- Footer con Gradiente -->
                 <footer v-if="$slots.footer" v-motion :initial="{ opacity: 0, y: 10 }"

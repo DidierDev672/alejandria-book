@@ -193,38 +193,33 @@ onUnmounted(() => {
                     <div class="flex items-center gap-4">
 
                         <!-- Play / Pause -->
-                        <button @click="togglePlay"
-                            :aria-label="isPlaying ? 'Pausar' : 'Reproducir'"
+                        <button type="button" @click="togglePlay" :aria-label="isPlaying ? 'Pausar' : 'Reproducir'"
                             class="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-md shadow-amber-500/30 hover:from-amber-400 hover:to-orange-500 transition-all duration-200 active:scale-95 focus:outline-none">
-                            <svg v-if="!isPlaying" width="16" height="16" viewBox="0 0 24 24"
-                                fill="currentColor">
+                            <svg v-if="!isPlaying" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M8 5v14l11-7z" />
                             </svg>
-                            <svg v-else width="16" height="16" viewBox="0 0 24 24"
-                                fill="currentColor">
+                            <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
                             </svg>
                         </button>
 
                         <!-- Tiempo -->
                         <div class="text-xs font-mono tracking-wide">
-                            <span
-                                class="text-amber-300 font-semibold">{{ formattedCurrentTime }}</span>
+                            <span class="text-amber-300 font-semibold">{{ formattedCurrentTime }}</span>
                             <span class="mx-1 text-stone-500">/</span>
                             <span class="text-stone-400">{{ formattedDuration }}</span>
                         </div>
 
                         <!-- Volumen -->
                         <div class="flex items-center gap-1.5 group/volume">
-                            <button @click="toggleMute"
+                            <button type="button" @click="toggleMute"
                                 class="text-stone-300 hover:text-amber-400 transition-colors duration-200 focus:outline-none">
-                                <svg v-if="isMuted || volume === 0" width="18" height="18"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2.5">
+                                <svg v-if="isMuted || volume === 0" width="18" height="18" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2.5">
                                     <path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6" />
                                 </svg>
-                                <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2.5">
+                                <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.5">
                                     <path d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07" />
                                 </svg>
                             </button>
@@ -235,8 +230,8 @@ onUnmounted(() => {
                                 <div class="relative h-1 rounded-full bg-white/15 mx-1">
                                     <div class="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-amber-400 to-orange-500"
                                         :style="{ width: (isMuted ? 0 : volume) * 100 + '%' }" />
-                                    <input type="range" min="0" max="1" step="0.05"
-                                        :value="isMuted ? 0 : volume" @input="handleVolumeChange"
+                                    <input type="range" min="0" max="1" step="0.05" :value="isMuted ? 0 : volume"
+                                        @input="handleVolumeChange"
                                         class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                                 </div>
                             </div>
@@ -258,26 +253,25 @@ onUnmounted(() => {
                                 <option value="2" class="bg-stone-900 text-stone-100">2.0×</option>
                             </select>
                             <!-- Chevron decorativo -->
-                            <div
-                                class="pointer-events-none absolute inset-y-0 right-2 flex items-center">
-                                <svg class="w-3 h-3 text-amber-500" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                            <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center">
+                                <svg class="w-3 h-3 text-amber-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>
                         </div>
 
                         <!-- Fullscreen -->
-                        <button @click="toggleFullscreen"
+                        <button type="button" @click="toggleFullscreen"
                             class="text-stone-300 hover:text-amber-400 transition-colors duration-200 focus:outline-none">
-                            <svg v-if="!isFullscreen" width="18" height="18" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2.5">
+                            <svg v-if="!isFullscreen" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5">
                                 <path
                                     d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3" />
                             </svg>
-                            <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2.5">
+                            <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
                                 <path d="M4 14h6v6M20 14h-6v6M4 10h6V4M20 10h-6V4" />
                             </svg>
                         </button>
