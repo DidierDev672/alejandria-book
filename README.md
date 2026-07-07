@@ -26,8 +26,10 @@ La aplicación se conecta con un backend REST denominado **API Atreides** y con 
 | 🤖 **Asistente IA** | Biblioteca | Chat contextual con LLM local, guiones de contenido | ✅ Funcional |
 | 🏷️ **Topics** | Biblioteca | CRUD con tipos (research/tech/literature/philosophy) | ✅ Funcional |
 | 👥 **Usuarios** | Global | Lista con búsqueda y detalle | ✅ Funcional |
-| 🏗️ **Equipamiento** | Coliseo | CRUD con imagen, paginación, subida de video | ✅ Funcional |
-| ⚡ **Ejercicios** | Coliseo | Timeline histórico por equipo, CRUD con video | ✅ Funcional |
+| 🏗️ **Equipamiento** | Coliseo | CRUD con imagen, interceptores Auth corregidos | ✅ Funcional |
+| ⚡ **Ejercicios** | Coliseo | Timeline histórico, CRUD + Modal de confirmación de videos | ✅ Funcional |
+| 🛡️ **Gladiadores (Miembros)** | Coliseo | Registro multi-paso, lista, arquitectura Onion + Atomic Design | ✅ Frontend listo |
+| ⏳ **LoadingView** | Global | Pantalla de carga imperial antes del render de la app | ✅ Funcional |
 | 📊 **Dashboard** | Global | KPIs y vista general del catálogo | ⚠️ Mock data |
 | 🌐 **Tracking** | Global | Registro de visitantes (IP, geo, fingerprint) | ✅ Funcional |
 
@@ -120,15 +122,15 @@ La aplicación estará disponible en `http://localhost:5173`.
 alajandria-book/
 ├── public/
 ├── src/
-│   ├── main.ts                          # Entry point: Vue + Pinia + Router + carga de historial IA
-│   ├── App.vue
+│   ├── main.ts                          # Entry point: Vue + Pinia + Router + MotionPlugin
+│   ├── App.vue                          # LoadingView global + RouterView condicional
 │   ├── style.css
 │   │
 │   ├── lib/
 │   │   └── supabase.ts                  # Cliente Supabase compartido (singleton)
 │   │
 │   ├── stores/
-│   │   ├── equipmentStore.js            # Store global de equipamiento
+│   │   ├── equipmentStore.js            # Store global de equipamiento (axiosInstance)
 │   │   └── chatStore.ts                 # Store de chat IA con persistencia en Supabase
 │   │
 │   ├── router/
@@ -139,6 +141,11 @@ alajandria-book/
 │   │       └── axiosInstance.ts         # Cliente HTTP centralizado → API Atreides
 │   │
 │   ├── utils/
+│   │   ├── loading/                     # ⏳ Módulo de carga (Onion)
+│   │   │   ├── domain/
+│   │   │   ├── application/
+│   │   │   ├── infrastructure/icons/
+│   │   │   └── presentation/components/LoadingView.vue
 │   │   └── components/
 │   │       ├── BaseLoading.vue          # Spinner reutilizable
 │   │       ├── BaseErrorDisplay.vue     # Visualizador de errores
@@ -156,10 +163,20 @@ alajandria-book/
 │       │           └── NotebookSpread.vue  # 📔 Cuaderno digital + Asistente IA
 │       ├── topics/                      # 🏷️ Topics
 │       ├── users/                       # 👥 Usuarios
+│       ├── members/                     # 🛡️ Gladiadores del Coliseo (Vertical Slice)
+│       │   ├── domain/                  # Entidades, repositorios (ports), servicios de dominio
+│       │   ├── application/             # MemberService, useMemberStore (Pinia)
+│       │   ├── infrastructure/http/     # HttpMemberRepository (adapter Axios)
+│       │   └── presentation/
+│       │       ├── components/          # Atomic Design: atoms → molecules → organisms
+│       │       └── pages/
+│       │           ├── MemberCreatePage.vue
+│       │           └── MemberListPage.vue
 │       ├── exercise/
 │       │   └── presentation/
 │       │       └── pages/
-│       │           └── ExerciseListPage.vue  # ⚡ Timeline de ejercicios
+│       │           ├── ExerciseCreatePage.vue  # Crear ejercicio + confirmación video Supabase
+│       │           └── ExerciseListPage.vue    # ⚡ Timeline de ejercicios
 │       ├── maintenance/                 # 🏗️ Equipamiento (CRUD + video upload)
 │       ├── video/                       # 🎬 Servicio Supabase Storage (videos)
 │       │   ├── domain/
@@ -167,7 +184,7 @@ alajandria-book/
 │       │   └── infrastructure/
 │       │       ├── config/supabase.ts
 │       │       └── repositories/SupabaseVideoRepository.ts
-│       ├── dashboard/                   # 📊 Layout + vista general
+│       ├── dashboard/                   # 📊 Layout + vista general + sidebar Coliseo
 │       └── tracking/                    # 🌐 Registro de visitantes
 │
 ├── docs/
@@ -200,7 +217,10 @@ alajandria-book/
 | `/dashboard/users/create` | `create-user` | ✅ | Registro de usuario |
 | `/dashboard/coliseo/equipment/create` | `create-equipment` | ✅ | Crear equipamiento |
 | `/dashboard/coliseo/equipment/list` | `equipment-list` | ✅ | Lista de equipamiento + ejercicios |
-| `/dashboard/coliseo/exercises` | `exercise-list` | ✅ | **Timeline histórico de ejercicios** |
+| `/dashboard/coliseo/exercises` | `exercise-list` | ✅ | Timeline histórico de ejercicios |
+| `/dashboard/coliseo/exercises/create` | `exercise-create` | ✅ | Crear ejercicio + confirmación de video Supabase |
+| `/dashboard/coliseo/members` | `members-list` | ✅ | Lista de gladiadores del Coliseo |
+| `/dashboard/coliseo/members/create` | `member-create` | ✅ | Registro multi-paso de gladiador |
 
 ---
 
@@ -239,13 +259,142 @@ create index if not exists chat_messages_user_created
 
 ---
 
-## 📅 Sesión de Desarrollo — 2 de Julio, 2026
+## 📅 Sesiones de Desarrollo 
+
+### 📜 Sesión Imperial — 5 de Julio, 2026
+> *«Como los ingenieros de los ornítopteros Atreides refinan cada engranaje hasta lograr el vuelo perfecto, hemos forjado el sistema de carga de videos hasta convertirlo en un ritual digno de la disciplina imperial.»*
+
+**⚔️ La Forja del Gladius Tecnológico — Sistema de Videos Supabase**
+
+En esta sesión, el sistema de videos alcanzó la perfección de un **gladius** romano: elegante, letal y absolutamente confiable. Como los gladiadores del Coliseo que perfeccionan cada movimiento antes de enfrentar a las fieras, refinamos cada aspecto del flujo de confirmación de videos.
+
+**🎬 El Ritual de Confirmación Imperial**
+
+Al igual que en Dune, donde cada acto ceremonial tiene múltiples capas de significado, implementamos el **Modal de Confirmación de Videos** que transforma la simple subida de archivos en un proceso digno de los archivistas de la Casa Atreides:
+
+1. **La Carga Silenciosa**: El video se sube a Supabase Storage sin intervención del usuario
+2. **El Oráculo Visual**: Se abre un modal mostrando la URL pública y reproduciendo el video con nuestro `CustomVideoPlayer` 
+3. **La Decisión Imperial**: Dos caminos, como las opciones que enfrenta Paul en el desierto:
+   - **"Confirmar URL y crear ejercicio"** — El video pasa a formar parte del registro eterno
+   - **"Reintentar"** — Se reinicia el proceso, como un Mentat que detecta un error en sus cálculos
+
+**🏛️ La Arquitectura de los Colosos**
+
+Como las máquinas masivas del Imperio en Dune que requieren mantenimiento preciso, corregimos errores estructurales críticos:
+
+- **Interceptores Axios Heredados**: Los `axiosEquipment` no heredaban la autenticación del `axiosInstance` central — cada petición de equipamiento fallaba con 401, como soldados imperiales sin sus identificaciones correctas
+- **Plantillas HTML Quebradas**: Etiquetas `<div>` desalineadas causaban errores de parsing — las reparamos con la precisión de un arquitecto que reconstruye los pilares del Coliseo
+- **Tipos TypeScript Discordantes**: Aserciones de tipos en plantillas Vue causaban conflictos — las refinamos como un Mentat que corrige inconsistencias lógicas
+
+### 📚 El Legado de la Biblioteca — 2 de Julio, 2026
 
 *Como haría un investigador de la Biblioteca que en un solo día consulta pergaminos dispares y los conecta en un tratado coherente, esta sesión amplió la plataforma en cuatro frentes simultáneos.*
 
 ---
 
-### I. El Historial del Coliseo — `ExerciseListPage`
+**🔧 Los Protocolos de Integridad Imperial**
+
+- **Error de Formulario Roto**: Como un ornítoptero con el fuselaje dañado, el formulario de ejercicios tenía etiquetas HTML mal anidadas que impedían su funcionamiento
+- **Gestión de Estado Reactivo**: Refinamos el manejo de `validationErrors` y `isSubmitting` con la precisión de un navegante espacial que calibra sus instrumentos antes de cada salto
+- **Interceptores de Autenticación**: Los módulos de equipamiento no heredaban la configuración de tokens JWT — cada petición era rechazada como un guardia que no reconoce el sello de la Casa
+
+**🎯 El Resultado: Un Arsenal Perfeccionado**
+
+Al final de esta sesión, el sistema de videos funciona con la confiabilidad de la maquinaria Atreides: cada componente cumple su función, cada error se maneja con gracia, y la experiencia del usuario fluye como la melange a través del desierto.
+
+---
+
+### 🛡️ Sesión del Coliseo — 5–6 de Julio, 2026
+> *«Antes de entrar a la arena, el gladiador es inscrito en los registros del lanista. Cuerpo, mente y objetivo quedan archivados como un pergamino más en la Biblioteca del Imperio.»*
+
+**IV. El Censo de Gladiadores — Módulo `members/`**
+
+Se implementó el slice vertical completo para registrar y listar **miembros del Coliseo**, siguiendo **Vertical Slicing + Onion Architecture + SOLID + Atomic Design**:
+
+| Capa | Contenido |
+|------|-----------|
+| **Domain** | `Member.types.ts`, `MemberRepository` (port), `MemberDomainService` (BMI, edad, mapeo form→DTO) |
+| **Application** | `MemberService` (casos de uso), `useMemberStore` (Pinia) |
+| **Infrastructure** | `HttpMemberRepository` — orquestación HTTP en cascada |
+| **Presentation** | Atoms → Molecules → Organisms → Pages |
+
+**Formulario de registro (`MemberCreatePage`) — 2 pasos:**
+
+1. **Información personal + métricas corporales** — datos básicos, peso, altura, medidas, IMC calculado en tiempo real
+2. **Salud y objetivos** — salud mental, condiciones físicas (dinámicas), objetivos del miembro (dinámicos)
+
+**Integración con API Atreides (flujo en cascada):**
+
+```
+POST /members                          → datos básicos (devuelve id)
+POST /members/{id}/body-metrics        → métricas corporales
+POST /members/{id}/health-conditions   → una petición por condición
+POST /members/{id}/mental-health        → salud mental
+POST /members/{id}/goals               → una petición por objetivo (is_achieved no se envía)
+```
+
+**Mapeos frontend → API:**
+
+| Campo interno | Enviado al backend |
+|---------------|-------------------|
+| `gender: MASCULINO` | `genre: "masculino"` |
+| `stress_level: 5` (1–10) | `stress_level: "moderado"` |
+| `mood: NEUTRO` | `mood: "neutro"` |
+| `goal_type: PERDIDA_PESO` | `goal_type: "pérdida de peso"` |
+
+**Lista de gladiadores (`MemberListPage`):** tabla con búsqueda, IMC, badges de género/objetivos y estadísticas agregadas. Normalización defensiva cuando el API devuelve miembros sin arrays anidados (`goals`, `health_conditions`).
+
+**Sidebar:** nuevo ítem **Registrar galiador** en el dropdown Coliseo → `/dashboard/coliseo/members/create`.
+
+---
+
+**V. El Velo de Entrada — `LoadingView` global**
+
+Como el ritual de apertura de los archivos de la Casa Atreides, la app ahora muestra `LoadingView` **antes** de renderizar cualquier ruta:
+
+- `App.vue` monta el loader con `isAppReady = false`
+- Inicializa chat (`loadFromCloud`) + `router.isReady()`
+- Solo entonces renderiza `<RouterView />`
+- Animaciones CSS puras (sin `<motion.div>` — incompatible con `@vueuse/motion`)
+
+---
+
+**VI. Protocolos de Autenticación Reforzados**
+
+| Archivo | Problema | Solución |
+|---------|----------|----------|
+| `axiosEquipment.ts` | `axiosInstance.create()` no hereda interceptores → 401 | Instancia propia con interceptor JWT + manejo 401 |
+| `equipmentStore.js` | Axios crudo con `Bearer null` | Migrado a `axiosInstance` centralizado |
+
+---
+
+**VII. Correcciones de Campo de Batalla**
+
+- **`ExerciseCreatePage`**: `isSubmitting` se resetea antes del modal de confirmación de video; HTML anidado corregido; `validationErrors` con `delete` en lugar de `undefined`
+- **`LoadingView`**: `withDefaults`, `watch(() => props.isLoading)`, reemplazo de `<motion.*>` por CSS
+- **`MemberListPage`**: crash `member.goals.length` cuando el API no incluye `goals` → `normalizeMember()` en repositorio
+- **`MemberCreatePage`**: `novalidate` en formulario + validación propia por pasos
+
+---
+
+**VIII. Grafo de Conocimiento Actualizado**
+
+```bash
+graphify update .   # 69 archivos nuevos/modificados
+```
+
+| Métrica | Valor |
+|---------|-------|
+| Nodos | **1.358** |
+| Aristas | **1.800** |
+| Comunidades | **144** |
+| God Node nuevo | `Member` (18 edges) |
+
+Backup automático en `graphify-out/2026-07-05/`.
+
+---
+
+### I. Los Anales del Coliseo — `ExerciseListPage`
 
 > *En la Biblioteca, no basta con archivar. Un buen investigador traza la línea del tiempo: cuándo apareció cada fragmento, de dónde provino y con qué otro saber está enlazado.*
 
@@ -335,28 +484,31 @@ Un singleton que centraliza la conexión. Como el catálogo maestro de la Biblio
 - `saving` (texto "Guardando en la nube…") → Supabase está escribiendo
 - `error` → el modelo no respondió, con botón para reconfigurar
 
-**Inicialización en `main.ts`:** antes de montar la aplicación, se verifica si hay una sesión activa (`auth_user` en `localStorage`) y se carga el historial de forma asíncrona. La app monta solo cuando este proceso termina, garantizando que los mensajes estén disponibles desde el primer render.
+**Inicialización en `App.vue`:** al montar la app, `LoadingView` cubre la pantalla mientras se carga el historial del chat (si hay sesión) y se resuelve la ruta inicial. Solo entonces se renderiza el contenido — como abrir los portones de la Biblioteca solo cuando los archivistas han preparado el salón de lectura.
 
 ---
 
-## 📊 Estado del Proyecto
+## 📊 Estado del Arsenal Imperial
 
-| Área | Estado |
-|------|--------|
-| Login | ✅ Integrado con API Atreides |
-| Registro | ⚠️ Validación local; sin endpoint backend activo |
-| CRUD Libros | ✅ Funcional |
-| CRUD Autores | ✅ Funcional |
-| CRUD Notas | ✅ Funcional |
-| CRUD Topics | ✅ Funcional |
-| CRUD Usuarios | ✅ Funcional |
-| CRUD Equipamiento | ✅ Funcional (con imagen y video en Supabase) |
-| Timeline de Ejercicios | ✅ Funcional (ver / editar / video modal) |
-| Asistente IA (Notas) | ✅ Funcional (Ollama + OpenAI-compatible) |
-| Historial IA en Supabase | ✅ Funcional |
-| Dashboard KPIs | ⚠️ Datos de demostración (mock) |
-| Tracking Visitantes | ✅ Funcional |
-| Tests | ❌ No implementados |
+Como los reportes de estado que los Mentat de la Casa Atreides entregan al Duque cada amanecer, aquí se documenta el poder de combate actual de nuestras fuerzas tecnológicas:
+
+| Arsenal | Estado de Combate | Notas del Comandante |
+|---------|------------------|---------------------|
+| **Sistemas de Acceso** | ⚔️ Operativo | Portal de autenticación imperial sincronizado con API Atreides |
+| **Registro de Nuevos Reclutas** | ⚠️ Solo validación local | Faltan protocolos de backend para incorporación oficial |
+| **Censo de Gladiadores** | ⚔️ Frontend operativo | Registro multi-paso + lista; requiere `POST /members` en API Atreides |
+| **Archivos de Pergaminos** | ⚔️ Operativo | CRUD completo de libros, como los catálogos de Alejandría |
+| **Registro de Escribas** | ⚔️ Operativo | Gestión de autores con la precisión de archivistas imperiales |
+| **Cuadernos de Campo** | ⚔️ Operativo | Sistema de notas con IA integrada, como un Mentat personal |
+| **Taxonomía del Saber** | ⚔️ Operativo | Clasificación de topics con rigor académico |
+| **Censo de Usuarios** | ⚔️ Operativo | Registro de todos los ciudadanos del dominio digital |
+| **Arsenal del Coliseo** | ⚔️ Operativo | CRUD de equipamiento con autenticación blindada y videos Supabase |
+| **Anales de Combate** | ⚔️ Operativo | Timeline de ejercicios con modalización de videos y confirmación imperial |
+| **Oráculo de Escritura** | ⚔️ Operativo | Asistente IA para análisis de notas (Ollama + OpenAI-compatible) |
+| **Memoria Eterna** | ⚔️ Operativo | Persistencia de conversaciones IA en Supabase |
+| **Centro de Comando** | ⚠️ Datos simulados | KPIs y métricas aún en fase de demostración |
+| **Vigilancia Territorial** | ⚔️ Operativo | Tracking de visitantes como los espías Atreides |
+| **Protocolos de Prueba** | ❌ Sin implementar | Las defensas no han sido probadas contra asedio |
 
 ---
 
@@ -374,12 +526,17 @@ Un singleton que centraliza la conexión. Como el catálogo maestro de la Biblio
 
 El proyecto incluye un grafo de conocimiento generado con Graphify en `graphify-out/`:
 
-- **`graph.html`** — Grafo interactivo (abre en navegador)
-- **`graph.json`** — Datos crudos para análisis
-- **`GRAPH_REPORT.md`** — Reporte de auditoría con God Nodes y conexiones
+| Archivo | Descripción |
+|---------|-------------|
+| **`graph.html`** | Grafo interactivo (abre en navegador) |
+| **`graph.json`** | Datos crudos — **1.358 nodos**, **1.800 aristas** |
+| **`GRAPH_REPORT.md`** | Reporte de auditoría con God Nodes y conexiones |
+
+**God Nodes actuales:** `Member`, `Alejandría Book`, `Video`, `MemberDomainService`, `SupabaseVideoRepository`.
 
 ```bash
-graphify .   # Regenerar tras cambios significativos
+graphify update .   # Actualización incremental (solo archivos modificados)
+graphify .          # Regeneración completa tras cambios masivos
 ```
 
 ---
@@ -405,7 +562,36 @@ Proyecto privado. Todos los derechos reservados.
 
 ---
 
-*«Un Mentat no adivina. Investiga, conecta, sintetiza. Solo entonces habla.»*
+---
 
-*Desarrollado con honor, como lo haría la Casa Atreides.*  
-*Preservado para la eternidad, como lo haría la Biblioteca de Alejandría.*
+## 🏺 Filosofía de Desarrollo: El Código de los Tres Mundos
+
+Este proyecto nace de la fusión de tres grandes civilizaciones del conocimiento y la disciplina:
+
+### 📚 **La Biblioteca de Alejandría** — El Saber Preservado
+> *«Solo quien cataloga puede comprender; solo quien comprende puede enseñar.»*
+
+Como los antiguos bibliotecarios que salvaron los pergaminos del incendio, nuestro código preserva cada fragmento de conocimiento. Cada componente Vue es un pergamino digital, cada store de Pinia es un archivo clasificado, cada endpoint una consulta a los anaqueles eternos.
+
+### ⚔️ **El Coliseo Romano** — La Disciplina del Entrenamiento  
+> *«Gladiator non nascitur, fit» — No se nace gladiador, se hace*
+
+El módulo de equipamiento y ejercicios refleja la disciplina romana: cada movimiento registrado, cada equipo catalogado con la precisión de un *lanista* que prepara a sus guerreros. Los videos de ejercicios son como los manuales de combate — técnica preservada para las generaciones futuras.
+
+### 🏜️ **El Imperio de Dune** — La Visión Estratégica
+> *«El que controla la melange, controla el universo.»*
+
+Nuestra arquitectura sigue los principios de la Casa Atreides: honor en el código, lealtad a los estándares, y la sabiduría Mentat de conectar datos aparentemente dispersos en patrones coherentes. Cada interceptor Axios es como un escudo Holtzman — protección invisible pero esencial. Cada validación TypeScript es como la Voz Bene Gesserit — poder que guía sin ser visto.
+
+---
+
+## 🔮 El Legado del Código
+
+*«Un Mentat no adivina. Investiga, conecta, sintetiza. Solo entonces ejecuta.»*
+
+*Forjado con honor, como lo ordenaría el Duque Leto Atreides.*  
+*Preservado para la eternidad, como lo haría el último bibliotecario de Alejandría.*  
+*Perfeccionado en combate, como lo haría un gladiador del Coliseo.*
+
+**Per aspera ad astra** — A través de las dificultades hacia las estrellas.  
+**Sic transit gloria mundi** — Así pasa la gloria del mundo, pero el código permanece.

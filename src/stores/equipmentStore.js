@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-import axios from "axios";
+import axiosInstance from "@/infrastructure/http/axiosInstance";
 
 /**
  * Store de Pinia para gestionar la lista de equipos del gimnasio
@@ -42,17 +42,11 @@ export const useEquipmentStore = defineStore("equipment", () => {
     // Activar estado de carga y limpiar error previo
     loading.value = true;
     error.value = null;
-    const baseUrl = import.meta.env.VITE_API_ATREIDES
-      ? `${import.meta.env.VITE_API_ATREIDES}/equipment`
-      : "http://localhost:8080/equipment";
 
     try {
-      // Llamada HTTP GET al endpoint /equipment
-      const response = await axios.get(baseUrl, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-        },
-      });
+      // axiosInstance ya resuelve baseURL, inyecta el token
+      // y maneja 401 (limpia sesión y redirige a /login)
+      const response = await axiosInstance.get("/equipment");
 
       // Manejar ambos casos: array o objeto único
       const data = response.data;

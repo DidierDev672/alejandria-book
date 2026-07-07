@@ -57,35 +57,28 @@ watch(() => props.isLoading, (val) => {
             <div class="accent-line" />
 
             <!-- Ícono con halo -->
-            <motion.div :initial="{ rotateY: 0, scale: 0 }" :animate="{ rotateY: [0, 10, -10, 0], scale: 1 }"
-                :transition="{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }" style="transform-origin: center;"
-                class="icon-wrapper">
+            <div class="icon-wrapper icon-sway">
                 <!-- Halo amber difuminado -->
                 <div class="icon-glow" />
                 <BookIcon :size="64" color="#d97706" class="drop-shadow-lg relative z-10" />
-            </motion.div>
+            </div>
 
             <!-- Partículas amber -->
-            <motion.div v-for="n in 4" :key="n" :initial="{ opacity: 0, scale: 0 }"
-                :animate="{ opacity: [0, 1, 0], scale: [0, 1, 0] }"
-                :transition="{ delay: n * 0.25, repeat: Infinity, duration: 1.5 }" class="particle"
-                :style="{ top: `calc(${n % 2 === 0 ? '-' : ''}${n * 10}px)` }" />
+            <div v-for="n in 4" :key="n" class="particle"
+                :style="{ top: `calc(${n % 2 === 0 ? '-' : ''}${n * 10}px)`, animationDelay: `${n * 0.25}s` }" />
 
             <!-- Título -->
-            <motion.h1 :initial="{ opacity: 0, y: 10 }" :animate="{ opacity: 1, y: 0 }" :transition="{ delay: 0.3 }"
-                class="loader-title" style="word-break: keep-all; hyphens: auto;">
+            <h1 class="loader-title fade-up" style="word-break: keep-all; hyphens: auto; animation-delay: 0.3s;">
                 {{ prepared.title }}
-            </motion.h1>
+            </h1>
 
             <!-- Descripción -->
-            <motion.p :initial="{ opacity: 0, y: 10 }" :animate="{ opacity: 1, y: 0 }" :transition="{ delay: 0.5 }"
-                class="loader-description" style="hyphens: auto;">
+            <p class="loader-description fade-up" style="hyphens: auto; animation-delay: 0.5s;">
                 {{ prepared.description }}
-            </motion.p>
+            </p>
 
             <!-- Barra de progreso -->
-            <motion.div :initial="{ width: 0 }" :animate="{ width: ['0%', '50%', '100%', '0%'] }"
-                :transition="{ repeat: Infinity, duration: 3, ease: 'linear' }" class="progress-bar" />
+            <div class="progress-bar" />
 
             <!-- Puntos de carga -->
             <div class="dots-wrapper">
@@ -212,6 +205,46 @@ watch(() => props.isLoading, (val) => {
     z-index: 10;
 }
 
+/* Balanceo 3D del ícono (reemplaza motion.div rotateY) */
+.icon-sway {
+    transform-origin: center;
+    animation: icon-sway 2.5s ease-in-out infinite;
+}
+
+@keyframes icon-sway {
+
+    0%,
+    100% {
+        transform: rotateY(0deg);
+    }
+
+    25% {
+        transform: rotateY(10deg);
+    }
+
+    75% {
+        transform: rotateY(-10deg);
+    }
+}
+
+/* Entrada suave de textos (reemplaza motion.h1 / motion.p) */
+.fade-up {
+    opacity: 0;
+    animation: fade-up 0.6s ease-out forwards;
+}
+
+@keyframes fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .icon-glow {
     position: absolute;
     inset: -10px;
@@ -248,6 +281,22 @@ watch(() => props.isLoading, (val) => {
     border-radius: 50%;
     background: linear-gradient(135deg, #f59e0b, #ea580c);
     box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+    opacity: 0;
+    animation: particle-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes particle-pulse {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .particle:nth-child(even) {
@@ -304,12 +353,29 @@ watch(() => props.isLoading, (val) => {
 .progress-bar {
     height: 3px;
     border-radius: 9999px;
-    min-width: 120px;
     max-width: 220px;
-    width: 100%;
     margin-bottom: 1.25rem;
     background: linear-gradient(90deg, transparent, #f59e0b 40%, #ea580c 70%, transparent);
     box-shadow: 0 0 14px rgba(245, 158, 11, 0.55);
+    animation: progress-sweep 3s linear infinite;
+}
+
+@keyframes progress-sweep {
+    0% {
+        width: 0;
+    }
+
+    40% {
+        width: 110px;
+    }
+
+    80% {
+        width: 220px;
+    }
+
+    100% {
+        width: 0;
+    }
 }
 
 .reduced-motion .progress-bar {

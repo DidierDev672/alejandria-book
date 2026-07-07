@@ -109,6 +109,24 @@ const router = createRouter({
           component: () =>
             import("@/features/exercise/presentation/pages/ExerciseCreatePage.vue"),
         },
+        {
+          path: "coliseo/members",
+          name: "members-list",
+          component: () =>
+            import("@/features/members/presentation/pages/MemberListPage.vue"),
+        },
+        {
+          path: "coliseo/members/create",
+          name: "member-create",
+          component: () =>
+            import("@/features/members/presentation/pages/MemberCreatePage.vue"),
+        },
+        {
+          path: "coliseo/members/list",
+          name: "members-list",
+          component: () =>
+            import("@/features/members/presentation/pages/MemberListPage.vue"),
+        },
       ],
     },
   ],

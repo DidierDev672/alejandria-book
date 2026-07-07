@@ -28,6 +28,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/members': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 })

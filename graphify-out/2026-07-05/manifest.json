@@ -1,0 +1,512 @@
+{
+  ".vscode/extensions.json": {
+    "mtime": 1779738394.5311637,
+    "ast_hash": "886c161c2f2d9388473a64033e7d1931",
+    "semantic_hash": "886c161c2f2d9388473a64033e7d1931"
+  },
+  "package.json": {
+    "mtime": 1783029551.220538,
+    "ast_hash": "e359ceea9381e8aa6208a662a8554502",
+    "semantic_hash": ""
+  },
+  "skills-lock.json": {
+    "mtime": 1781925698.7272255,
+    "ast_hash": "85d6bff1f47d75975f1dca7ac6483e6a",
+    "semantic_hash": "85d6bff1f47d75975f1dca7ac6483e6a"
+  },
+  "src/App.vue": {
+    "mtime": 1781715735.779604,
+    "ast_hash": "9c1956103a456499afc662d0065c7647",
+    "semantic_hash": "9c1956103a456499afc662d0065c7647"
+  },
+  "src/features/auth/application/AuthService.ts": {
+    "mtime": 1781701913.4321346,
+    "ast_hash": "94c2ff638fe07b2cedd5ac13c5e06c20",
+    "semantic_hash": "94c2ff638fe07b2cedd5ac13c5e06c20"
+  },
+  "src/features/auth/domain/AuthEntity.ts": {
+    "mtime": 1781717460.367034,
+    "ast_hash": "6e024c7e6edd8bb85d76f99c375b5d72",
+    "semantic_hash": "6e024c7e6edd8bb85d76f99c375b5d72"
+  },
+  "src/features/auth/domain/AuthRepository.ts": {
+    "mtime": 1781701910.0472174,
+    "ast_hash": "0405a1a97ff7a1c50d21704be1f1dc66",
+    "semantic_hash": "0405a1a97ff7a1c50d21704be1f1dc66"
+  },
+  "src/features/auth/domain/UserEntity.ts": {
+    "mtime": 1781712923.0434294,
+    "ast_hash": "a94c602fc5bd6dc43287e67e77235ae4",
+    "semantic_hash": "a94c602fc5bd6dc43287e67e77235ae4"
+  },
+  "src/features/auth/domain/validators/UserValidator.ts": {
+    "mtime": 1781715824.1296124,
+    "ast_hash": "7a40a79f3484783906cbc93687ff39a1",
+    "semantic_hash": "7a40a79f3484783906cbc93687ff39a1"
+  },
+  "src/features/auth/infrastructure/AuthApi.ts": {
+    "mtime": 1781701911.9197166,
+    "ast_hash": "ce2d63845dff221df17caafcd4ef7d04",
+    "semantic_hash": "ce2d63845dff221df17caafcd4ef7d04"
+  },
+  "src/features/auth/presentation/components/UserRegisterForm.vue": {
+    "mtime": 1782271422.941399,
+    "ast_hash": "9a66fc3c7df7a7f715bd037996c840ec",
+    "semantic_hash": "9a66fc3c7df7a7f715bd037996c840ec"
+  },
+  "src/features/auth/presentation/pages/LoginPage.vue": {
+    "mtime": 1781717466.6257732,
+    "ast_hash": "7e9f3915e44f8d3ebbffe15fb826ed9a",
+    "semantic_hash": "7e9f3915e44f8d3ebbffe15fb826ed9a"
+  },
+  "src/features/auth/presentation/pages/RegisterForm.vue": {
+    "mtime": 1781716128.1762352,
+    "ast_hash": "5ebd7f24511069f22c7628eb639499c7",
+    "semantic_hash": "5ebd7f24511069f22c7628eb639499c7"
+  },
+  "src/features/auth/presentation/stores/authStore.ts": {
+    "mtime": 1781701915.4210231,
+    "ast_hash": "b222bd0a44a2fd0d98e53319f8abb805",
+    "semantic_hash": "b222bd0a44a2fd0d98e53319f8abb805"
+  },
+  "src/features/auth/usesCases/useRegisterForm.ts": {
+    "mtime": 1781715821.3885722,
+    "ast_hash": "092790be9f2f57d8d3db8b560d2ac9c7",
+    "semantic_hash": "092790be9f2f57d8d3db8b560d2ac9c7"
+  },
+  "src/features/books/application/useBookStore.ts": {
+    "mtime": 1782048927.6195774,
+    "ast_hash": "e087ccfee8f9675b19743d2db131dce9",
+    "semantic_hash": "e087ccfee8f9675b19743d2db131dce9"
+  },
+  "src/features/books/domain/entities/Book.ts": {
+    "mtime": 1782045243.189813,
+    "ast_hash": "26b1e627cd8aaa877f7d396d91eccc39",
+    "semantic_hash": "26b1e627cd8aaa877f7d396d91eccc39"
+  },
+  "src/features/books/domain/repositories/BookRepository.ts": {
+    "mtime": 1782098354.6354415,
+    "ast_hash": "2175029c7147fb7e918ca4d90fef397a",
+    "semantic_hash": "2175029c7147fb7e918ca4d90fef397a"
+  },
+  "src/features/books/infrastructure/repositories/AxiosBookRepository.ts": {
+    "mtime": 1782098358.2551258,
+    "ast_hash": "d197a1ed8d0c53886a720b8818f1a453",
+    "semantic_hash": "d197a1ed8d0c53886a720b8818f1a453"
+  },
+  "src/features/books/presentation/components/BookForm.vue": {
+    "mtime": 1782047344.9866264,
+    "ast_hash": "6bcf13eedfb55348b6ee6b3439aaf2d0",
+    "semantic_hash": "6bcf13eedfb55348b6ee6b3439aaf2d0"
+  },
+  "src/features/dashboard/domain/AuthorEntity.ts": {
+    "mtime": 1781718060.52067,
+    "ast_hash": "5b51f887fcfb8335cdac0860f7376435",
+    "semantic_hash": "5b51f887fcfb8335cdac0860f7376435"
+  },
+  "src/features/dashboard/domain/BookEntity.ts": {
+    "mtime": 1782187635.0239418,
+    "ast_hash": "99787e68dff00395e7e623b94891d4c8",
+    "semantic_hash": "99787e68dff00395e7e623b94891d4c8"
+  },
+  "src/features/dashboard/infrastructure/AuthorApi.ts": {
+    "mtime": 1781718062.1367354,
+    "ast_hash": "146cdadd8e9c122d854365edb7f08f26",
+    "semantic_hash": "146cdadd8e9c122d854365edb7f08f26"
+  },
+  "src/features/dashboard/infrastructure/BookApi.ts": {
+    "mtime": 1781717690.3010957,
+    "ast_hash": "554827939287b107502a8d1c75624c52",
+    "semantic_hash": "554827939287b107502a8d1c75624c52"
+  },
+  "src/features/dashboard/presentation/layouts/DashboardLayout.vue": {
+    "mtime": 1783023381.4494905,
+    "ast_hash": "b845bdb4875e069da4e99f29d7f643df",
+    "semantic_hash": ""
+  },
+  "src/features/dashboard/presentation/pages/AuthorsPage.vue": {
+    "mtime": 1782103174.058975,
+    "ast_hash": "ce4d08d0ef0c54a6f5a264ccd9cd670a",
+    "semantic_hash": "ce4d08d0ef0c54a6f5a264ccd9cd670a"
+  },
+  "src/features/dashboard/presentation/pages/BooksPage.vue": {
+    "mtime": 1782187659.1938875,
+    "ast_hash": "64e48ed85a1dfd126197c5dbacbb0d87",
+    "semantic_hash": "64e48ed85a1dfd126197c5dbacbb0d87"
+  },
+  "src/features/dashboard/presentation/pages/DashboardOverview.vue": {
+    "mtime": 1782269826.3184903,
+    "ast_hash": "0968d2dedf7bf4f594842cc56dcc87c0",
+    "semantic_hash": "0968d2dedf7bf4f594842cc56dcc87c0"
+  },
+  "src/features/maintenance/application/stores/useEquipmentStore.ts": {
+    "mtime": 1782362178.0689597,
+    "ast_hash": "ba70eb5151a9cc95f4240b1315c6ac2b",
+    "semantic_hash": ""
+  },
+  "src/features/maintenance/infrastructure/http/axiosEquipment.ts": {
+    "mtime": 1782480266.6450522,
+    "ast_hash": "1aa41bb42d5528a1bc3503cd1c7fe485",
+    "semantic_hash": ""
+  },
+  "src/features/maintenance/presentation/components/MaintenanceForm.vue": {
+    "mtime": 1782621869.5082662,
+    "ast_hash": "518474e8e26d4cc75c671e67b6a8fc71",
+    "semantic_hash": ""
+  },
+  "src/features/notes/application/useNoteStore.ts": {
+    "mtime": 1782132391.890267,
+    "ast_hash": "38e4c5aa5ebe440f0aa39fe682726032",
+    "semantic_hash": "38e4c5aa5ebe440f0aa39fe682726032"
+  },
+  "src/features/notes/domain/entities/Note.ts": {
+    "mtime": 1782018988.104998,
+    "ast_hash": "576374d0b8153c2350bba216bfc7e1b4",
+    "semantic_hash": "576374d0b8153c2350bba216bfc7e1b4"
+  },
+  "src/features/notes/domain/repositories/NoteRepository.ts": {
+    "mtime": 1782132310.6365428,
+    "ast_hash": "51473e261a20a5ba076342fe01888097",
+    "semantic_hash": "51473e261a20a5ba076342fe01888097"
+  },
+  "src/features/notes/index.ts": {
+    "mtime": 1782187490.4470081,
+    "ast_hash": "8febaf027a170730026f7e4b0b205492",
+    "semantic_hash": "8febaf027a170730026f7e4b0b205492"
+  },
+  "src/features/notes/infrastructure/repositories/AxiosNoteRepository.ts": {
+    "mtime": 1782132360.0102935,
+    "ast_hash": "f6707904313c6456be1fc6d8e43715cc",
+    "semantic_hash": "f6707904313c6456be1fc6d8e43715cc"
+  },
+  "src/features/notes/presentation/components/NoteForm.vue": {
+    "mtime": 1782105082.0174654,
+    "ast_hash": "55b80da3b461c3589e5bc6f6f0fad17c",
+    "semantic_hash": "55b80da3b461c3589e5bc6f6f0fad17c"
+  },
+  "src/features/notes/presentation/components/NoteList.vue": {
+    "mtime": 1782187568.6140468,
+    "ast_hash": "ac9319e02e21348e46c090d34df73db5",
+    "semantic_hash": "ac9319e02e21348e46c090d34df73db5"
+  },
+  "src/features/notes/presentation/components/NotebookSpread.vue": {
+    "mtime": 1783045393.6889777,
+    "ast_hash": "7d5d4e23d3441ded9989603f35296c1a",
+    "semantic_hash": ""
+  },
+  "src/features/topics/application/useTopicStore.ts": {
+    "mtime": 1782017997.6205437,
+    "ast_hash": "094c5020243dc01a62b8fd44d941c925",
+    "semantic_hash": "094c5020243dc01a62b8fd44d941c925"
+  },
+  "src/features/topics/domain/entities/Topic.ts": {
+    "mtime": 1781836601.1784227,
+    "ast_hash": "2a110acb943404b7ec4ebcb00996d8c7",
+    "semantic_hash": "2a110acb943404b7ec4ebcb00996d8c7"
+  },
+  "src/features/topics/domain/repositories/TopicRepository.ts": {
+    "mtime": 1781895031.6047096,
+    "ast_hash": "cf91b2f46b15a711564b4267f91dc9b5",
+    "semantic_hash": "cf91b2f46b15a711564b4267f91dc9b5"
+  },
+  "src/features/topics/infrastructure/repositories/AxiosTopicRepository.ts": {
+    "mtime": 1782103820.528049,
+    "ast_hash": "e9a87a8f9f95fa681a14713942454a47",
+    "semantic_hash": "e9a87a8f9f95fa681a14713942454a47"
+  },
+  "src/features/topics/infrastructure/repositories/TopicRepository.ts": {
+    "mtime": 1781836243.069127,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "src/features/topics/presentation/components/TopicForm.vue": {
+    "mtime": 1782019266.8454933,
+    "ast_hash": "1bc5715423bd8dd838a0278451d7f497",
+    "semantic_hash": "1bc5715423bd8dd838a0278451d7f497"
+  },
+  "src/features/topics/presentation/components/TopicList.vue": {
+    "mtime": 1782046603.4303632,
+    "ast_hash": "fe9bd3a4f93d2f800edfade544cb5378",
+    "semantic_hash": "fe9bd3a4f93d2f800edfade544cb5378"
+  },
+  "src/features/tracking/presentation/components/UrlTracker.vue": {
+    "mtime": 1782096772.038555,
+    "ast_hash": "09f23c7d7d864d11950ab0d47c0154e3",
+    "semantic_hash": "09f23c7d7d864d11950ab0d47c0154e3"
+  },
+  "src/features/users/presentation/components/UserList.vue": {
+    "mtime": 1782275276.0929391,
+    "ast_hash": "b4737a4cbf8a4bab7ae3ca83e8d6c660",
+    "semantic_hash": "b4737a4cbf8a4bab7ae3ca83e8d6c660"
+  },
+  "src/infrastructure/http/axiosInstance.ts": {
+    "mtime": 1782104553.3694344,
+    "ast_hash": "7771f3243cf477801e8a101df1e85301",
+    "semantic_hash": "7771f3243cf477801e8a101df1e85301"
+  },
+  "src/main.ts": {
+    "mtime": 1783045263.019544,
+    "ast_hash": "92029eeb50df3af2a4d5c34cffdc1595",
+    "semantic_hash": ""
+  },
+  "src/router/index.ts": {
+    "mtime": 1783138024.8431816,
+    "ast_hash": "54044fd8bbce3eb0b453415f0a31c141",
+    "semantic_hash": ""
+  },
+  "src/utils/components/BaseInput.vue": {
+    "mtime": 1782102860.593547,
+    "ast_hash": "fd47aba9109b8a2021ae1b177ffe4b7d",
+    "semantic_hash": "fd47aba9109b8a2021ae1b177ffe4b7d"
+  },
+  "src/utils/components/BaseModal.vue": {
+    "mtime": 1782386669.44338,
+    "ast_hash": "4c862e756d931d6405240848196232dc",
+    "semantic_hash": ""
+  },
+  "src/utils/components/ImageViewer.vue": {
+    "mtime": 1782100058.7255263,
+    "ast_hash": "f6d639e78f673a53e606759cc9707985",
+    "semantic_hash": "f6d639e78f673a53e606759cc9707985"
+  },
+  "tsconfig.app.json": {
+    "mtime": 1782046583.0727255,
+    "ast_hash": "a439c4be12bc1d9c09f51b2419949c6e",
+    "semantic_hash": "a439c4be12bc1d9c09f51b2419949c6e"
+  },
+  "tsconfig.json": {
+    "mtime": 1779738394.5934682,
+    "ast_hash": "a3d39fa780ebff65444de257f291ce6c",
+    "semantic_hash": "a3d39fa780ebff65444de257f291ce6c"
+  },
+  "tsconfig.node.json": {
+    "mtime": 1779738394.6064513,
+    "ast_hash": "70bdd0a673bcfc0e828080b306e7c680",
+    "semantic_hash": "70bdd0a673bcfc0e828080b306e7c680"
+  },
+  "vite.config.ts": {
+    "mtime": 1782480246.51677,
+    "ast_hash": "829f85367d44ede045313be4db17d11e",
+    "semantic_hash": ""
+  },
+  ".agents/skills/frontend-design/LICENSE.txt": {
+    "mtime": 1781925210.7033741,
+    "ast_hash": "29256199be2a609aac596980ffc11996",
+    "semantic_hash": "29256199be2a609aac596980ffc11996"
+  },
+  ".agents/skills/frontend-design/SKILL.md": {
+    "mtime": 1781925210.707058,
+    "ast_hash": "f5c3db69b9c6a00578301dd0cbe90253",
+    "semantic_hash": "f5c3db69b9c6a00578301dd0cbe90253"
+  },
+  ".agents/skills/vue/GENERATION.md": {
+    "mtime": 1781925539.246935,
+    "ast_hash": "720aa73bd7ea72dbc2aeaa5c2d3467b7",
+    "semantic_hash": "720aa73bd7ea72dbc2aeaa5c2d3467b7"
+  },
+  ".agents/skills/vue/SKILL.md": {
+    "mtime": 1781925539.246935,
+    "ast_hash": "75a7fa0dd0f704462570d9d44cf4ed06",
+    "semantic_hash": "75a7fa0dd0f704462570d9d44cf4ed06"
+  },
+  ".agents/skills/vue/references/advanced-patterns.md": {
+    "mtime": 1781925539.246935,
+    "ast_hash": "e396e4b5cd62d24d06ba08bbb9aefb72",
+    "semantic_hash": "e396e4b5cd62d24d06ba08bbb9aefb72"
+  },
+  ".agents/skills/vue/references/core-new-apis.md": {
+    "mtime": 1781925539.246935,
+    "ast_hash": "ab5745ee8a789ebc71db23d4d4565cb2",
+    "semantic_hash": "ab5745ee8a789ebc71db23d4d4565cb2"
+  },
+  ".agents/skills/vue/references/script-setup-macros.md": {
+    "mtime": 1781925539.2495062,
+    "ast_hash": "63b9a866ac71cc44d7d3b68e54e9da35",
+    "semantic_hash": "63b9a866ac71cc44d7d3b68e54e9da35"
+  },
+  "README.md": {
+    "mtime": 1783049764.8719893,
+    "ast_hash": "ed0a31060d6d81869be18bbd82cfdb45",
+    "semantic_hash": ""
+  },
+  "docs/API.md": {
+    "mtime": 1782536745.1244338,
+    "ast_hash": "4f1212a30621b78f91e6ebc91c5facd2",
+    "semantic_hash": ""
+  },
+  "docs/ARCHITECTURE.md": {
+    "mtime": 1782536773.4809282,
+    "ast_hash": "bb3fc196f8650626303bc0a6756b0688",
+    "semantic_hash": ""
+  },
+  "docs/DUNE-ALEXANDRIA.md": {
+    "mtime": 1781719464.1324947,
+    "ast_hash": "e3fc7144424200ac0b892e28c4b4595c",
+    "semantic_hash": "e3fc7144424200ac0b892e28c4b4595c"
+  },
+  "index.html": {
+    "mtime": 1781701901.9730463,
+    "ast_hash": "75730883ac5e59ce4c4ec1b3b771a1a7",
+    "semantic_hash": "75730883ac5e59ce4c4ec1b3b771a1a7"
+  },
+  "src/features/tracking/TRACKING_README.md": {
+    "mtime": 1782096798.4419985,
+    "ast_hash": "85da687b77e7d766f4725b886c36a757",
+    "semantic_hash": "85da687b77e7d766f4725b886c36a757"
+  },
+  "public/favicon.svg": {
+    "mtime": 1779738394.802066,
+    "ast_hash": "7e840862161341271697daa99a40d76b",
+    "semantic_hash": "7e840862161341271697daa99a40d76b"
+  },
+  "public/icons.svg": {
+    "mtime": 1779738394.856117,
+    "ast_hash": "3b4fcfcf393eca4d264dca4a4663bc37",
+    "semantic_hash": "3b4fcfcf393eca4d264dca4a4663bc37"
+  },
+  "src/features/exercise/application/stores/useExerciseStore.ts": {
+    "mtime": 1782480434.656801,
+    "ast_hash": "7dc2c87316c3162b434a7071590c8abb",
+    "semantic_hash": ""
+  },
+  "src/features/exercise/infrastructure/http/axiosExercise.ts": {
+    "mtime": 1782536196.8493786,
+    "ast_hash": "543abed0081b81d023e88f6bd5d1c2ac",
+    "semantic_hash": ""
+  },
+  "src/features/exercise/infrastructure/services/exerciseService.ts": {
+    "mtime": 1782532694.1555834,
+    "ast_hash": "217c6b08d98bedcf48884ffdfc8b3478",
+    "semantic_hash": ""
+  },
+  "src/features/exercise/presentation/pages/ExerciseCreatePage.vue": {
+    "mtime": 1783139197.124953,
+    "ast_hash": "44359efcf94655dde0a2aabe9ce14840",
+    "semantic_hash": ""
+  },
+  "src/features/exercise/presentation/pages/ExerciseListPage.vue": {
+    "mtime": 1783138078.5500875,
+    "ast_hash": "51cb1998be8ef14647ee0eba6b9dbca2",
+    "semantic_hash": ""
+  },
+  "src/features/maintenance/application/stores/useEquipmentListStore.ts": {
+    "mtime": 1782473758.5676708,
+    "ast_hash": "93a3ddf6716840857ad1b32a1ff6c0f4",
+    "semantic_hash": ""
+  },
+  "src/features/maintenance/presentation/components/EquipmentDetailCard.vue": {
+    "mtime": 1782386604.165704,
+    "ast_hash": "197456523b949193ad37438c51651770",
+    "semantic_hash": ""
+  },
+  "src/features/maintenance/presentation/components/EquipmentList.vue": {
+    "mtime": 1782473758.5676708,
+    "ast_hash": "7d727be82e905f3a330a428cc10a580b",
+    "semantic_hash": ""
+  },
+  "src/features/maintenance/presentation/components/EquipmentPage.vue": {
+    "mtime": 1783022701.4687982,
+    "ast_hash": "6b5b02db700901568345e8f4606a4cfe",
+    "semantic_hash": ""
+  },
+  "src/features/maintenance/presentation/components/atomic/InfoRow.vue": {
+    "mtime": 1782386396.8917909,
+    "ast_hash": "4e012eecee8d6923100808e5795ad7cc",
+    "semantic_hash": ""
+  },
+  "src/features/maintenance/presentation/components/atomic/StatusBadge.vue": {
+    "mtime": 1782362467.79346,
+    "ast_hash": "de4e47790adcb6e43c246613d6c8376b",
+    "semantic_hash": ""
+  },
+  "src/features/video/application/VideoService.ts": {
+    "mtime": 1782737009.481429,
+    "ast_hash": "2c0c63caf6619f29b90b9ddef1758cc2",
+    "semantic_hash": ""
+  },
+  "src/features/video/domain/entities/VideoEntity.ts": {
+    "mtime": 1782621345.9687705,
+    "ast_hash": "300667b02a6fff6c51e8f2e223880f2e",
+    "semantic_hash": ""
+  },
+  "src/features/video/domain/repositories/VideoRepository.ts": {
+    "mtime": 1782621349.100755,
+    "ast_hash": "6ce78b020bd98d2da4fa470e9cba1c2a",
+    "semantic_hash": ""
+  },
+  "src/features/video/index.ts": {
+    "mtime": 1782621413.8395069,
+    "ast_hash": "d3cdcc5b69f143874be88d6a4595207d",
+    "semantic_hash": ""
+  },
+  "src/features/video/infrastructure/config/supabase.ts": {
+    "mtime": 1782995542.5672128,
+    "ast_hash": "9f30a8d9bf583c878bdc7da660b54315",
+    "semantic_hash": ""
+  },
+  "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts": {
+    "mtime": 1783021923.6632688,
+    "ast_hash": "e09b288259e9cc02ae3b93622478d16c",
+    "semantic_hash": ""
+  },
+  "src/features/video/presentation/components/VideoUploadForm.vue": {
+    "mtime": 1782621410.6476893,
+    "ast_hash": "ec9fc60b51cd85fb6b3b20136f110e79",
+    "semantic_hash": ""
+  },
+  "src/features/video/presentation/composables/useVideoUpload.ts": {
+    "mtime": 1782737022.9197419,
+    "ast_hash": "aeeecfb5a90b1f850bc19a44c4649997",
+    "semantic_hash": ""
+  },
+  "src/lib/supabase.ts": {
+    "mtime": 1783045217.059752,
+    "ast_hash": "13f9424e4141d65a625dd81b11490106",
+    "semantic_hash": ""
+  },
+  "src/stores/chatStore.ts": {
+    "mtime": 1783045252.719951,
+    "ast_hash": "eebe2abe77b8f41d0bce23e72fcbb4b7",
+    "semantic_hash": ""
+  },
+  "src/stores/equipmentStore.js": {
+    "mtime": 1782475371.427574,
+    "ast_hash": "8324c94bf0fe695471df65224fe24121",
+    "semantic_hash": ""
+  },
+  "src/utils/components/BaseErrorDisplay.vue": {
+    "mtime": 1782443715.3388243,
+    "ast_hash": "b555ab25f8e5097e7e6311e54cf4dfc2",
+    "semantic_hash": ""
+  },
+  "src/utils/components/BaseLoading.vue": {
+    "mtime": 1782735486.2572572,
+    "ast_hash": "30efde3781d6adde59239f33d73da230",
+    "semantic_hash": ""
+  },
+  "src/utils/components/BaseTextarea.vue": {
+    "mtime": 1783081820.836169,
+    "ast_hash": "e897957af31521d099aa85150792fb6b",
+    "semantic_hash": ""
+  },
+  "src/utils/components/CustomVideoPlayer.vue": {
+    "mtime": 1783182632.7235725,
+    "ast_hash": "4673822b2da1fc137d76eec97801d470",
+    "semantic_hash": ""
+  },
+  "src/utils/components/EmptyBox.vue": {
+    "mtime": 1782532398.8848453,
+    "ast_hash": "e76fd47a54a5a68df661436d84a7e923",
+    "semantic_hash": ""
+  },
+  ".cursor/skills/alejandria-design-system/SKILL.md": {
+    "mtime": 1782476504.9542718,
+    "ast_hash": "ce643fad006d5e6d3aa13b0725384293",
+    "semantic_hash": ""
+  },
+  "src/features/video/README.md": {
+    "mtime": 1782995542.5672128,
+    "ast_hash": "d82f3ad37ae38b9597c90f5611aab635",
+    "semantic_hash": ""
+  }
+}
