@@ -127,6 +127,30 @@ const router = createRouter({
           component: () =>
             import("@/features/members/presentation/pages/MemberListPage.vue"),
         },
+        {
+          path: "coliseo/objetivo-gladiadores",
+          name: "objetivo-gladiadores",
+          component: () =>
+            import("@/features/member-progress/presentation/pages/MemberProgressCreatePage.vue"),
+        },
+        {
+          path: "coliseo/objetivo-gladiadores/list",
+          name: "member-progress-list",
+          component: () =>
+            import("@/features/member-progress/presentation/pages/MemberProgressListPage.vue"),
+        },
+        {
+          path: "coliseo/objetivo-gladiadores/create",
+          name: "member-progress-create",
+          component: () =>
+            import("@/features/member-progress/presentation/pages/MemberProgressCreatePage.vue"),
+        },
+        {
+          path: "coliseo/progreso-gladiadores",
+          name: "progreso-gladiadores",
+          component: () =>
+            import("@/features/member-progress/presentation/pages/MemberProgressListPage.vue"),
+        },
       ],
     },
   ],

@@ -29,6 +29,7 @@ La aplicación se conecta con un backend REST denominado **API Atreides** y con 
 | 🏗️ **Equipamiento** | Coliseo | CRUD con imagen, interceptores Auth corregidos | ✅ Funcional |
 | ⚡ **Ejercicios** | Coliseo | Timeline histórico, CRUD + Modal de confirmación de videos | ✅ Funcional |
 | 🛡️ **Gladiadores (Miembros)** | Coliseo | Registro multi-paso, lista, arquitectura Onion + Atomic Design | ✅ Frontend listo |
+| 📈 **Progreso de Gladiadores** | Coliseo | Registro mensual de objetivos, lista con nombres reales vía `/members/{id}` | ✅ Frontend listo |
 | ⏳ **LoadingView** | Global | Pantalla de carga imperial antes del render de la app | ✅ Funcional |
 | 📊 **Dashboard** | Global | KPIs y vista general del catálogo | ⚠️ Mock data |
 | 🌐 **Tracking** | Global | Registro de visitantes (IP, geo, fingerprint) | ✅ Funcional |
@@ -172,6 +173,15 @@ alajandria-book/
 │       │       └── pages/
 │       │           ├── MemberCreatePage.vue
 │       │           └── MemberListPage.vue
+│       ├── member-progress/             # 📈 Cuaderno de bitácora del Coliseo
+│       │   ├── domain/                  # MemberProgress.types, repositorio, dominio
+│       │   ├── application/             # MemberProgressService, useMemberProgressStore
+│       │   ├── infrastructure/http/     # HttpMemberProgressRepository
+│       │   └── presentation/
+│       │       ├── components/          # Atomic Design: ProgressInput, MemberSelectorModal…
+│       │       └── pages/
+│       │           ├── MemberProgressListPage.vue
+│       │           └── MemberProgressCreatePage.vue
 │       ├── exercise/
 │       │   └── presentation/
 │       │       └── pages/
@@ -221,6 +231,10 @@ alajandria-book/
 | `/dashboard/coliseo/exercises/create` | `exercise-create` | ✅ | Crear ejercicio + confirmación de video Supabase |
 | `/dashboard/coliseo/members` | `members-list` | ✅ | Lista de gladiadores del Coliseo |
 | `/dashboard/coliseo/members/create` | `member-create` | ✅ | Registro multi-paso de gladiador |
+| `/dashboard/coliseo/progreso-gladiadores` | `progreso-gladiadores` | ✅ | Lista de progreso mensual de objetivos |
+| `/dashboard/coliseo/objetivo-gladiadores` | `objetivo-gladiadores` | ✅ | Registrar progreso de un gladiador |
+| `/dashboard/coliseo/objetivo-gladiadores/list` | `member-progress-list` | ✅ | Lista de progreso (ruta alternativa) |
+| `/dashboard/coliseo/objetivo-gladiadores/create` | `member-progress-create` | ✅ | Crear progreso (ruta alternativa) |
 
 ---
 
@@ -260,6 +274,46 @@ create index if not exists chat_messages_user_created
 ---
 
 ## 📅 Sesiones de Desarrollo 
+
+### 📖 Sesión del Cuaderno de Bitácora — 10 de Julio, 2026
+> *«Un buen archivo no solo guarda nombres: guarda el avance de cada guerrero, mes a mes, como las crónicas que los escribas del Coliseo llevaban en sus tablillas de cera.»*
+
+**IX. El Cuaderno de Bitácora — Módulo `member-progress/`**
+
+Se añadió un nuevo anexo del Coliseo para registrar y consultar el **progreso mensual de objetivos** de cada gladiador. Como un cuaderno de bitácora en los anaqueles de la Biblioteca: cada entrada dice *quién* avanzó, *cuánto* y *en qué mes*.
+
+| Pieza | Analogía | Función |
+|-------|----------|---------|
+| `MemberProgressListPage` | El índice maestro | Tabla con todos los registros, estados de carga y error |
+| `MemberProgressCreatePage` | La mesa del escriba | Formulario para registrar avance mensual |
+| `GET /progress-member` | Consultar el catálogo de crónicas | Trae todos los registros de progreso |
+| `GET /members/{id}` | La ficha de referencia cruzada | Obtiene el nombre completo y datos básicos del gladiador |
+| Caché `memberById` | La ficha a mano del bibliotecario | Evita repetir consultas al mismo miembro |
+| Proxy Vite | El pasillo interno | Conecta el frontend con la API sin problemas de CORS |
+
+**La lista como bibliotecario diligente:**
+
+La página de listado usa Vue 3 Composition API con el patrón directo que todo desarrollador reconoce:
+
+```typescript
+const list = ref<MemberProgress[]>([])
+const loading = ref(false)
+const error = ref<string | null>(null)
+
+onMounted(() => fetchProgressMember())
+```
+
+- **`loading`** — El velo de polvo mientras el mensajero (Axios) busca los pergaminos.
+- **`error`** — El aviso cuando el estante está vacío o el depósito no responde.
+- **`v-for`** — Recorrer el índice del catálogo, fila por fila.
+
+**Enriquecimiento de miembros:**
+
+El registro de progreso solo guarda el `user_id`. Para mostrar nombres reales, la página consulta `GET /members/{id}` y guarda el resultado en caché. En la tabla se ve `name_full`; en el modal de detalle se despliegan también tipo de documento, número y género.
+
+**Sidebar Coliseo:** nuevos ítems *Objetivo de gladiadores* y *Progreso de gladiadores* en el menú del Coliseo.
+
+---
 
 ### 📜 Sesión Imperial — 5 de Julio, 2026
 > *«Como los ingenieros de los ornítopteros Atreides refinan cada engranaje hasta lograr el vuelo perfecto, hemos forjado el sistema de carga de videos hasta convertirlo en un ritual digno de la disciplina imperial.»*
@@ -497,6 +551,7 @@ Como los reportes de estado que los Mentat de la Casa Atreides entregan al Duque
 | **Sistemas de Acceso** | ⚔️ Operativo | Portal de autenticación imperial sincronizado con API Atreides |
 | **Registro de Nuevos Reclutas** | ⚠️ Solo validación local | Faltan protocolos de backend para incorporación oficial |
 | **Censo de Gladiadores** | ⚔️ Frontend operativo | Registro multi-paso + lista; requiere `POST /members` en API Atreides |
+| **Cuaderno de Bitácora** | ⚔️ Frontend operativo | Progreso mensual de objetivos + lista con nombres reales vía `/members/{id}` |
 | **Archivos de Pergaminos** | ⚔️ Operativo | CRUD completo de libros, como los catálogos de Alejandría |
 | **Registro de Escribas** | ⚔️ Operativo | Gestión de autores con la precisión de archivistas imperiales |
 | **Cuadernos de Campo** | ⚔️ Operativo | Sistema de notas con IA integrada, como un Mentat personal |
@@ -518,6 +573,7 @@ Como los reportes de estado que los Mentat de la Casa Atreides entregan al Duque
 |-----------|-----------|
 | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Arquitectura por capas, patrones, flujo de datos |
 | [docs/API.md](./docs/API.md) | Contratos de la API Atreides, endpoints y modelos |
+| [docs/ALAJANDRIA.md](./docs/ALAJANDRIA.md) | Documentación narrativa, cambios recientes y analogías |
 | [docs/DUNE-ALEXANDRIA.md](./docs/DUNE-ALEXANDRIA.md) | Ensayo: paralelos entre Dune, la Biblioteca y el software |
 
 ---

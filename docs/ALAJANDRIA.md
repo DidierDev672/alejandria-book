@@ -145,6 +145,50 @@ Los endpoints de la API Atreides son las rutas comerciales de CHOAM: los caminos
 
 **Qué significa esto para el socio:** Ahora puedes abrir un chat con Gurney Halleck desde la lista de gladiadores. Al hacer clic en el ícono del cerebro, Gurney se presenta como el maestro de armas del Coliseo, analiza los datos registrados del gladiador y te pregunta si deseas un plan de ejercicios personalizado. La conversación se guarda en Supabase: si cierras y vuelves a abrir, el historial está intacto. Gurney no responde sobre libros, finanzas ni medicina: su único propósito es tu rendimiento deportivo.
 
+### Julio 2026 — El Registro de Crónicas de los Gladiadores
+
+**Cambio:** Se añadió el módulo `member-progress/`, un nuevo anexo del Coliseo dedicado a registrar y consultar el avance mensual de los objetivos de cada gladiador.
+
+**Analogía de la Biblioteca:** Imagina que cada gladiador tiene un cuaderno de bitácora en los anaqueles del archivo. No basta con saber que alguien entrenó: hay que anotar *cuánto* avanzó, *en qué mes* y *con qué observaciones*. Ese cuaderno es el módulo de progreso. La lista de registros es el índice alfabético; el formulario de creación es la pluma con la que el bibliotecario inscribe una nueva entrada; y la consulta al endpoint de miembros es la ficha de referencia cruzada que te permite leer el nombre completo del guerrero sin confundirlo con un simple código de archivo.
+
+**Qué se construyó:**
+
+| Pieza | Qué hace | Analogía |
+|---|---|---|
+| `MemberProgressListPage` | Muestra todos los registros de progreso en una tabla | El índice maestro del archivo: abres la sala y ves todas las entradas ordenadas |
+| `MemberProgressCreatePage` | Permite registrar el progreso de un gladiador por mes | La mesa del escriba: eliges al guerrero, anotas el mes, el valor y las observaciones |
+| `HttpMemberProgressRepository` | Habla con la API `/progress-member` | El mensajero que lleva y trae los pergaminos del depósito central |
+| `useMemberProgressStore` | Orquesta la creación desde el formulario | El bibliotecario jefe que valida antes de archivar |
+| Proxy Vite `/progress-member` y `/members` | Redirige las peticiones al backend en desarrollo | El pasillo interno que conecta la sala de consulta con el depósito sin salir al exterior |
+
+**La lista como un bibliotecario diligente (`MemberProgressListPage`):**
+
+La página de listado sigue el patrón directo de Vue 3 Composition API — como un bibliotecario que no delega en intermediarios cuando solo necesita consultar el catálogo:
+
+1. **`ref` y `onMounted`** — El bibliotecario abre la sala al amanecer: al montar la página, se ejecuta la consulta automáticamente.
+2. **`list`, `loading`, `error`** — Tres estados claros: el velo de polvo mientras se busca el pergamino, el aviso cuando el estante está vacío o dañado, y el índice con todos los registros encontrados.
+3. **Axios `GET /progress-member`** — El mensajero recorre el camino oficial hasta el depósito central y vuelve con los cuadernos de bitácora.
+4. **`v-for` en la tabla** — Recorrer el índice del catálogo, fila por fila, mostrando miembro, mes, valor y notas con claridad.
+
+**La ficha cruzada del gladiador (`GET /members/{id}`):**
+
+El registro de progreso solo guarda el `user_id` — como un código de referencia en el margen de un manuscrito. Para mostrar el nombre completo en la tabla y los datos básicos en el modal de detalle, la página consulta la ficha individual de cada gladiador:
+
+- En la **tabla**, se muestra `name_full` en lugar del código crudo.
+- En el **modal "Detalle del Progreso"**, la sección Miembro despliega: nombre completo, tipo de documento, número de documento y género.
+- Las consultas se guardan en un **caché local** (`memberById`): como una ficha de referencia que el bibliotecario tiene a mano para no volver al archivo central cada vez que alguien pregunta por el mismo guerrero.
+
+**Rutas nuevas:**
+
+| Ruta | Nombre | Función |
+|---|---|---|
+| `/dashboard/coliseo/progreso-gladiadores` | `progreso-gladiadores` | Lista de registros de progreso |
+| `/dashboard/coliseo/objetivo-gladiadores` | `objetivo-gladiadores` | Formulario de registro |
+| `/dashboard/coliseo/objetivo-gladiadores/list` | `member-progress-list` | Lista (ruta alternativa) |
+| `/dashboard/coliseo/objetivo-gladiadores/create` | `member-progress-create` | Crear registro (ruta alternativa) |
+
+**Qué significa esto para el socio:** Ahora puedes registrar cuánto avanzó cada gladiador mes a mes y consultar ese historial en una tabla clara. Ya no verás códigos crípticos: verás nombres reales, documentos y género. Es como pasar de leer referencias abreviadas en un índice a tener el cuaderno completo del guerrero en tus manos.
+
 ### Julio 2026 — Eliminación de gladiadores con modal de consecuencias
 
 **Cambio:** Se añadió un botón de eliminar (ícono de papelera) en cada fila de la lista de gladiadores, con un modal de confirmación que detalla las consecuencias de la eliminación.
@@ -246,3 +290,8 @@ objetivos y condiciones de salud.
 | Vue Router | Los navegantes del Gremio |
 | Tailwind CSS | El traje estático |
 | Motion (motion.dev) | El Camino del Weirding |
+| Módulo member-progress | El cuaderno de bitácora del Coliseo |
+| GET /progress-member | Consultar el índice de crónicas mensuales |
+| GET /members/{id} | La ficha de referencia cruzada del gladiador |
+| Caché memberById | La ficha que el bibliotecario guarda a mano |
+| Proxy Vite | El pasillo interno entre sala de consulta y depósito |

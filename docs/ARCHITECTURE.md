@@ -348,4 +348,63 @@ Esto evita problemas de CORS en desarrollo.
 
 ---
 
+## Módulo de Progreso de Gladiadores (`member-progress`)
+
+### Estructura
+
+```
+member-progress/
+├── domain/
+│   ├── entities/MemberProgress.types.ts   # Entidad y DTOs
+│   ├── repositories/MemberProgressRepository.ts  # Contrato (port)
+│   └── services/MemberProgressDomainService.ts   # Formato de mes, mapeo form→DTO
+├── application/
+│   ├── services/MemberProgressService.ts  # Casos de uso
+│   └── stores/useMemberProgressStore.ts   # Pinia (creación y listado vía repositorio)
+├── infrastructure/http/
+│   └── HttpMemberProgressRepository.ts    # Adapter Axios → /progress-member
+└── presentation/
+    ├── components/   # Atomic Design: atoms → molecules → organisms
+    └── pages/
+        ├── MemberProgressListPage.vue     # Lista con Axios directo + enriquecimiento de miembros
+        └── MemberProgressCreatePage.vue   # Registro mensual de avance
+```
+
+### Analogía con la Biblioteca de Alejandría
+
+| Capa | Rol técnico | Paralelo narrativo |
+|------|-------------|-------------------|
+| **Presentation** | Tabla, modales, formulario | La sala de consulta donde el bibliotecario muestra las crónicas |
+| **Application** | `MemberProgressService`, store Pinia | El escriba que valida y archiva cada entrada |
+| **Domain** | Entidades, validaciones, formato de fechas | El sistema de clasificación: reglas de cómo se registra el avance |
+| **Infrastructure** | `HttpMemberProgressRepository`, Axios | Los mensajeros que van al depósito central por los cuadernos |
+
+### Dos formas de consultar datos en la lista
+
+La página de listado (`MemberProgressListPage`) usa un patrón híbrido deliberado:
+
+1. **Progreso** — Axios directo con `ref` / `onMounted` / `loading` / `error` / `list`. Como un bibliotecario que abre la sala y consulta el índice sin intermediarios.
+2. **Datos del miembro** — `GET /members/{id}` con caché en `memberById`. Como la ficha de referencia cruzada: una vez consultada, queda a mano para no repetir el viaje al archivo central.
+
+```
+onMounted()
+  └─ fetchProgressMember()        → GET /progress-member
+  └─ loadMembersForProgress()     → GET /members/{id} (paralelo, únicos)
+
+openDetailModal(progress)
+  └─ fetchMemberById(user_id)     → caché o GET /members/{id}
+```
+
+### Proxy Vite
+
+```typescript
+// vite.config.ts
+'/progress-member': { target: 'http://localhost:8080', changeOrigin: true },
+'/members':         { target: 'http://localhost:8080', changeOrigin: true },
+```
+
+El proxy es el pasillo interno de la biblioteca: en desarrollo, las peticiones salen de la sala de consulta (Vite :5173) y llegan al depósito (API Atreides :8080) sin cruzar el exterior, evitando bloqueos de CORS.
+
+---
+
 *La arquitectura limpia es el pergamenio bien archivado: cada capa en su estante, cada dependencia apuntando hacia el dominio, no al revés.*

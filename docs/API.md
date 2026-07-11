@@ -354,6 +354,108 @@ Elimina un ejercicio vinculado a un equipo.
 
 ---
 
+### Progreso de gladiadores
+
+> *Cada gladiador lleva un cuaderno de bitácora en los anaqueles del Coliseo. Este endpoint es el índice de esas crónicas mensuales.*
+
+#### `GET /progress-member`
+
+Devuelve todos los registros de progreso de objetivos.
+
+**Response 200 (array):**
+
+```json
+[
+  {
+    "id": "uuid",
+    "user_id": "20260710232910B",
+    "month_year": "2026-07-01",
+    "recorded_value": 85,
+    "notes": "Buen avance en resistencia",
+    "created_at": "2026-07-10T23:29:10.368358-05:00",
+    "updated_at": "2026-07-10T23:29:10.368358-05:00"
+  }
+]
+```
+
+**Implementación frontend:** `MemberProgressListPage` usa Axios directo; `HttpMemberProgressRepository.findAll()` usa `axiosInstance`.
+
+#### `POST /progress-member`
+
+Registra el progreso mensual de un gladiador.
+
+**Request body:**
+
+```json
+{
+  "user_id": "20260710232910B",
+  "month_year": "2026-07-01",
+  "recorded_value": 85,
+  "notes": "Observaciones opcionales"
+}
+```
+
+**Errores frecuentes:**
+
+| Código | Significado |
+|--------|-------------|
+| `409` | Ya existe un registro para ese miembro y mes |
+| `422` | Datos inválidos (valor vacío, usuario inexistente) |
+
+**Implementación frontend:** `useMemberProgressStore.createProgress()` → `HttpMemberProgressRepository.create()`
+
+#### `GET /progress-member/{id}`
+
+Obtiene un registro de progreso por su identificador.
+
+#### `PUT /progress-member/{id}`
+
+Actualiza un registro existente.
+
+#### `DELETE /progress-member/{id}`
+
+Elimina un registro de progreso.
+
+**Implementación frontend:** `MemberProgressListPage.confirmDelete()` usa Axios directo.
+
+---
+
+### Miembros del Coliseo (consulta individual)
+
+> *El registro de progreso guarda solo el código del gladiador. Para leer su nombre completo, hay que consultar su ficha en el archivo de miembros — como una referencia cruzada en el margen de un manuscrito.*
+
+#### `GET /members/{id}`
+
+Devuelve los datos básicos de un gladiador.
+
+**Response 200:**
+
+```json
+{
+  "id": "20260710232910B",
+  "name_full": "John Doe",
+  "type_document": "CC",
+  "number_document": "12345",
+  "date_of_birth": "1990-01-01",
+  "genre": "masculino",
+  "phone_number": "1234567890",
+  "address": "123 Main St",
+  "createdAt": "2026-07-10T23:29:10.368358-05:00",
+  "updatedAt": "2026-07-10T23:29:10.368358-05:00"
+}
+```
+
+**Uso en progreso de gladiadores:**
+
+| Campo | Dónde se muestra |
+|-------|------------------|
+| `name_full` | Columna Miembro en la tabla de progreso |
+| `name_full`, `type_document`, `number_document`, `genre` | Modal "Detalle del Progreso" → sección Miembro |
+
+**Implementación frontend:** `MemberProgressListPage.fetchMemberById()` con caché en `memberById`.
+
+---
+
 ## Modelos de datos (TypeScript)
 
 ### User
@@ -432,6 +534,40 @@ interface CreateExercisePayload {
 }
 ```
 
+### MemberProgress
+
+```typescript
+interface MemberProgress {
+  id: string
+  user_id: string
+  user_name?: string
+  month_year: string       // formato "YYYY-MM-01"
+  recorded_value: number
+  notes?: string
+  created_at: string
+  updated_at: string
+}
+
+interface CreateMemberProgressDTO {
+  user_id: string
+  month_year: string
+  recorded_value: number
+  notes?: string
+}
+```
+
+### Member (consulta básica)
+
+```typescript
+interface MemberBasicInfo {
+  id: string
+  name_full: string
+  type_document: string
+  number_document: string
+  genre: string
+}
+```
+
 ### Error estándar
 
 ```typescript
@@ -450,9 +586,12 @@ interface ApiError {
 | `BookApi` | `src/features/dashboard/infrastructure/BookApi.ts` | `getAll`, `getById`, `create`, `update`, `remove` |
 | `AuthorApi` | `src/features/dashboard/infrastructure/AuthorApi.ts` | `getAll`, `getById`, `create`, `update`, `remove` |
 | `ExerciseService` | `src/features/exercise/infrastructure/services/exerciseService.ts` | `getAll`, `getById`, `create`, `update`, `delete`, `getByEquipmentId`, `uploadVideo` |
+| `HttpMemberProgressRepository` | `src/features/member-progress/infrastructure/http/HttpMemberProgressRepository.ts` | `findAll`, `findById`, `create`, `update`, `delete` |
+| `HttpMemberRepository` | `src/features/members/infrastructure/http/HttpMemberRepository.ts` | `findAll`, `findById`, `create`, `update`, `delete` |
 
 - `AuthApi`, `BookApi`, `AuthorApi` utilizan `axiosInstance` importado desde `@/infrastructure/http/axiosInstance`
 - `ExerciseService` utiliza `axiosExercise` importado desde `@/features/exercise/infrastructure/http/axiosExercise` (usa proxy Vite)
+- `MemberProgressListPage` usa Axios directo para `GET /progress-member` y `GET /members/{id}` (con caché local)
 
 ---
 

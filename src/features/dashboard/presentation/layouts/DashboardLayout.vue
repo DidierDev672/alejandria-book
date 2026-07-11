@@ -39,7 +39,9 @@ const coliseoItems = [
   { label: 'Lista de galiadores', icon: 'gladiator-list', route: '/dashboard/coliseo/members/list' },
   { label: 'Crear equipo', icon: 'equipment', route: '/dashboard/coliseo/equipment/create' },
   { label: 'Lista de equipos', icon: 'equipment-list', route: '/dashboard/coliseo/equipment/list' },
-  { label: 'Historial de ejercicios', icon: 'exercise-list', route: '/dashboard/coliseo/exercises' }
+  { label: 'Historial de ejercicios', icon: 'exercise-list', route: '/dashboard/coliseo/exercises' },
+  { label: 'Objetivo de gladiadores', icon: 'gladiator-progress', route: '/dashboard/coliseo/objetivo-gladiadores' },
+  { label: 'Progreso de gladiadores', icon: 'gladiator-progress', route: '/dashboard/coliseo/progreso-gladiadores' }
 ]
 
 function toggleAlejandria() {
@@ -324,6 +326,12 @@ function logout() {
                 <svg v-else-if="item.icon === 'exercise-list'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
                   stroke="currentColor" stroke-width="1.8">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <!-- Icono objetivo de gladiadores -->
+                <svg v-else-if="item.icon === 'gladiator-progress'" class="h-5 w-5 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                 {{ item.label }}
               </button>
