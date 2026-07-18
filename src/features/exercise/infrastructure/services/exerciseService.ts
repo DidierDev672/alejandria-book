@@ -82,6 +82,8 @@ export const ExerciseService = {
    * @param videoFile - Archivo de video (opcional)
    */
   async create(exerciseData: CreateExerciseDTO): Promise<Exercise> {
+    console.log("exerciseData");
+    console.log(exerciseData);
     const { data } = await axiosExercise.post<Exercise>("", {
       name: exerciseData.name,
       muscle_group: exerciseData.muscle_group,
@@ -112,10 +114,13 @@ export const ExerciseService = {
    */
   async update(id: string, updateData: UpdateExerciseDTO): Promise<Exercise> {
     const payload: Record<string, string> = {};
-    if (updateData.name) payload.name = updateData.name;
-    if (updateData.muscle_group) payload.muscle_group = updateData.muscle_group;
-    if (updateData.difficulty) payload.difficulty = updateData.difficulty;
-    if (updateData.video_url) payload.video_url = updateData.video_url;
+    if (updateData.name !== undefined) payload.name = updateData.name;
+    if (updateData.muscle_group !== undefined)
+      payload.muscle_group = updateData.muscle_group;
+    if (updateData.difficulty !== undefined)
+      payload.difficulty = updateData.difficulty;
+    if (updateData.video_url !== undefined)
+      payload.video_url = updateData.video_url;
 
     const { data } = await axiosExercise.put<Exercise>(`/${id}`, payload);
     return data;
@@ -135,9 +140,12 @@ export const ExerciseService = {
    */
   async getByEquipmentId(equipmentId: string): Promise<Exercise[]> {
     try {
-      const { data } = await axiosExercise.get<PaginatedResponse<Exercise>>("", {
-        params: { equipment_id: equipmentId }
-      });
+      const { data } = await axiosExercise.get<PaginatedResponse<Exercise>>(
+        "",
+        {
+          params: { equipment_id: equipmentId },
+        },
+      );
       return data?.data || data || [];
     } catch (error: any) {
       if (error.status === 404) {

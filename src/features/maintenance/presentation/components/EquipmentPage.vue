@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useExerciseEdit } from '@/features/exercise/application/composables/useExerciseEdit'
 import { useExerciseViewer } from '@/features/exercise/application/composables/useExerciseViewer'
 import axiosExercise from '@/features/exercise/infrastructure/http/axiosExercise'
@@ -690,11 +690,13 @@ const saveExerciseToAPI = async (videoUrl) => {
       name: exerciseForm.value.name,
       muscle_group: exerciseForm.value.muscle_group,
       difficulty: exerciseForm.value.difficulty,
-      video: finalVideoUrl // URL editada por el usuario o null
+      video_url: finalVideoUrl || undefined // URL editada por el usuario o null
     }
 
+
+
     console.log('[EquipmentPage] 📦 Datos a enviar a API:', JSON.stringify(exerciseData, null, 2))
-    console.log('[EquipmentPage] 🚀 ENVIANDO A API - video:', exerciseData.video)
+    console.log('[EquipmentPage] 🚀 ENVIANDO A API - video_url:', exerciseData.video_url)
 
     await axiosExercise.post('', exerciseData)
 

@@ -800,9 +800,9 @@
     "semantic_hash": "5b67eb345d26add909ddb932f303e784"
   },
   "D:\\Vue\\alajandria-book\\backup-service\\cmd\\server\\main.go": {
-    "mtime": 1784115561.67852,
-    "ast_hash": "4012e262683bd3e42e03fd375c9379a4",
-    "semantic_hash": "4012e262683bd3e42e03fd375c9379a4"
+    "mtime": 1784292601.4680555,
+    "ast_hash": "9ed32d3344b8d79198866292ee087d1b",
+    "semantic_hash": "9ed32d3344b8d79198866292ee087d1b"
   },
   "D:\\Vue\\alajandria-book\\backup-service\\domain\\entities\\backup.go": {
     "mtime": 1784089902.9601178,
@@ -815,9 +815,9 @@
     "semantic_hash": "8130caf59b9d026efbbb0e91b9299bd8"
   },
   "D:\\Vue\\alajandria-book\\backup-service\\infrastructure\\database\\postgres.go": {
-    "mtime": 1784092789.9543488,
-    "ast_hash": "78571a6fb1bde6b2ee5af84704f43f9e",
-    "semantic_hash": "78571a6fb1bde6b2ee5af84704f43f9e"
+    "mtime": 1784292615.4926414,
+    "ast_hash": "05e17e44f0b102c9c0173eec10c9ac4b",
+    "semantic_hash": "05e17e44f0b102c9c0173eec10c9ac4b"
   },
   "D:\\Vue\\alajandria-book\\backup-service\\infrastructure\\filesystem\\pg_dump.go": {
     "mtime": 1784118446.0410244,
@@ -840,9 +840,9 @@
     "semantic_hash": "8b8d2dc55480311c22d916f9458eb777"
   },
   "D:\\Vue\\alajandria-book\\backup-service\\infrastructure\\http\\router.go": {
-    "mtime": 1784093601.364689,
-    "ast_hash": "e0fd28cf8c67c5839dce41bc1f2b2557",
-    "semantic_hash": "e0fd28cf8c67c5839dce41bc1f2b2557"
+    "mtime": 1784292595.8096528,
+    "ast_hash": "858d113dc7c7a44976a27ae219688f07",
+    "semantic_hash": "858d113dc7c7a44976a27ae219688f07"
   },
   "D:\\Vue\\alajandria-book\\package.json": {
     "mtime": 1783029551.220538,
@@ -1125,9 +1125,9 @@
     "semantic_hash": "60d1268860ff8de3a0f1921fc2ab442e"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\exercise\\presentation\\pages\\ExerciseListPage.vue": {
-    "mtime": 1783255325.3137643,
-    "ast_hash": "ac5389ff91f48a7581a128d43fb8cfd1",
-    "semantic_hash": "ac5389ff91f48a7581a128d43fb8cfd1"
+    "mtime": 1784347634.7871063,
+    "ast_hash": "f43e4de6f547f19ce45ef9dbb1e249a0",
+    "semantic_hash": "f43e4de6f547f19ce45ef9dbb1e249a0"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\maintenance\\application\\stores\\useEquipmentListStore.ts": {
     "mtime": 1782473758.5676708,
@@ -1155,9 +1155,9 @@
     "semantic_hash": "7d727be82e905f3a330a428cc10a580b"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\maintenance\\presentation\\components\\EquipmentPage.vue": {
-    "mtime": 1784120146.8564038,
-    "ast_hash": "8498ec2a67829384cda36357f388229a",
-    "semantic_hash": "8498ec2a67829384cda36357f388229a"
+    "mtime": 1784351372.040507,
+    "ast_hash": "56665371f7e7ec28f651158be2af03ae",
+    "semantic_hash": "56665371f7e7ec28f651158be2af03ae"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\maintenance\\presentation\\components\\MaintenanceForm.vue": {
     "mtime": 1784055582.4447303,
@@ -1420,9 +1420,9 @@
     "semantic_hash": "19d45fd47662a9ef82825368d2823a68"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\topics\\presentation\\components\\TopicList.vue": {
-    "mtime": 1784203376.5337334,
-    "ast_hash": "a1b2f2cc03df8a3711f45a8b76b2a12f",
-    "semantic_hash": "a1b2f2cc03df8a3711f45a8b76b2a12f"
+    "mtime": 1784287930.3786623,
+    "ast_hash": "8b673a42e80b818746ef260f445d8cd3",
+    "semantic_hash": "8b673a42e80b818746ef260f445d8cd3"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\tracking\\presentation\\components\\UrlTracker.vue": {
     "mtime": 1782096772.038555,
@@ -1660,14 +1660,14 @@
     "semantic_hash": "6e63df20592a49d75a968021df9bdf78"
   },
   "D:\\Vue\\alajandria-book\\docs\\API.md": {
-    "mtime": 1783744976.319105,
-    "ast_hash": "4dddcffc0e910a6e8f157b223463a9ef",
-    "semantic_hash": "4dddcffc0e910a6e8f157b223463a9ef"
+    "mtime": 1784351408.948341,
+    "ast_hash": "403fe597baed54815d30003fdddefad1",
+    "semantic_hash": "403fe597baed54815d30003fdddefad1"
   },
   "D:\\Vue\\alajandria-book\\docs\\ARCHITECTURE.md": {
-    "mtime": 1783744971.0540273,
-    "ast_hash": "25758134bd6b5e171b17594836b09cf9",
-    "semantic_hash": "25758134bd6b5e171b17594836b09cf9"
+    "mtime": 1784351389.4397137,
+    "ast_hash": "dff8db6eac117961c158cd1b9bf63bcd",
+    "semantic_hash": "dff8db6eac117961c158cd1b9bf63bcd"
   },
   "D:\\Vue\\alajandria-book\\docs\\DUNE-ALEXANDRIA.md": {
     "mtime": 1783227943.1250558,
@@ -1788,5 +1788,95 @@
     "mtime": 1784118396.2448647,
     "ast_hash": "134a807961d599319b5410c69039d577",
     "semantic_hash": "134a807961d599319b5410c69039d577"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\application\\services\\topic_research_service.go": {
+    "mtime": 1784292549.880523,
+    "ast_hash": "32d5bad6b63455da57ac551ea6a2c348",
+    "semantic_hash": "32d5bad6b63455da57ac551ea6a2c348"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\domain\\entities\\topic_research.go": {
+    "mtime": 1784292500.9885254,
+    "ast_hash": "2ccaf8ff297f5da0d16151febf71a745",
+    "semantic_hash": "2ccaf8ff297f5da0d16151febf71a745"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\domain\\repositories\\topic_research_repository.go": {
+    "mtime": 1784292538.4541943,
+    "ast_hash": "658a5ac0b80133359b69b06014e2f6fd",
+    "semantic_hash": "658a5ac0b80133359b69b06014e2f6fd"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\infrastructure\\database\\postgres_topic_research.go": {
+    "mtime": 1784292566.7351408,
+    "ast_hash": "2cf0f6e0f86a9b8e8d8e03ecfdd0bd7a",
+    "semantic_hash": "2cf0f6e0f86a9b8e8d8e03ecfdd0bd7a"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\infrastructure\\http\\handlers\\topic_research_handler.go": {
+    "mtime": 1784292744.1625545,
+    "ast_hash": "bc2b741597b0594b63b59d3a14369c41",
+    "semantic_hash": "bc2b741597b0594b63b59d3a14369c41"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\ai\\config\\aiConfigStore.ts": {
+    "mtime": 1784288641.6105866,
+    "ast_hash": "48ef06a9afa29031d05464e13f207d7c",
+    "semantic_hash": "48ef06a9afa29031d05464e13f207d7c"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\ai\\presentation\\components\\AIConfigModal.vue": {
+    "mtime": 1784288910.9492483,
+    "ast_hash": "3b0fbcede4e967fb46a0c31f8b688ee8",
+    "semantic_hash": "3b0fbcede4e967fb46a0c31f8b688ee8"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\exercise\\application\\composables\\useExerciseVideoUpload.ts": {
+    "mtime": 1784347412.45442,
+    "ast_hash": "ae2f17f9953ddb2afc86d0385148073d",
+    "semantic_hash": "ae2f17f9953ddb2afc86d0385148073d"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\exercise\\domain\\services\\ExerciseVideoUploadService.ts": {
+    "mtime": 1784347388.6683927,
+    "ast_hash": "4a9fd9599dc83025a4072c159766039a",
+    "semantic_hash": "4a9fd9599dc83025a4072c159766039a"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\exercise\\presentation\\components\\molecules\\VideoUploadingModal.vue": {
+    "mtime": 1784347460.7209992,
+    "ast_hash": "95e41112ee09f155f6b22cddb8353627",
+    "semantic_hash": "95e41112ee09f155f6b22cddb8353627"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\exercise\\presentation\\components\\molecules\\VideoVerificationModal.vue": {
+    "mtime": 1784347499.1249857,
+    "ast_hash": "bc79515933f3064a3b8c0d0045ce7468",
+    "semantic_hash": "bc79515933f3064a3b8c0d0045ce7468"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\topics\\config\\topicResearchStore.ts": {
+    "mtime": 1784292661.3605857,
+    "ast_hash": "b026595704fdf942874e122511867791",
+    "semantic_hash": "b026595704fdf942874e122511867791"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\topics\\presentation\\components\\AssignResearchModal.vue": {
+    "mtime": 1784292706.8852968,
+    "ast_hash": "5538c1235e70e77740bd935b7aae420c",
+    "semantic_hash": "5538c1235e70e77740bd935b7aae420c"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\topics\\presentation\\components\\TopicDetailModal.vue": {
+    "mtime": 1784287503.390079,
+    "ast_hash": "1a55ba4357c66249d9a8e11707cc3da4",
+    "semantic_hash": "1a55ba4357c66249d9a8e11707cc3da4"
+  },
+  "D:\\Vue\\alajandria-book\\docs\\exercise-list-changes.md": {
+    "mtime": 1784351372.687753,
+    "ast_hash": "d5688e210d45345acd8e47aaa1bd079c",
+    "semantic_hash": "d5688e210d45345acd8e47aaa1bd079c"
+  },
+  "graphify-out\\transcripts\\PRESS PECHO AGARRE CERRADO EN MAQUINA.txt": {
+    "mtime": 1784258509.7241023,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "graphify-out\\transcripts\\Press_Pecho_Agarre_Cerrado.txt": {
+    "mtime": 1784258516.3398955,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "graphify-out\\transcripts\\Press_de_Pecho_Sentado.txt": {
+    "mtime": 1784258563.1730266,
+    "ast_hash": "fc32b88dbdae18a39900163a8cac754e",
+    "semantic_hash": "fc32b88dbdae18a39900163a8cac754e"
   }
 }
