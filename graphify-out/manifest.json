@@ -7,7 +7,7 @@
   "package.json": {
     "mtime": 1783029551.220538,
     "ast_hash": "e359ceea9381e8aa6208a662a8554502",
-    "semantic_hash": ""
+    "semantic_hash": "e359ceea9381e8aa6208a662a8554502"
   },
   "skills-lock.json": {
     "mtime": 1781925698.7272255,
@@ -17,7 +17,7 @@
   "src/App.vue": {
     "mtime": 1783310176.866621,
     "ast_hash": "003873df3e74ce6a7a4876329ed27d91",
-    "semantic_hash": ""
+    "semantic_hash": "003873df3e74ce6a7a4876329ed27d91"
   },
   "src/features/auth/application/AuthService.ts": {
     "mtime": 1781701913.4321346,
@@ -120,9 +120,9 @@
     "semantic_hash": "554827939287b107502a8d1c75624c52"
   },
   "src/features/dashboard/presentation/layouts/DashboardLayout.vue": {
-    "mtime": 1783309460.4275613,
-    "ast_hash": "1c013134843cda2dfb6878d141fb213a",
-    "semantic_hash": ""
+    "mtime": 1783957275.946266,
+    "ast_hash": "e5d171671600ca9c3657e21ef1f9d1d1",
+    "semantic_hash": "e5d171671600ca9c3657e21ef1f9d1d1"
   },
   "src/features/dashboard/presentation/pages/AuthorsPage.vue": {
     "mtime": 1782103174.058975,
@@ -142,17 +142,17 @@
   "src/features/maintenance/application/stores/useEquipmentStore.ts": {
     "mtime": 1783225217.2008743,
     "ast_hash": "f0db017795607305222e7027d1e8781d",
-    "semantic_hash": ""
+    "semantic_hash": "f0db017795607305222e7027d1e8781d"
   },
   "src/features/maintenance/infrastructure/http/axiosEquipment.ts": {
     "mtime": 1783187337.6708987,
     "ast_hash": "99c0a70540d9a0721a6997ba07f5244f",
-    "semantic_hash": ""
+    "semantic_hash": "99c0a70540d9a0721a6997ba07f5244f"
   },
   "src/features/maintenance/presentation/components/MaintenanceForm.vue": {
     "mtime": 1782621869.5082662,
     "ast_hash": "518474e8e26d4cc75c671e67b6a8fc71",
-    "semantic_hash": ""
+    "semantic_hash": "518474e8e26d4cc75c671e67b6a8fc71"
   },
   "src/features/notes/application/useNoteStore.ts": {
     "mtime": 1782132391.890267,
@@ -192,7 +192,7 @@
   "src/features/notes/presentation/components/NotebookSpread.vue": {
     "mtime": 1783045393.6889777,
     "ast_hash": "7d5d4e23d3441ded9989603f35296c1a",
-    "semantic_hash": ""
+    "semantic_hash": "7d5d4e23d3441ded9989603f35296c1a"
   },
   "src/features/topics/application/useTopicStore.ts": {
     "mtime": 1782017997.6205437,
@@ -247,12 +247,12 @@
   "src/main.ts": {
     "mtime": 1783310177.5199733,
     "ast_hash": "53b16465dd34cb0598df7ef2e255b40e",
-    "semantic_hash": ""
+    "semantic_hash": "53b16465dd34cb0598df7ef2e255b40e"
   },
   "src/router/index.ts": {
-    "mtime": 1783308833.548681,
-    "ast_hash": "4c90627b4ce2a8126d06f94df7d01687",
-    "semantic_hash": ""
+    "mtime": 1783957278.6481419,
+    "ast_hash": "d262d17dea352a42261aa10e7fad8619",
+    "semantic_hash": "d262d17dea352a42261aa10e7fad8619"
   },
   "src/utils/components/BaseInput.vue": {
     "mtime": 1782102860.593547,
@@ -262,7 +262,7 @@
   "src/utils/components/BaseModal.vue": {
     "mtime": 1783224920.7432456,
     "ast_hash": "23f1b9e4c85444ebf0ef662e82d1c4c5",
-    "semantic_hash": ""
+    "semantic_hash": "23f1b9e4c85444ebf0ef662e82d1c4c5"
   },
   "src/utils/components/ImageViewer.vue": {
     "mtime": 1782100058.7255263,
@@ -285,9 +285,9 @@
     "semantic_hash": "70bdd0a673bcfc0e828080b306e7c680"
   },
   "vite.config.ts": {
-    "mtime": 1782480246.51677,
-    "ast_hash": "829f85367d44ede045313be4db17d11e",
-    "semantic_hash": ""
+    "mtime": 1783742156.680349,
+    "ast_hash": "afd99ee2c0ca7ea08552462cd678cff1",
+    "semantic_hash": "afd99ee2c0ca7ea08552462cd678cff1"
   },
   ".agents/skills/frontend-design/LICENSE.txt": {
     "mtime": 1781925210.7033741,
@@ -325,24 +325,24 @@
     "semantic_hash": "63b9a866ac71cc44d7d3b68e54e9da35"
   },
   "README.md": {
-    "mtime": 1783227805.3334193,
-    "ast_hash": "313d2fedd2d9e7659fe7ca05994b5842",
-    "semantic_hash": ""
+    "mtime": 1783744985.913176,
+    "ast_hash": "fa3f21a99a57bb4a9a75ef75d2fd3aa8",
+    "semantic_hash": "fa3f21a99a57bb4a9a75ef75d2fd3aa8"
   },
   "docs/API.md": {
-    "mtime": 1782536745.1244338,
-    "ast_hash": "4f1212a30621b78f91e6ebc91c5facd2",
-    "semantic_hash": ""
+    "mtime": 1783744976.319105,
+    "ast_hash": "4dddcffc0e910a6e8f157b223463a9ef",
+    "semantic_hash": "4dddcffc0e910a6e8f157b223463a9ef"
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1782536773.4809282,
-    "ast_hash": "bb3fc196f8650626303bc0a6756b0688",
-    "semantic_hash": ""
+    "mtime": 1783744971.0540273,
+    "ast_hash": "25758134bd6b5e171b17594836b09cf9",
+    "semantic_hash": "25758134bd6b5e171b17594836b09cf9"
   },
   "docs/DUNE-ALEXANDRIA.md": {
     "mtime": 1783227943.1250558,
     "ast_hash": "751decc16a4fa17ed11dcbccf87c2b2e",
-    "semantic_hash": ""
+    "semantic_hash": "751decc16a4fa17ed11dcbccf87c2b2e"
   },
   "index.html": {
     "mtime": 1781701901.9730463,
@@ -367,277 +367,482 @@
   "src/features/exercise/application/stores/useExerciseStore.ts": {
     "mtime": 1782480434.656801,
     "ast_hash": "7dc2c87316c3162b434a7071590c8abb",
-    "semantic_hash": ""
+    "semantic_hash": "7dc2c87316c3162b434a7071590c8abb"
   },
   "src/features/exercise/infrastructure/http/axiosExercise.ts": {
     "mtime": 1782536196.8493786,
     "ast_hash": "543abed0081b81d023e88f6bd5d1c2ac",
-    "semantic_hash": ""
+    "semantic_hash": "543abed0081b81d023e88f6bd5d1c2ac"
   },
   "src/features/exercise/infrastructure/services/exerciseService.ts": {
     "mtime": 1782532694.1555834,
     "ast_hash": "217c6b08d98bedcf48884ffdfc8b3478",
-    "semantic_hash": ""
+    "semantic_hash": "217c6b08d98bedcf48884ffdfc8b3478"
   },
   "src/features/exercise/presentation/pages/ExerciseCreatePage.vue": {
     "mtime": 1783224902.9957144,
     "ast_hash": "60d1268860ff8de3a0f1921fc2ab442e",
-    "semantic_hash": ""
+    "semantic_hash": "60d1268860ff8de3a0f1921fc2ab442e"
   },
   "src/features/exercise/presentation/pages/ExerciseListPage.vue": {
     "mtime": 1783255325.3137643,
     "ast_hash": "ac5389ff91f48a7581a128d43fb8cfd1",
-    "semantic_hash": ""
+    "semantic_hash": "ac5389ff91f48a7581a128d43fb8cfd1"
   },
   "src/features/maintenance/application/stores/useEquipmentListStore.ts": {
     "mtime": 1782473758.5676708,
     "ast_hash": "93a3ddf6716840857ad1b32a1ff6c0f4",
-    "semantic_hash": ""
+    "semantic_hash": "93a3ddf6716840857ad1b32a1ff6c0f4"
   },
   "src/features/maintenance/presentation/components/EquipmentDetailCard.vue": {
     "mtime": 1782386604.165704,
     "ast_hash": "197456523b949193ad37438c51651770",
-    "semantic_hash": ""
+    "semantic_hash": "197456523b949193ad37438c51651770"
   },
   "src/features/maintenance/presentation/components/EquipmentList.vue": {
     "mtime": 1782473758.5676708,
     "ast_hash": "7d727be82e905f3a330a428cc10a580b",
-    "semantic_hash": ""
+    "semantic_hash": "7d727be82e905f3a330a428cc10a580b"
   },
   "src/features/maintenance/presentation/components/EquipmentPage.vue": {
     "mtime": 1783022701.4687982,
     "ast_hash": "6b5b02db700901568345e8f4606a4cfe",
-    "semantic_hash": ""
+    "semantic_hash": "6b5b02db700901568345e8f4606a4cfe"
   },
   "src/features/maintenance/presentation/components/atomic/InfoRow.vue": {
     "mtime": 1782386396.8917909,
     "ast_hash": "4e012eecee8d6923100808e5795ad7cc",
-    "semantic_hash": ""
+    "semantic_hash": "4e012eecee8d6923100808e5795ad7cc"
   },
   "src/features/maintenance/presentation/components/atomic/StatusBadge.vue": {
     "mtime": 1782362467.79346,
     "ast_hash": "de4e47790adcb6e43c246613d6c8376b",
-    "semantic_hash": ""
+    "semantic_hash": "de4e47790adcb6e43c246613d6c8376b"
   },
   "src/features/video/application/VideoService.ts": {
     "mtime": 1782737009.481429,
     "ast_hash": "2c0c63caf6619f29b90b9ddef1758cc2",
-    "semantic_hash": ""
+    "semantic_hash": "2c0c63caf6619f29b90b9ddef1758cc2"
   },
   "src/features/video/domain/entities/VideoEntity.ts": {
     "mtime": 1782621345.9687705,
     "ast_hash": "300667b02a6fff6c51e8f2e223880f2e",
-    "semantic_hash": ""
+    "semantic_hash": "300667b02a6fff6c51e8f2e223880f2e"
   },
   "src/features/video/domain/repositories/VideoRepository.ts": {
     "mtime": 1782621349.100755,
     "ast_hash": "6ce78b020bd98d2da4fa470e9cba1c2a",
-    "semantic_hash": ""
+    "semantic_hash": "6ce78b020bd98d2da4fa470e9cba1c2a"
   },
   "src/features/video/index.ts": {
     "mtime": 1782621413.8395069,
     "ast_hash": "d3cdcc5b69f143874be88d6a4595207d",
-    "semantic_hash": ""
+    "semantic_hash": "d3cdcc5b69f143874be88d6a4595207d"
   },
   "src/features/video/infrastructure/config/supabase.ts": {
     "mtime": 1782995542.5672128,
     "ast_hash": "9f30a8d9bf583c878bdc7da660b54315",
-    "semantic_hash": ""
+    "semantic_hash": "9f30a8d9bf583c878bdc7da660b54315"
   },
   "src/features/video/infrastructure/repositories/SupabaseVideoRepository.ts": {
     "mtime": 1783021923.6632688,
     "ast_hash": "e09b288259e9cc02ae3b93622478d16c",
-    "semantic_hash": ""
+    "semantic_hash": "e09b288259e9cc02ae3b93622478d16c"
   },
   "src/features/video/presentation/components/VideoUploadForm.vue": {
     "mtime": 1782621410.6476893,
     "ast_hash": "ec9fc60b51cd85fb6b3b20136f110e79",
-    "semantic_hash": ""
+    "semantic_hash": "ec9fc60b51cd85fb6b3b20136f110e79"
   },
   "src/features/video/presentation/composables/useVideoUpload.ts": {
     "mtime": 1782737022.9197419,
     "ast_hash": "aeeecfb5a90b1f850bc19a44c4649997",
-    "semantic_hash": ""
+    "semantic_hash": "aeeecfb5a90b1f850bc19a44c4649997"
   },
   "src/lib/supabase.ts": {
     "mtime": 1783045217.059752,
     "ast_hash": "13f9424e4141d65a625dd81b11490106",
-    "semantic_hash": ""
+    "semantic_hash": "13f9424e4141d65a625dd81b11490106"
   },
   "src/stores/chatStore.ts": {
     "mtime": 1783045252.719951,
     "ast_hash": "eebe2abe77b8f41d0bce23e72fcbb4b7",
-    "semantic_hash": ""
+    "semantic_hash": "eebe2abe77b8f41d0bce23e72fcbb4b7"
   },
   "src/stores/equipmentStore.js": {
     "mtime": 1783311483.5339427,
     "ast_hash": "e2062283fc8848144b6f7444c9a866ea",
-    "semantic_hash": ""
+    "semantic_hash": "e2062283fc8848144b6f7444c9a866ea"
   },
   "src/utils/components/BaseErrorDisplay.vue": {
     "mtime": 1782443715.3388243,
     "ast_hash": "b555ab25f8e5097e7e6311e54cf4dfc2",
-    "semantic_hash": ""
+    "semantic_hash": "b555ab25f8e5097e7e6311e54cf4dfc2"
   },
   "src/utils/components/BaseLoading.vue": {
     "mtime": 1782735486.2572572,
     "ast_hash": "30efde3781d6adde59239f33d73da230",
-    "semantic_hash": ""
+    "semantic_hash": "30efde3781d6adde59239f33d73da230"
   },
   "src/utils/components/BaseTextarea.vue": {
     "mtime": 1783081820.836169,
     "ast_hash": "e897957af31521d099aa85150792fb6b",
-    "semantic_hash": ""
+    "semantic_hash": "e897957af31521d099aa85150792fb6b"
   },
   "src/utils/components/CustomVideoPlayer.vue": {
     "mtime": 1783222115.2580628,
     "ast_hash": "bbde1a522766e84c657987c9de6a7dbd",
-    "semantic_hash": ""
+    "semantic_hash": "bbde1a522766e84c657987c9de6a7dbd"
   },
   "src/utils/components/EmptyBox.vue": {
     "mtime": 1782532398.8848453,
     "ast_hash": "e76fd47a54a5a68df661436d84a7e923",
-    "semantic_hash": ""
+    "semantic_hash": "e76fd47a54a5a68df661436d84a7e923"
   },
   ".cursor/skills/alejandria-design-system/SKILL.md": {
     "mtime": 1782476504.9542718,
     "ast_hash": "ce643fad006d5e6d3aa13b0725384293",
-    "semantic_hash": ""
+    "semantic_hash": "ce643fad006d5e6d3aa13b0725384293"
   },
   "src/features/video/README.md": {
     "mtime": 1782995542.5672128,
     "ast_hash": "d82f3ad37ae38b9597c90f5611aab635",
-    "semantic_hash": ""
+    "semantic_hash": "d82f3ad37ae38b9597c90f5611aab635"
   },
   "src/features/members/application/services/MemberService.ts": {
-    "mtime": 1783308606.143903,
-    "ast_hash": "9c1c2316cb0e22359de017832c5dac0d",
-    "semantic_hash": ""
+    "mtime": 1783399046.7968726,
+    "ast_hash": "e6cb1592edcda92b2a679ca8034d22a2",
+    "semantic_hash": "e6cb1592edcda92b2a679ca8034d22a2"
   },
   "src/features/members/application/stores/useMemberStore.ts": {
-    "mtime": 1783308636.4074657,
-    "ast_hash": "7ec5ce413807e4daca934306a022cb52",
-    "semantic_hash": ""
+    "mtime": 1783338947.8748038,
+    "ast_hash": "599e19f5aef442580b9008a67d434e51",
+    "semantic_hash": "599e19f5aef442580b9008a67d434e51"
   },
   "src/features/members/domain/entities/Member.types.ts": {
     "mtime": 1783308555.1824603,
     "ast_hash": "264e37dfb5ddd6ab1fba418b2e2ea159",
-    "semantic_hash": ""
+    "semantic_hash": "264e37dfb5ddd6ab1fba418b2e2ea159"
   },
   "src/features/members/domain/repositories/MemberRepository.ts": {
     "mtime": 1783308562.0622735,
     "ast_hash": "8b7584fbbc9989ad36afe2396af7b081",
-    "semantic_hash": ""
+    "semantic_hash": "8b7584fbbc9989ad36afe2396af7b081"
   },
   "src/features/members/domain/services/MemberDomainService.ts": {
     "mtime": 1783308577.8925452,
     "ast_hash": "6801486a905881636f2d508163712b9b",
-    "semantic_hash": ""
+    "semantic_hash": "6801486a905881636f2d508163712b9b"
   },
   "src/features/members/index.ts": {
     "mtime": 1783308842.676788,
     "ast_hash": "1a385315086e592e0df110577a4c6268",
-    "semantic_hash": ""
+    "semantic_hash": "1a385315086e592e0df110577a4c6268"
   },
   "src/features/members/infrastructure/http/HttpMemberRepository.ts": {
-    "mtime": 1783312452.4851139,
-    "ast_hash": "6c0da54a84790f50728cb32add8dddbf",
-    "semantic_hash": ""
+    "mtime": 1783343832.7737694,
+    "ast_hash": "00680423b176b23693e7812b079d36a9",
+    "semantic_hash": "00680423b176b23693e7812b079d36a9"
   },
   "src/features/members/presentation/components/atoms/BMIIndicator.vue": {
     "mtime": 1783308666.6428204,
     "ast_hash": "fb09b31973a8aaedd0191ae75a0eaa0a",
-    "semantic_hash": ""
+    "semantic_hash": "fb09b31973a8aaedd0191ae75a0eaa0a"
   },
   "src/features/members/presentation/components/atoms/MemberFieldLabel.vue": {
     "mtime": 1783308641.2440581,
     "ast_hash": "7bf990b6db5ef86295099c3e1a59eeb7",
-    "semantic_hash": ""
+    "semantic_hash": "7bf990b6db5ef86295099c3e1a59eeb7"
   },
   "src/features/members/presentation/components/atoms/MemberInput.vue": {
     "mtime": 1783308647.474183,
     "ast_hash": "b6597beb5cc6af63a17b357fd43cb80e",
-    "semantic_hash": ""
+    "semantic_hash": "b6597beb5cc6af63a17b357fd43cb80e"
   },
   "src/features/members/presentation/components/atoms/MemberSelect.vue": {
     "mtime": 1783308652.7889285,
     "ast_hash": "0f5b30c802c6ef0c3dc774f8f37e367b",
-    "semantic_hash": ""
+    "semantic_hash": "0f5b30c802c6ef0c3dc774f8f37e367b"
   },
   "src/features/members/presentation/components/atoms/MemberTextarea.vue": {
     "mtime": 1783308657.7441256,
     "ast_hash": "4fd35c52ef41c6d7cd9e35a08d4bd993",
-    "semantic_hash": ""
+    "semantic_hash": "4fd35c52ef41c6d7cd9e35a08d4bd993"
   },
   "src/features/members/presentation/components/molecules/HealthConditionCard.vue": {
     "mtime": 1783309562.129144,
     "ast_hash": "8e9784845f7461422960f7a7f0888e44",
-    "semantic_hash": ""
+    "semantic_hash": "8e9784845f7461422960f7a7f0888e44"
   },
   "src/features/members/presentation/components/molecules/MemberFormField.vue": {
     "mtime": 1783309653.804613,
     "ast_hash": "2ac1d365768c6574d5aaeb0142cd5927",
-    "semantic_hash": ""
+    "semantic_hash": "2ac1d365768c6574d5aaeb0142cd5927"
   },
   "src/features/members/presentation/components/molecules/MemberGoalCard.vue": {
     "mtime": 1783309562.3121808,
     "ast_hash": "edad5120fcb1be36f02869df7e2c1137",
-    "semantic_hash": ""
+    "semantic_hash": "edad5120fcb1be36f02869df7e2c1137"
   },
   "src/features/members/presentation/components/organisms/MemberBasicInfoForm.vue": {
     "mtime": 1783311693.6858597,
     "ast_hash": "dd49e0a75aa64424323cf15eb5b77f43",
-    "semantic_hash": ""
+    "semantic_hash": "dd49e0a75aa64424323cf15eb5b77f43"
   },
   "src/features/members/presentation/components/organisms/MemberHealthForm.vue": {
     "mtime": 1783309563.2347872,
     "ast_hash": "de56d7a01088c807e150a62ef8db3425",
-    "semantic_hash": ""
+    "semantic_hash": "de56d7a01088c807e150a62ef8db3425"
   },
   "src/features/members/presentation/pages/MemberCreatePage.vue": {
     "mtime": 1783311690.952433,
     "ast_hash": "ed612b04c1fad7004a6902c15b41cbf7",
-    "semantic_hash": ""
+    "semantic_hash": "ed612b04c1fad7004a6902c15b41cbf7"
   },
   "src/features/members/presentation/pages/MemberListPage.vue": {
-    "mtime": 1783309562.129144,
-    "ast_hash": "0f021e5cef7aaadecdcf478b6a993092",
-    "semantic_hash": ""
+    "mtime": 1783809724.0688107,
+    "ast_hash": "a750907bed6f77350ffc175292eae127",
+    "semantic_hash": "a750907bed6f77350ffc175292eae127"
   },
   "src/utils/loading/application/Loading.service.ts": {
     "mtime": 1783184139.4601495,
     "ast_hash": "ae1e953daf220e44e2fd090db7e26350",
-    "semantic_hash": ""
+    "semantic_hash": "ae1e953daf220e44e2fd090db7e26350"
   },
   "src/utils/loading/domain/Loading.model.ts": {
     "mtime": 1783183860.6704965,
     "ast_hash": "f114261c14f243683cc38effe42d2f46",
-    "semantic_hash": ""
+    "semantic_hash": "f114261c14f243683cc38effe42d2f46"
   },
   "src/utils/loading/domain/Loading.types.ts": {
     "mtime": 1783183853.907933,
     "ast_hash": "93f1dfc4fd7a7a1c5b4afd2444fe2c9e",
-    "semantic_hash": ""
+    "semantic_hash": "93f1dfc4fd7a7a1c5b4afd2444fe2c9e"
   },
   "src/utils/loading/index.ts": {
     "mtime": 1783186843.8829181,
     "ast_hash": "38e4c4f59581b8208e1e5e89c2c2aba7",
-    "semantic_hash": ""
+    "semantic_hash": "38e4c4f59581b8208e1e5e89c2c2aba7"
   },
   "src/utils/loading/infrastructure/icons/BookIcon.vue": {
     "mtime": 1783184938.3337944,
     "ast_hash": "37ae78dd41314167365a542295a39013",
-    "semantic_hash": ""
+    "semantic_hash": "37ae78dd41314167365a542295a39013"
   },
   "src/utils/loading/presentation/components/LoadingView.vue": {
     "mtime": 1783311680.996114,
     "ast_hash": "9faf5d7a4a74e7a27c2b686b4baeee2d",
-    "semantic_hash": ""
+    "semantic_hash": "9faf5d7a4a74e7a27c2b686b4baeee2d"
+  },
+  "src/features/members/infrastructure/cache/memberLocalCache.ts": {
+    "mtime": 1783338933.7939186,
+    "ast_hash": "773f9e06a5c9dd1697535e454108e6d1",
+    "semantic_hash": "773f9e06a5c9dd1697535e454108e6d1"
+  },
+  "src/utils/components/ErrorNotification.vue": {
+    "mtime": 1783340825.5249228,
+    "ast_hash": "0bd4efec264ecb8bf0ad511c0b7bbaaa",
+    "semantic_hash": "0bd4efec264ecb8bf0ad511c0b7bbaaa"
+  },
+  "src/features/colesio/application/stores/useAssignRolesMemberStore.ts": {
+    "mtime": 1783929450.1200256,
+    "ast_hash": "39eb06e0b9d17437c13661ad5e36be6b",
+    "semantic_hash": "39eb06e0b9d17437c13661ad5e36be6b"
+  },
+  "src/features/colesio/application/stores/useAssignRolesUserStore.ts": {
+    "mtime": 1783930291.0606613,
+    "ast_hash": "eaa2bc5c55351deab13e229629d03cd6",
+    "semantic_hash": "eaa2bc5c55351deab13e229629d03cd6"
+  },
+  "src/features/colesio/presentation/components/atoms/MemberListItemCheckbox.vue": {
+    "mtime": 1783929461.360458,
+    "ast_hash": "64194b35680f197f28e7352a5265063c",
+    "semantic_hash": "64194b35680f197f28e7352a5265063c"
+  },
+  "src/features/colesio/presentation/components/atoms/MemberListItemInfo.vue": {
+    "mtime": 1783929470.312306,
+    "ast_hash": "7b8f72cade7e83cbee9461f40137481d",
+    "semantic_hash": "7b8f72cade7e83cbee9461f40137481d"
+  },
+  "src/features/colesio/presentation/components/atoms/UserListItemCheckbox.vue": {
+    "mtime": 1783929992.2532938,
+    "ast_hash": "23a64465018208eab53b3605f1748178",
+    "semantic_hash": "23a64465018208eab53b3605f1748178"
+  },
+  "src/features/colesio/presentation/components/atoms/UserListItemInfo.vue": {
+    "mtime": 1783929995.0983865,
+    "ast_hash": "716fc64f81bd459bc4118b86fb4de3da",
+    "semantic_hash": "716fc64f81bd459bc4118b86fb4de3da"
+  },
+  "src/features/colesio/presentation/components/molecules/MemberListItem.vue": {
+    "mtime": 1783929483.6567862,
+    "ast_hash": "de1126fa6297090575d237f0525b165c",
+    "semantic_hash": "de1126fa6297090575d237f0525b165c"
+  },
+  "src/features/colesio/presentation/components/molecules/UserListItem.vue": {
+    "mtime": 1783929999.4381347,
+    "ast_hash": "f2bfc821a6da7174232c50dc3291678f",
+    "semantic_hash": "f2bfc821a6da7174232c50dc3291678f"
+  },
+  "src/features/colesio/presentation/components/organisms/MemberListModal.vue": {
+    "mtime": 1783929528.770616,
+    "ast_hash": "afd40e49fe0d4b06ef6785b0b0a6ded2",
+    "semantic_hash": "afd40e49fe0d4b06ef6785b0b0a6ded2"
+  },
+  "src/features/colesio/presentation/components/organisms/UserListModal.vue": {
+    "mtime": 1783930429.3305573,
+    "ast_hash": "7771fa72cc5fc71ae3963caa0c439daa",
+    "semantic_hash": "7771fa72cc5fc71ae3963caa0c439daa"
+  },
+  "src/features/colesio/presentation/pages/AssignRolesPage.vue": {
+    "mtime": 1783950341.8643904,
+    "ast_hash": "ec0f7819719c683e57d2dc6d202185ca",
+    "semantic_hash": "ec0f7819719c683e57d2dc6d202185ca"
+  },
+  "src/features/member-progress/application/services/MemberProgressService.ts": {
+    "mtime": 1783566083.5774033,
+    "ast_hash": "38e88eea302c2ce00e01176b975889c3",
+    "semantic_hash": "38e88eea302c2ce00e01176b975889c3"
+  },
+  "src/features/member-progress/application/stores/useMemberProgressStore.ts": {
+    "mtime": 1783569633.6350007,
+    "ast_hash": "975eba3df3e9cf4a7939ed75a5a5e78a",
+    "semantic_hash": "975eba3df3e9cf4a7939ed75a5a5e78a"
+  },
+  "src/features/member-progress/domain/entities/MemberProgress.types.ts": {
+    "mtime": 1783566071.2744951,
+    "ast_hash": "f691f25572e78e2b98b6ab75cf5623ed",
+    "semantic_hash": "f691f25572e78e2b98b6ab75cf5623ed"
+  },
+  "src/features/member-progress/domain/repositories/MemberProgressRepository.ts": {
+    "mtime": 1783566072.5444844,
+    "ast_hash": "ebe631dd87aa87bc23d495d0690ca0c1",
+    "semantic_hash": "ebe631dd87aa87bc23d495d0690ca0c1"
+  },
+  "src/features/member-progress/domain/services/MemberProgressDomainService.ts": {
+    "mtime": 1783566077.4042838,
+    "ast_hash": "b695b54e3a665b261867f8e3d8ac91bb",
+    "semantic_hash": "b695b54e3a665b261867f8e3d8ac91bb"
+  },
+  "src/features/member-progress/infrastructure/http/HttpMemberProgressRepository.ts": {
+    "mtime": 1783743001.881668,
+    "ast_hash": "3e06a092c8b5674ce272697cef55f944",
+    "semantic_hash": "3e06a092c8b5674ce272697cef55f944"
+  },
+  "src/features/member-progress/presentation/components/atoms/ProgressFieldLabel.vue": {
+    "mtime": 1783566140.0401728,
+    "ast_hash": "6133dff6560b48f40083fca7652fb0d4",
+    "semantic_hash": "6133dff6560b48f40083fca7652fb0d4"
+  },
+  "src/features/member-progress/presentation/components/atoms/ProgressInput.vue": {
+    "mtime": 1783566141.7569609,
+    "ast_hash": "7d8dc9e7b6f1b5d0d467d030922a4494",
+    "semantic_hash": "7d8dc9e7b6f1b5d0d467d030922a4494"
+  },
+  "src/features/member-progress/presentation/components/atoms/ProgressSelect.vue": {
+    "mtime": 1783566148.8643765,
+    "ast_hash": "9a279ab64f552ffa91e47587d0f8be64",
+    "semantic_hash": "9a279ab64f552ffa91e47587d0f8be64"
+  },
+  "src/features/member-progress/presentation/components/atoms/ProgressTextarea.vue": {
+    "mtime": 1783566153.5842364,
+    "ast_hash": "0e2b53e5d1f512d26ace4f5e5db6fd5c",
+    "semantic_hash": "0e2b53e5d1f512d26ace4f5e5db6fd5c"
+  },
+  "src/features/member-progress/presentation/components/molecules/MemberSelectorModal.vue": {
+    "mtime": 1783566188.5781589,
+    "ast_hash": "9bc58a840f908d9fb9fc62e4cbc7f10e",
+    "semantic_hash": "9bc58a840f908d9fb9fc62e4cbc7f10e"
+  },
+  "src/features/member-progress/presentation/components/molecules/ProgressFormField.vue": {
+    "mtime": 1783566174.3747644,
+    "ast_hash": "a3c9772cfbedde10dbdce419b38966bd",
+    "semantic_hash": "a3c9772cfbedde10dbdce419b38966bd"
+  },
+  "src/features/member-progress/presentation/components/organisms/MemberProgressFormContent.vue": {
+    "mtime": 1783566216.6798723,
+    "ast_hash": "fa64fbdf8762926b7cf9affb76a4aafb",
+    "semantic_hash": "fa64fbdf8762926b7cf9affb76a4aafb"
+  },
+  "src/features/member-progress/presentation/pages/MemberProgressCreatePage.vue": {
+    "mtime": 1783566251.560083,
+    "ast_hash": "0dbf7125b08fafeb220e1092cdf0d6c1",
+    "semantic_hash": "0dbf7125b08fafeb220e1092cdf0d6c1"
+  },
+  "src/features/member-progress/presentation/pages/MemberProgressListPage.vue": {
+    "mtime": 1783810075.9817803,
+    "ast_hash": "edf5fddcb32bf1fc0a91efd089cac516",
+    "semantic_hash": "edf5fddcb32bf1fc0a91efd089cac516"
+  },
+  "docs/ALAJANDRIA.md": {
+    "mtime": 1783744968.159227,
+    "ast_hash": "6e63df20592a49d75a968021df9bdf78",
+    "semantic_hash": "6e63df20592a49d75a968021df9bdf78"
+  },
+  "src/features/colesio/presentation/pages/AssignedRolesListPage.vue": {
+    "mtime": 1783957512.753926,
+    "ast_hash": "d46f8bffb1544fb416044880470d4885",
+    "semantic_hash": "d46f8bffb1544fb416044880470d4885"
   },
   "D:\\Vue\\alajandria-book\\.vscode\\extensions.json": {
     "mtime": 1779738394.5311637,
     "ast_hash": "886c161c2f2d9388473a64033e7d1931",
     "semantic_hash": "886c161c2f2d9388473a64033e7d1931"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\application\\services\\backup_service.go": {
+    "mtime": 1784089931.5492053,
+    "ast_hash": "ab0eb0e2648f5b4bd90f74b9c12d7e3a",
+    "semantic_hash": "ab0eb0e2648f5b4bd90f74b9c12d7e3a"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\application\\services\\storage_service.go": {
+    "mtime": 1784089938.881514,
+    "ast_hash": "5b67eb345d26add909ddb932f303e784",
+    "semantic_hash": "5b67eb345d26add909ddb932f303e784"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\cmd\\server\\main.go": {
+    "mtime": 1784115561.67852,
+    "ast_hash": "4012e262683bd3e42e03fd375c9379a4",
+    "semantic_hash": "4012e262683bd3e42e03fd375c9379a4"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\domain\\entities\\backup.go": {
+    "mtime": 1784089902.9601178,
+    "ast_hash": "21951b8266bc13f758d021f492d0ef05",
+    "semantic_hash": "21951b8266bc13f758d021f492d0ef05"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\domain\\repositories\\backup_repository.go": {
+    "mtime": 1784089909.2547603,
+    "ast_hash": "8130caf59b9d026efbbb0e91b9299bd8",
+    "semantic_hash": "8130caf59b9d026efbbb0e91b9299bd8"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\infrastructure\\database\\postgres.go": {
+    "mtime": 1784092789.9543488,
+    "ast_hash": "78571a6fb1bde6b2ee5af84704f43f9e",
+    "semantic_hash": "78571a6fb1bde6b2ee5af84704f43f9e"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\infrastructure\\filesystem\\pg_dump.go": {
+    "mtime": 1784118446.0410244,
+    "ast_hash": "66b0f7c2d00b325e748fe4b4f36fae4e",
+    "semantic_hash": "66b0f7c2d00b325e748fe4b4f36fae4e"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\infrastructure\\http\\handlers\\backup_handler.go": {
+    "mtime": 1784093611.378695,
+    "ast_hash": "b28f598614461cdfb7bcafaf17d2bcf3",
+    "semantic_hash": "b28f598614461cdfb7bcafaf17d2bcf3"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\infrastructure\\http\\handlers\\status_handler.go": {
+    "mtime": 1784089991.643074,
+    "ast_hash": "aaf721b53b299b66f0df50ed429e5df7",
+    "semantic_hash": "aaf721b53b299b66f0df50ed429e5df7"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\infrastructure\\http\\middleware\\cors.go": {
+    "mtime": 1784089995.4783008,
+    "ast_hash": "8b8d2dc55480311c22d916f9458eb777",
+    "semantic_hash": "8b8d2dc55480311c22d916f9458eb777"
+  },
+  "D:\\Vue\\alajandria-book\\backup-service\\infrastructure\\http\\router.go": {
+    "mtime": 1784093601.364689,
+    "ast_hash": "e0fd28cf8c67c5839dce41bc1f2b2557",
+    "semantic_hash": "e0fd28cf8c67c5839dce41bc1f2b2557"
   },
   "D:\\Vue\\alajandria-book\\package.json": {
     "mtime": 1783029551.220538,
@@ -709,6 +914,56 @@
     "ast_hash": "092790be9f2f57d8d3db8b560d2ac9c7",
     "semantic_hash": "092790be9f2f57d8d3db8b560d2ac9c7"
   },
+  "D:\\Vue\\alajandria-book\\src\\features\\backup\\application\\composables\\useBackups.ts": {
+    "mtime": 1784093698.870573,
+    "ast_hash": "94d0581e8080f583658e087ee635d03a",
+    "semantic_hash": "94d0581e8080f583658e087ee635d03a"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\backup\\domain\\entities\\Backup.ts": {
+    "mtime": 1784090042.2481084,
+    "ast_hash": "fa25714aa689fb09a4abbb2a95109a77",
+    "semantic_hash": "fa25714aa689fb09a4abbb2a95109a77"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\backup\\infrastructure\\http\\axiosBackup.ts": {
+    "mtime": 1784093625.95839,
+    "ast_hash": "985bf1ac4bb8238e80de1ff64f643bec",
+    "semantic_hash": "985bf1ac4bb8238e80de1ff64f643bec"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\backup\\presentation\\components\\atoms\\StatusIndicator.vue": {
+    "mtime": 1784090073.0927758,
+    "ast_hash": "2ba9ac5461d02a2f4c25246b5a625226",
+    "semantic_hash": "2ba9ac5461d02a2f4c25246b5a625226"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\backup\\presentation\\components\\atoms\\StorageBar.vue": {
+    "mtime": 1784090081.150452,
+    "ast_hash": "f5d98678e0ed30ca66731fa44e5a6c41",
+    "semantic_hash": "f5d98678e0ed30ca66731fa44e5a6c41"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\backup\\presentation\\components\\molecules\\BackupCard.vue": {
+    "mtime": 1784090109.8769917,
+    "ast_hash": "03176971847e201453dbf472947f922d",
+    "semantic_hash": "03176971847e201453dbf472947f922d"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\backup\\presentation\\components\\molecules\\ServerStatus.vue": {
+    "mtime": 1784090091.7416956,
+    "ast_hash": "2220cf90dbcb2e31d20286def25d185d",
+    "semantic_hash": "2220cf90dbcb2e31d20286def25d185d"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\backup\\presentation\\components\\organisms\\BackupTable.vue": {
+    "mtime": 1784090124.899356,
+    "ast_hash": "532b21a490b621c0ba5d30c143411496",
+    "semantic_hash": "532b21a490b621c0ba5d30c143411496"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\backup\\presentation\\components\\organisms\\CreateBackupButton.vue": {
+    "mtime": 1784090143.0213523,
+    "ast_hash": "6f37ef116e86f7aad776b3bdbcbe00f7",
+    "semantic_hash": "6f37ef116e86f7aad776b3bdbcbe00f7"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\backup\\presentation\\pages\\BackupPage.vue": {
+    "mtime": 1784093913.0322773,
+    "ast_hash": "989654811dcd1fae09ae38bcb1021b52",
+    "semantic_hash": "989654811dcd1fae09ae38bcb1021b52"
+  },
   "D:\\Vue\\alajandria-book\\src\\features\\books\\application\\useBookStore.ts": {
     "mtime": 1782048927.6195774,
     "ast_hash": "e087ccfee8f9675b19743d2db131dce9",
@@ -734,6 +989,66 @@
     "ast_hash": "6bcf13eedfb55348b6ee6b3439aaf2d0",
     "semantic_hash": "6bcf13eedfb55348b6ee6b3439aaf2d0"
   },
+  "D:\\Vue\\alajandria-book\\src\\features\\colesio\\application\\stores\\useAssignRolesMemberStore.ts": {
+    "mtime": 1783929450.1200256,
+    "ast_hash": "39eb06e0b9d17437c13661ad5e36be6b",
+    "semantic_hash": "39eb06e0b9d17437c13661ad5e36be6b"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\colesio\\application\\stores\\useAssignRolesUserStore.ts": {
+    "mtime": 1783930291.0606613,
+    "ast_hash": "eaa2bc5c55351deab13e229629d03cd6",
+    "semantic_hash": "eaa2bc5c55351deab13e229629d03cd6"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\colesio\\presentation\\components\\atoms\\MemberListItemCheckbox.vue": {
+    "mtime": 1783929461.360458,
+    "ast_hash": "64194b35680f197f28e7352a5265063c",
+    "semantic_hash": "64194b35680f197f28e7352a5265063c"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\colesio\\presentation\\components\\atoms\\MemberListItemInfo.vue": {
+    "mtime": 1783929470.312306,
+    "ast_hash": "7b8f72cade7e83cbee9461f40137481d",
+    "semantic_hash": "7b8f72cade7e83cbee9461f40137481d"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\colesio\\presentation\\components\\atoms\\UserListItemCheckbox.vue": {
+    "mtime": 1783929992.2532938,
+    "ast_hash": "23a64465018208eab53b3605f1748178",
+    "semantic_hash": "23a64465018208eab53b3605f1748178"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\colesio\\presentation\\components\\atoms\\UserListItemInfo.vue": {
+    "mtime": 1783929995.0983865,
+    "ast_hash": "716fc64f81bd459bc4118b86fb4de3da",
+    "semantic_hash": "716fc64f81bd459bc4118b86fb4de3da"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\colesio\\presentation\\components\\molecules\\MemberListItem.vue": {
+    "mtime": 1783929483.6567862,
+    "ast_hash": "de1126fa6297090575d237f0525b165c",
+    "semantic_hash": "de1126fa6297090575d237f0525b165c"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\colesio\\presentation\\components\\molecules\\UserListItem.vue": {
+    "mtime": 1783929999.4381347,
+    "ast_hash": "f2bfc821a6da7174232c50dc3291678f",
+    "semantic_hash": "f2bfc821a6da7174232c50dc3291678f"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\colesio\\presentation\\components\\organisms\\MemberListModal.vue": {
+    "mtime": 1783929528.770616,
+    "ast_hash": "afd40e49fe0d4b06ef6785b0b0a6ded2",
+    "semantic_hash": "afd40e49fe0d4b06ef6785b0b0a6ded2"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\colesio\\presentation\\components\\organisms\\UserListModal.vue": {
+    "mtime": 1783930429.3305573,
+    "ast_hash": "7771fa72cc5fc71ae3963caa0c439daa",
+    "semantic_hash": "7771fa72cc5fc71ae3963caa0c439daa"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\colesio\\presentation\\pages\\AssignRolesPage.vue": {
+    "mtime": 1783950341.8643904,
+    "ast_hash": "ec0f7819719c683e57d2dc6d202185ca",
+    "semantic_hash": "ec0f7819719c683e57d2dc6d202185ca"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\colesio\\presentation\\pages\\AssignedRolesListPage.vue": {
+    "mtime": 1783957512.753926,
+    "ast_hash": "d46f8bffb1544fb416044880470d4885",
+    "semantic_hash": "d46f8bffb1544fb416044880470d4885"
+  },
   "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\domain\\AuthorEntity.ts": {
     "mtime": 1781718060.52067,
     "ast_hash": "5b51f887fcfb8335cdac0860f7376435",
@@ -755,14 +1070,14 @@
     "semantic_hash": "554827939287b107502a8d1c75624c52"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\presentation\\layouts\\DashboardLayout.vue": {
-    "mtime": 1783337752.981045,
-    "ast_hash": "3ca664a9c21c8b7e32371d9e25d3b1ff",
-    "semantic_hash": "3ca664a9c21c8b7e32371d9e25d3b1ff"
+    "mtime": 1784090609.0225506,
+    "ast_hash": "c9fbffdb73336116d7a7b4f5450060c4",
+    "semantic_hash": "c9fbffdb73336116d7a7b4f5450060c4"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\presentation\\pages\\AuthorsPage.vue": {
-    "mtime": 1782103174.058975,
-    "ast_hash": "ce4d08d0ef0c54a6f5a264ccd9cd670a",
-    "semantic_hash": "ce4d08d0ef0c54a6f5a264ccd9cd670a"
+    "mtime": 1784174154.927271,
+    "ast_hash": "717b7e89cfe18709b4e38c0d270c7266",
+    "semantic_hash": "717b7e89cfe18709b4e38c0d270c7266"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\presentation\\pages\\BooksPage.vue": {
     "mtime": 1782187659.1938875,
@@ -773,6 +1088,11 @@
     "mtime": 1782269826.3184903,
     "ast_hash": "0968d2dedf7bf4f594842cc56dcc87c0",
     "semantic_hash": "0968d2dedf7bf4f594842cc56dcc87c0"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\exercise\\application\\composables\\useExerciseViewer.ts": {
+    "mtime": 1784088197.5161536,
+    "ast_hash": "22bbe2fb0afe0372b1ea043f1a7947bd",
+    "semantic_hash": "22bbe2fb0afe0372b1ea043f1a7947bd"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\exercise\\application\\stores\\useExerciseStore.ts": {
     "mtime": 1782480434.656801,
@@ -785,9 +1105,19 @@
     "semantic_hash": "543abed0081b81d023e88f6bd5d1c2ac"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\exercise\\infrastructure\\services\\exerciseService.ts": {
-    "mtime": 1782532694.1555834,
-    "ast_hash": "217c6b08d98bedcf48884ffdfc8b3478",
-    "semantic_hash": "217c6b08d98bedcf48884ffdfc8b3478"
+    "mtime": 1784119202.6078007,
+    "ast_hash": "d387fdde9d92799b697029197678885c",
+    "semantic_hash": "d387fdde9d92799b697029197678885c"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\exercise\\presentation\\components\\molecules\\ExerciseVideoCard.vue": {
+    "mtime": 1784088214.7940993,
+    "ast_hash": "3fd4ac21030f38a258c990e1dd42f1ac",
+    "semantic_hash": "3fd4ac21030f38a258c990e1dd42f1ac"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\exercise\\presentation\\components\\organisms\\ExerciseViewerModal.vue": {
+    "mtime": 1784088255.1749475,
+    "ast_hash": "49fffb6a7d38c245713f43587d4a776b",
+    "semantic_hash": "49fffb6a7d38c245713f43587d4a776b"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\exercise\\presentation\\pages\\ExerciseCreatePage.vue": {
     "mtime": 1783224902.9957144,
@@ -825,14 +1155,14 @@
     "semantic_hash": "7d727be82e905f3a330a428cc10a580b"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\maintenance\\presentation\\components\\EquipmentPage.vue": {
-    "mtime": 1783022701.4687982,
-    "ast_hash": "6b5b02db700901568345e8f4606a4cfe",
-    "semantic_hash": "6b5b02db700901568345e8f4606a4cfe"
+    "mtime": 1784120146.8564038,
+    "ast_hash": "8498ec2a67829384cda36357f388229a",
+    "semantic_hash": "8498ec2a67829384cda36357f388229a"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\maintenance\\presentation\\components\\MaintenanceForm.vue": {
-    "mtime": 1782621869.5082662,
-    "ast_hash": "518474e8e26d4cc75c671e67b6a8fc71",
-    "semantic_hash": "518474e8e26d4cc75c671e67b6a8fc71"
+    "mtime": 1784055582.4447303,
+    "ast_hash": "197ed4cec0a58bcb4ba753f7899fdbb8",
+    "semantic_hash": "197ed4cec0a58bcb4ba753f7899fdbb8"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\maintenance\\presentation\\components\\atomic\\InfoRow.vue": {
     "mtime": 1782386396.8917909,
@@ -844,10 +1174,85 @@
     "ast_hash": "de4e47790adcb6e43c246613d6c8376b",
     "semantic_hash": "de4e47790adcb6e43c246613d6c8376b"
   },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\application\\services\\MemberProgressService.ts": {
+    "mtime": 1783566083.5774033,
+    "ast_hash": "38e88eea302c2ce00e01176b975889c3",
+    "semantic_hash": "38e88eea302c2ce00e01176b975889c3"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\application\\stores\\useMemberProgressStore.ts": {
+    "mtime": 1783569633.6350007,
+    "ast_hash": "975eba3df3e9cf4a7939ed75a5a5e78a",
+    "semantic_hash": "975eba3df3e9cf4a7939ed75a5a5e78a"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\domain\\entities\\MemberProgress.types.ts": {
+    "mtime": 1783566071.2744951,
+    "ast_hash": "f691f25572e78e2b98b6ab75cf5623ed",
+    "semantic_hash": "f691f25572e78e2b98b6ab75cf5623ed"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\domain\\repositories\\MemberProgressRepository.ts": {
+    "mtime": 1783566072.5444844,
+    "ast_hash": "ebe631dd87aa87bc23d495d0690ca0c1",
+    "semantic_hash": "ebe631dd87aa87bc23d495d0690ca0c1"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\domain\\services\\MemberProgressDomainService.ts": {
+    "mtime": 1783566077.4042838,
+    "ast_hash": "b695b54e3a665b261867f8e3d8ac91bb",
+    "semantic_hash": "b695b54e3a665b261867f8e3d8ac91bb"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\infrastructure\\http\\HttpMemberProgressRepository.ts": {
+    "mtime": 1783743001.881668,
+    "ast_hash": "3e06a092c8b5674ce272697cef55f944",
+    "semantic_hash": "3e06a092c8b5674ce272697cef55f944"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\presentation\\components\\atoms\\ProgressFieldLabel.vue": {
+    "mtime": 1783566140.0401728,
+    "ast_hash": "6133dff6560b48f40083fca7652fb0d4",
+    "semantic_hash": "6133dff6560b48f40083fca7652fb0d4"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\presentation\\components\\atoms\\ProgressInput.vue": {
+    "mtime": 1783566141.7569609,
+    "ast_hash": "7d8dc9e7b6f1b5d0d467d030922a4494",
+    "semantic_hash": "7d8dc9e7b6f1b5d0d467d030922a4494"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\presentation\\components\\atoms\\ProgressSelect.vue": {
+    "mtime": 1783566148.8643765,
+    "ast_hash": "9a279ab64f552ffa91e47587d0f8be64",
+    "semantic_hash": "9a279ab64f552ffa91e47587d0f8be64"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\presentation\\components\\atoms\\ProgressTextarea.vue": {
+    "mtime": 1783566153.5842364,
+    "ast_hash": "0e2b53e5d1f512d26ace4f5e5db6fd5c",
+    "semantic_hash": "0e2b53e5d1f512d26ace4f5e5db6fd5c"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\presentation\\components\\molecules\\MemberSelectorModal.vue": {
+    "mtime": 1783566188.5781589,
+    "ast_hash": "9bc58a840f908d9fb9fc62e4cbc7f10e",
+    "semantic_hash": "9bc58a840f908d9fb9fc62e4cbc7f10e"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\presentation\\components\\molecules\\ProgressFormField.vue": {
+    "mtime": 1783566174.3747644,
+    "ast_hash": "a3c9772cfbedde10dbdce419b38966bd",
+    "semantic_hash": "a3c9772cfbedde10dbdce419b38966bd"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\presentation\\components\\organisms\\MemberProgressFormContent.vue": {
+    "mtime": 1783566216.6798723,
+    "ast_hash": "fa64fbdf8762926b7cf9affb76a4aafb",
+    "semantic_hash": "fa64fbdf8762926b7cf9affb76a4aafb"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\presentation\\pages\\MemberProgressCreatePage.vue": {
+    "mtime": 1783566251.560083,
+    "ast_hash": "0dbf7125b08fafeb220e1092cdf0d6c1",
+    "semantic_hash": "0dbf7125b08fafeb220e1092cdf0d6c1"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\member-progress\\presentation\\pages\\MemberProgressListPage.vue": {
+    "mtime": 1783810075.9817803,
+    "ast_hash": "edf5fddcb32bf1fc0a91efd089cac516",
+    "semantic_hash": "edf5fddcb32bf1fc0a91efd089cac516"
+  },
   "D:\\Vue\\alajandria-book\\src\\features\\members\\application\\services\\MemberService.ts": {
-    "mtime": 1783314475.2631106,
-    "ast_hash": "d479fa091fd856aaf5f531224a51b376",
-    "semantic_hash": "d479fa091fd856aaf5f531224a51b376"
+    "mtime": 1783399046.7968726,
+    "ast_hash": "e6cb1592edcda92b2a679ca8034d22a2",
+    "semantic_hash": "e6cb1592edcda92b2a679ca8034d22a2"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\members\\application\\stores\\useMemberStore.ts": {
     "mtime": 1783338947.8748038,
@@ -880,9 +1285,9 @@
     "semantic_hash": "773f9e06a5c9dd1697535e454108e6d1"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\members\\infrastructure\\http\\HttpMemberRepository.ts": {
-    "mtime": 1783338941.1210268,
-    "ast_hash": "767baf1013738feeec7479953e447f1b",
-    "semantic_hash": "767baf1013738feeec7479953e447f1b"
+    "mtime": 1783343832.7737694,
+    "ast_hash": "00680423b176b23693e7812b079d36a9",
+    "semantic_hash": "00680423b176b23693e7812b079d36a9"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\members\\presentation\\components\\atoms\\BMIIndicator.vue": {
     "mtime": 1783308666.6428204,
@@ -940,9 +1345,9 @@
     "semantic_hash": "ed612b04c1fad7004a6902c15b41cbf7"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\members\\presentation\\pages\\MemberListPage.vue": {
-    "mtime": 1783341628.4175,
-    "ast_hash": "00d3b7d94fdbd812c80cc40d155d8a75",
-    "semantic_hash": "00d3b7d94fdbd812c80cc40d155d8a75"
+    "mtime": 1783809724.0688107,
+    "ast_hash": "a750907bed6f77350ffc175292eae127",
+    "semantic_hash": "a750907bed6f77350ffc175292eae127"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\notes\\application\\useNoteStore.ts": {
     "mtime": 1782132391.890267,
@@ -1010,14 +1415,14 @@
     "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\topics\\presentation\\components\\TopicForm.vue": {
-    "mtime": 1782019266.8454933,
-    "ast_hash": "1bc5715423bd8dd838a0278451d7f497",
-    "semantic_hash": "1bc5715423bd8dd838a0278451d7f497"
+    "mtime": 1784201776.3868885,
+    "ast_hash": "19d45fd47662a9ef82825368d2823a68",
+    "semantic_hash": "19d45fd47662a9ef82825368d2823a68"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\topics\\presentation\\components\\TopicList.vue": {
-    "mtime": 1782046603.4303632,
-    "ast_hash": "fe9bd3a4f93d2f800edfade544cb5378",
-    "semantic_hash": "fe9bd3a4f93d2f800edfade544cb5378"
+    "mtime": 1784203376.5337334,
+    "ast_hash": "a1b2f2cc03df8a3711f45a8b76b2a12f",
+    "semantic_hash": "a1b2f2cc03df8a3711f45a8b76b2a12f"
   },
   "D:\\Vue\\alajandria-book\\src\\features\\tracking\\presentation\\components\\UrlTracker.vue": {
     "mtime": 1782096772.038555,
@@ -1085,9 +1490,9 @@
     "semantic_hash": "53b16465dd34cb0598df7ef2e255b40e"
   },
   "D:\\Vue\\alajandria-book\\src\\router\\index.ts": {
-    "mtime": 1783337939.1743817,
-    "ast_hash": "368f14d29056290665fdc1e4a157b63d",
-    "semantic_hash": "368f14d29056290665fdc1e4a157b63d"
+    "mtime": 1784090254.5834975,
+    "ast_hash": "bb6887c8c6ea572745028747e8b81b30",
+    "semantic_hash": "bb6887c8c6ea572745028747e8b81b30"
   },
   "D:\\Vue\\alajandria-book\\src\\stores\\chatStore.ts": {
     "mtime": 1783045252.719951,
@@ -1139,10 +1544,20 @@
     "ast_hash": "0bd4efec264ecb8bf0ad511c0b7bbaaa",
     "semantic_hash": "0bd4efec264ecb8bf0ad511c0b7bbaaa"
   },
+  "D:\\Vue\\alajandria-book\\src\\utils\\components\\ExerciseModal.vue": {
+    "mtime": 1784055694.0474255,
+    "ast_hash": "e665dde41f99eb61d4c860ffcf44da6b",
+    "semantic_hash": "e665dde41f99eb61d4c860ffcf44da6b"
+  },
   "D:\\Vue\\alajandria-book\\src\\utils\\components\\ImageViewer.vue": {
     "mtime": 1782100058.7255263,
     "ast_hash": "f6d639e78f673a53e606759cc9707985",
     "semantic_hash": "f6d639e78f673a53e606759cc9707985"
+  },
+  "D:\\Vue\\alajandria-book\\src\\utils\\components\\SuccessModal.vue": {
+    "mtime": 1784049810.47664,
+    "ast_hash": "492688e93d7a5465354b59cfbba96e98",
+    "semantic_hash": "492688e93d7a5465354b59cfbba96e98"
   },
   "D:\\Vue\\alajandria-book\\src\\utils\\loading\\application\\Loading.service.ts": {
     "mtime": 1783184139.4601495,
@@ -1190,9 +1605,9 @@
     "semantic_hash": "70bdd0a673bcfc0e828080b306e7c680"
   },
   "D:\\Vue\\alajandria-book\\vite.config.ts": {
-    "mtime": 1783338939.6872382,
-    "ast_hash": "3b983b36143a56aa130abf005f040419",
-    "semantic_hash": "3b983b36143a56aa130abf005f040419"
+    "mtime": 1784118295.0911384,
+    "ast_hash": "c98b3e83e72c641a3ccad71c005e35a1",
+    "semantic_hash": "c98b3e83e72c641a3ccad71c005e35a1"
   },
   "D:\\Vue\\alajandria-book\\.agents\\skills\\frontend-design\\LICENSE.txt": {
     "mtime": 1781925210.7033741,
@@ -1235,19 +1650,24 @@
     "semantic_hash": "ce643fad006d5e6d3aa13b0725384293"
   },
   "D:\\Vue\\alajandria-book\\README.md": {
-    "mtime": 1783314983.2282805,
-    "ast_hash": "01ba64e6d37485c1dcd17b695d20c321",
-    "semantic_hash": "01ba64e6d37485c1dcd17b695d20c321"
+    "mtime": 1783744985.913176,
+    "ast_hash": "fa3f21a99a57bb4a9a75ef75d2fd3aa8",
+    "semantic_hash": "fa3f21a99a57bb4a9a75ef75d2fd3aa8"
+  },
+  "D:\\Vue\\alajandria-book\\docs\\ALAJANDRIA.md": {
+    "mtime": 1783744968.159227,
+    "ast_hash": "6e63df20592a49d75a968021df9bdf78",
+    "semantic_hash": "6e63df20592a49d75a968021df9bdf78"
   },
   "D:\\Vue\\alajandria-book\\docs\\API.md": {
-    "mtime": 1782536745.1244338,
-    "ast_hash": "4f1212a30621b78f91e6ebc91c5facd2",
-    "semantic_hash": "4f1212a30621b78f91e6ebc91c5facd2"
+    "mtime": 1783744976.319105,
+    "ast_hash": "4dddcffc0e910a6e8f157b223463a9ef",
+    "semantic_hash": "4dddcffc0e910a6e8f157b223463a9ef"
   },
   "D:\\Vue\\alajandria-book\\docs\\ARCHITECTURE.md": {
-    "mtime": 1782536773.4809282,
-    "ast_hash": "bb3fc196f8650626303bc0a6756b0688",
-    "semantic_hash": "bb3fc196f8650626303bc0a6756b0688"
+    "mtime": 1783744971.0540273,
+    "ast_hash": "25758134bd6b5e171b17594836b09cf9",
+    "semantic_hash": "25758134bd6b5e171b17594836b09cf9"
   },
   "D:\\Vue\\alajandria-book\\docs\\DUNE-ALEXANDRIA.md": {
     "mtime": 1783227943.1250558,
@@ -1269,6 +1689,31 @@
     "ast_hash": "d82f3ad37ae38b9597c90f5611aab635",
     "semantic_hash": "d82f3ad37ae38b9597c90f5611aab635"
   },
+  "graphify-out\\transcripts\\entrenamiento_20_minutos.txt": {
+    "mtime": 1784091400.382417,
+    "ast_hash": "6866d8c72b227416cb22ff2ccee7c186",
+    "semantic_hash": "6866d8c72b227416cb22ff2ccee7c186"
+  },
+  "graphify-out\\transcripts\\pedaleo_con_resistencia.txt": {
+    "mtime": 1784091506.1142797,
+    "ast_hash": "60039f1ce52641dca1f3333e294c2974",
+    "semantic_hash": "60039f1ce52641dca1f3333e294c2974"
+  },
+  "graphify-out\\transcripts\\sprint_intervalos_hit.txt": {
+    "mtime": 1784091567.8527465,
+    "ast_hash": "4ea0282c0bea61d802f5546468553166",
+    "semantic_hash": "4ea0282c0bea61d802f5546468553166"
+  },
+  "graphify-out\\transcripts\\tabata_workout.txt": {
+    "mtime": 1784091578.859114,
+    "ast_hash": "9848e011e4f22873b8afd3eb25262854",
+    "semantic_hash": "9848e011e4f22873b8afd3eb25262854"
+  },
+  "graphify-out\\transcripts\\videoplayback.txt": {
+    "mtime": 1784091608.0010457,
+    "ast_hash": "900213536f09d0037907448d1819e726",
+    "semantic_hash": "900213536f09d0037907448d1819e726"
+  },
   "D:\\Vue\\alajandria-book\\public\\favicon.svg": {
     "mtime": 1779738394.802066,
     "ast_hash": "7e840862161341271697daa99a40d76b",
@@ -1278,5 +1723,70 @@
     "mtime": 1779738394.856117,
     "ast_hash": "3b4fcfcf393eca4d264dca4a4663bc37",
     "semantic_hash": "3b4fcfcf393eca4d264dca4a4663bc37"
+  },
+  "D:\\Vue\\alajandria-book\\videos\\entrenamiento_20_minutos.mp4": {
+    "mtime": 1784087433.597069,
+    "ast_hash": "f49515aa22d51126a6cbac8f3f51a235",
+    "semantic_hash": "f49515aa22d51126a6cbac8f3f51a235"
+  },
+  "D:\\Vue\\alajandria-book\\videos\\pedaleo_con_resistencia.mp4": {
+    "mtime": 1784087018.8813834,
+    "ast_hash": "efcbf31472faac7e41a349f6310f58cc",
+    "semantic_hash": "efcbf31472faac7e41a349f6310f58cc"
+  },
+  "D:\\Vue\\alajandria-book\\videos\\sprint_intervalos_hit.mp4": {
+    "mtime": 1784086295.7726254,
+    "ast_hash": "b40ec93e8343f603fd88e08120728d4d",
+    "semantic_hash": "b40ec93e8343f603fd88e08120728d4d"
+  },
+  "D:\\Vue\\alajandria-book\\videos\\tabata_workout.mp4": {
+    "mtime": 1784087786.525977,
+    "ast_hash": "39bb787a5765cd6ba69df67df46d3d25",
+    "semantic_hash": "39bb787a5765cd6ba69df67df46d3d25"
+  },
+  "D:\\Vue\\alajandria-book\\videos\\videoplayback.mp4": {
+    "mtime": 1784084164.651875,
+    "ast_hash": "5f5159a25cf1c18e214f6536d1c959da",
+    "semantic_hash": "5f5159a25cf1c18e214f6536d1c959da"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\presentation\\components\\AuthorModal.vue": {
+    "mtime": 1784172009.4682262,
+    "ast_hash": "8a1f9b46f9bb1466ec0d720ce261d284",
+    "semantic_hash": "8a1f9b46f9bb1466ec0d720ce261d284"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\presentation\\composables\\useAuthorCrud.ts": {
+    "mtime": 1784171987.0871446,
+    "ast_hash": "d27c91acc70e787d8904b779ea253b45",
+    "semantic_hash": "d27c91acc70e787d8904b779ea253b45"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\dashboard\\presentation\\composables\\useAuthorForm.ts": {
+    "mtime": 1784171982.5360436,
+    "ast_hash": "9ad88bbab6ca52d69d682a83b336937d",
+    "semantic_hash": "9ad88bbab6ca52d69d682a83b336937d"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\exercise\\application\\composables\\useExerciseEdit.ts": {
+    "mtime": 1784120923.8307078,
+    "ast_hash": "ec6c15b19c20a5917d52f74f40313562",
+    "semantic_hash": "ec6c15b19c20a5917d52f74f40313562"
+  },
+  "D:\\Vue\\alajandria-book\\src\\features\\exercise\\presentation\\components\\organisms\\ExerciseEditModal.vue": {
+    "mtime": 1784124105.1364343,
+    "ast_hash": "9c1072c49e39208ba1b1ab3ba9ebf028",
+    "semantic_hash": "9c1072c49e39208ba1b1ab3ba9ebf028"
+  },
+  "D:\\Vue\\alajandria-book\\videos\\PRESS PECHO AGARRE CERRADO EN MAQUINA.mp4": {
+    "mtime": 1784118819.994135,
+    "ast_hash": "fdfa84bb262ac48a77c6473809b83ed9",
+    "semantic_hash": "fdfa84bb262ac48a77c6473809b83ed9"
+  },
+  "D:\\Vue\\alajandria-book\\videos\\Press_Pecho_Agarre_Cerrado.mp4": {
+    "mtime": 1784118665.2966826,
+    "ast_hash": "8c7bd8820c0ba50a703a45f19f3b4e13",
+    "semantic_hash": "8c7bd8820c0ba50a703a45f19f3b4e13"
+  },
+  "D:\\Vue\\alajandria-book\\videos\\Press_de_Pecho_Sentado.mp4": {
+    "mtime": 1784118396.2448647,
+    "ast_hash": "134a807961d599319b5410c69039d577",
+    "semantic_hash": "134a807961d599319b5410c69039d577"
   }
 }

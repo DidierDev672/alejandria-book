@@ -1,16 +1,20 @@
 <script setup lang="ts">
+import { useEquipmentStore } from '@/features/maintenance/application/stores/useEquipmentStore'
 import { useExerciseStore } from '@/features/exercise/application/stores/useExerciseStore'
-import type { CreateExerciseDTO } from '@/features/exercise/infrastructure/services/exerciseService'
-import BaseModal from '@/utils/components/BaseModal.vue'
+import ExerciseModal from '@/utils/components/ExerciseModal.vue'
 import ImageViewer from '@/utils/components/ImageViewer.vue'
+import SuccessModal from '@/utils/components/SuccessModal.vue'
 import { storeToRefs } from 'pinia'
 import { computed, reactive, ref } from 'vue'
 
 // ============================================================
-// IMPORTAR STORE DE EJERCICIOS
+// STORES
 // ============================================================
+const equipmentStore = useEquipmentStore()
+const { loading: isCreating, error: createError } = storeToRefs(equipmentStore)
+
 const exerciseStore = useExerciseStore()
-const { isLoading: isSavingExercises, error: exerciseError } = storeToRefs(exerciseStore)
+const { isLoading: isSavingExercise } = storeToRefs(exerciseStore)
 
 // ============================================================
 // INTERFACES
@@ -31,14 +35,6 @@ interface FormErrors {
   status: string
   lastMaintenance: string
   image: string
-}
-
-interface Exercise {
-  id: string
-  name: string
-  muscle_group: string
-  difficulty: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED'
-  video_url: string
 }
 
 // ============================================================
@@ -76,37 +72,22 @@ const MAX_IMAGE_SIZE = 5 * 1024 * 1024 // 5MB
 
 const isSubmitting = ref(false)
 const showSuccessMessage = ref(false)
+const registeredEquipmentName = ref('')
 
 // ============================================================
-// ESTADO REACTIVO - MODALES Y EJERCICIOS
+// MODAL DE EJERCICIOS
 // ============================================================
-const showConfirmationModal = ref(false)
-const showExercisesModal = ref(false)
-const savedEquipmentId = ref<string>('')
-
-// DataGrid de ejercicios
-const exercises = reactive<Exercise[]>([])
-const exerciseErrors = reactive<Record<string, string>>({})
-
-// Opciones para ejercicios
-const muscleGroups = [
-  { value: 'chest', label: 'Pecho', icon: '💪' },
-  { value: 'back', label: 'Espalda', icon: '🏋️' },
-  { value: 'legs', label: 'Piernas', icon: '🦵' },
-  { value: 'shoulders', label: 'Hombros', icon: '🤷' },
-  { value: 'arms', label: 'Brazos', icon: '💪' },
-  { value: 'core', label: 'Core', icon: '🎯' },
-  { value: 'cardio', label: 'Cardio', icon: '❤️' },
-  { value: 'fullbody', label: 'Cuerpo Completo', icon: '🏃' },
-]
-
-const difficultyLevels = [
-  { value: 'BEGINNER', label: 'Principiante', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' },
-  { value: 'INTERMEDIATE', label: 'Intermedio', color: 'bg-amber-100 text-amber-700 border-amber-200' },
-  { value: 'ADVANCED', label: 'Avanzado', color: 'bg-rose-100 text-rose-700 border-rose-200' },
-]
+const showExerciseModal = ref(false)
+const lastCreatedEquipmentId = ref('')
 
 // ============================================================
+// MODAL DE ÉXITO - EJERCICIO
+// ============================================================
+const showExerciseSuccessModal = ref(false)
+const registeredExerciseName = ref('')
+
+// ============================================================
+// DATAGRID DE EJERCICIOS
 // OPCIONES DE SELECTORES
 // ============================================================
 const equipmentTypes = [
@@ -314,69 +295,6 @@ const formatFileSize = (bytes: number): string => {
 }
 
 // ============================================================
-// MANEJO DE EJERCICIOS - DATAGRID
-// ============================================================
-
-const generateExerciseId = (): string => {
-  return `EX-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-}
-
-const addExercise = (): void => {
-  const newExercise: Exercise = {
-    id: generateExerciseId(),
-    name: '',
-    muscle_group: '',
-    difficulty: 'BEGINNER',
-    video_url: '',
-  }
-  exercises.push(newExercise)
-}
-
-const removeExercise = (index: number): void => {
-  exercises.splice(index, 1)
-  // Limpiar errores relacionados
-  delete exerciseErrors[index.toString()]
-}
-
-const validateExercise = (exercise: Exercise, index: number): boolean => {
-  let isValid = true
-
-  if (!exercise.name.trim()) {
-    exerciseErrors[`${index}-name`] = 'El nombre es obligatorio'
-    isValid = false
-  } else {
-    delete exerciseErrors[`${index}-name`]
-  }
-
-  if (!exercise.muscle_group) {
-    exerciseErrors[`${index}-muscle_group`] = 'Selecciona un grupo muscular'
-    isValid = false
-  } else {
-    delete exerciseErrors[`${index}-muscle_group`]
-  }
-
-  return isValid
-}
-
-const validateAllExercises = (): boolean => {
-  let allValid = true
-  exercises.forEach((exercise, index) => {
-    if (!validateExercise(exercise, index)) {
-      allValid = false
-    }
-  })
-  return allValid
-}
-
-const getDifficultyLabel = (value: string): string => {
-  return difficultyLevels.find(d => d.value === value)?.label || value
-}
-
-const getDifficultyColor = (value: string): string => {
-  return difficultyLevels.find(d => d.value === value)?.color || 'bg-slate-100 text-slate-700'
-}
-
-// ============================================================
 // MANEJO DE MODALES
 // ============================================================
 
@@ -387,76 +305,52 @@ const handleSubmit = async () => {
 
   isSubmitting.value = true
 
-  // Simulación de envío a API
-  await new Promise((resolve) => setTimeout(resolve, 1500))
-
-  console.log('Formulario enviado:', { ...form })
-
-  // Guardar el ID del equipo creado
-  savedEquipmentId.value = form.id
-
-  showSuccessMessage.value = true
-  isSubmitting.value = false
-
-  // Mostrar modal de confirmación para ejercicios
-  setTimeout(() => {
-    showSuccessMessage.value = false
-    showConfirmationModal.value = true
-  }, 1000)
-}
-
-const handleOnlyEquipment = (): void => {
-  showConfirmationModal.value = false
-  resetForm()
-  // Mostrar mensaje de éxito final
-  alert('Equipo creado exitosamente')
-}
-
-const handleAddExercises = (): void => {
-  showConfirmationModal.value = false
-  showExercisesModal.value = true
-  // Agregar primera fila vacía
-  if (exercises.length === 0) {
-    addExercise()
-  }
-}
-
-const closeExercisesModal = (): void => {
-  showExercisesModal.value = false
-  resetExercises()
-}
-
-const resetExercises = (): void => {
-  exercises.length = 0
-  Object.keys(exerciseErrors).forEach(key => delete exerciseErrors[key])
-}
-
-const saveExercises = async (): Promise<void> => {
-  if (!validateAllExercises()) {
-    return
-  }
-
   try {
-    const exercisesData: CreateExerciseDTO[] = exercises.map((exercise) => ({
-      name: exercise.name,
-      muscle_group: exercise.muscle_group,
-      difficulty: exercise.difficulty,
-      video_url: exercise.video_url || '',
-      equipment_id: savedEquipmentId.value,
-    }))
+    const created = await equipmentStore.createEquipment({
+      name: form.name,
+      type: form.type,
+      status: form.status as 'active' | 'inactive' | 'pending',
+      lastMaintenance: form.lastMaintenance,
+    })
 
-    await exerciseStore.createMultipleExercises(exercisesData)
-
-    showExercisesModal.value = false
-    resetExercises()
+    lastCreatedEquipmentId.value = created.id
+    registeredEquipmentName.value = form.name
+    showSuccessMessage.value = true
     resetForm()
-
-    alert(`¡Equipo y ${exercises.length} ejercicio(s) guardados exitosamente!`)
   } catch (err: any) {
-    console.error('Error guardando ejercicios:', err)
-    alert(err.message || 'Error al guardar los ejercicios. Intente nuevamente.')
+    alert(err.message || 'Error al crear el equipo. Intente nuevamente.')
+  } finally {
+    isSubmitting.value = false
   }
 }
+
+const closeSuccessModal = () => {
+  showSuccessMessage.value = false
+  registeredEquipmentName.value = ''
+}
+
+const openExerciseModal = () => {
+  showExerciseModal.value = true
+}
+
+const handleExerciseSaved = async (exerciseData: { name: string; muscle_group: string; difficulty: string; videoFile: File | null; videoUrl: string; equipmentIds: string[] }) => {
+  try {
+    for (const eqId of exerciseData.equipmentIds) {
+      await exerciseStore.createExercise({
+        name: exerciseData.name,
+        muscle_group: exerciseData.muscle_group,
+        difficulty: exerciseData.difficulty as 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED',
+        equipment_id: eqId,
+        video_url: exerciseData.videoUrl || '',
+      })
+    }
+    registeredExerciseName.value = exerciseData.name
+    showExerciseSuccessModal.value = true
+  } catch (err: any) {
+    alert(err.message || 'Error al crear el ejercicio')
+  }
+}
+
 </script>
 
 <template>
@@ -477,30 +371,67 @@ const saveExercises = async (): Promise<void> => {
     <!-- Contenedor Principal con Animación de Entrada -->
     <div v-motion :initial="{ opacity: 0, y: 40 }" :enter="{ opacity: 1, y: 0 }"
       :transition="{ duration: 600, ease: 'easeOut' }" class="w-full max-w-4xl mx-auto">
-      <!-- Header -->
-      <div class="text-center mb-8 sm:mb-10">
-        <!-- Header  -->
-        <div v-motion :initial="{ opacity: 0, scale: 0.7 }" :enter="{ opacity: 1, scale: 1 }"
-          :transition="{ duration: 500, ease: [0.16, 1, 0.3, 1] }"
-          class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-xl shadow-amber-500/30 mb-5">
-          <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+
+      <!-- ============================================================
+           HEADER - TÍTULO Y DESCRIPCIÓN
+           ============================================================ -->
+      <header class="relative mb-8 sm:mb-10 overflow-hidden rounded-3xl bg-gradient-to-br from-amber-600 via-orange-500 to-amber-700 p-8 sm:p-10 shadow-2xl shadow-amber-500/25">
+        <!-- Patrón decorativo de fondo -->
+        <div class="absolute inset-0 opacity-10">
+          <svg class="w-full h-full" viewBox="0 0 800 400" preserveAspectRatio="none">
+            <defs>
+              <pattern id="header-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                <rect x="10" y="10" width="20" height="60" fill="white" opacity="0.3" rx="3" />
+                <rect x="40" y="10" width="20" height="70" fill="white" opacity="0.2" rx="3" />
+                <rect x="70" y="10" width="20" height="50" fill="white" opacity="0.3" rx="3" />
+              </pattern>
+            </defs>
+            <rect width="800" height="400" fill="url(#header-pattern)" />
           </svg>
         </div>
-        <h1 v-motion :initial="{ opacity: 0, y: -20 }" :enter="{ opacity: 1, y: 0 }"
-          :transition="{ duration: 500, delay: 100, ease: 'easeOut' }"
-          class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-stone-800 mb-3">
-          Registro de Mantenimiento
-        </h1>
-        <p v-motion :initial="{ opacity: 0, y: -10 }" :enter="{ opacity: 1, y: 0 }"
-          :transition="{ duration: 500, delay: 200, ease: 'easeOut' }"
-          class="text-sm sm:text-base text-slate-500 max-w-md mx-auto">
-          Complete los datos del equipo para registrar su mantenimiento
-        </p>
-      </div>
+
+        <!-- Círculos decorativos -->
+        <div class="absolute -top-16 -right-16 w-48 h-48 bg-white/10 rounded-full blur-2xl" />
+        <div class="absolute -bottom-12 -left-12 w-36 h-36 bg-white/10 rounded-full blur-2xl" />
+
+        <!-- Contenido del Header -->
+        <div class="relative z-10 flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+          <!-- Icono -->
+          <div
+            v-motion
+            :initial="{ opacity: 0, scale: 0, rotate: -180 }"
+            :enter="{ opacity: 1, scale: 1, rotate: 0, transition: { type: 'spring', stiffness: 200, damping: 15, delay: 200 } }"
+            class="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg border border-white/30"
+          >
+            <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+
+          <!-- Texto -->
+          <div class="text-center sm:text-left">
+            <h1
+              v-motion
+              :initial="{ opacity: 0, x: -30 }"
+              :enter="{ opacity: 1, x: 0, transition: { duration: 500, delay: 300, ease: [0.16, 1, 0.3, 1] } }"
+              class="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-white drop-shadow-md tracking-wide"
+            >
+              Registro de Mantenimiento
+            </h1>
+            <p
+              v-motion
+              :initial="{ opacity: 0, x: -30 }"
+              :enter="{ opacity: 1, x: 0, transition: { duration: 500, delay: 400, ease: [0.16, 1, 0.3, 1] } }"
+              class="mt-2 text-sm sm:text-base text-white/80 max-w-md sm:max-w-lg"
+            >
+              Complete los datos del equipo para registrar su mantenimiento
+            </p>
+          </div>
+        </div>
+      </header>
 
       <!-- Tarjeta del Formulario -->
       <div v-motion :initial="{ opacity: 0, scale: 0.95 }" :enter="{ opacity: 1, scale: 1 }"
@@ -940,296 +871,6 @@ const saveExercises = async (): Promise<void> => {
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!-- MODAL DE CONFIRMACIÓN PSICOLÓGICA -->
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <BaseModal :is-open="showConfirmationModal" max-with-class="max-w-4xl" @close="handleOnlyEquipment">
-      <template #header>
-        <div class="flex items-center gap-3">
-          <div
-            class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <div>
-            <h3 class="text-2xl font-serif font-bold text-white">¡Equipo Creado!</h3>
-            <p class="text-white/80 text-sm">Tu equipo está listo para usar</p>
-          </div>
-        </div>
-      </template>
-
-      <template #content>
-        <div class="space-y-6">
-          <!-- Mensaje psicológico persuasivo -->
-          <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-4 border border-amber-200/50">
-            <div class="flex items-start gap-3">
-              <div class="p-2 bg-amber-100 rounded-lg flex-shrink-0">
-                <span class="text-2xl">💡</span>
-              </div>
-              <div>
-                <h4 class="font-semibold text-amber-800 mb-1">¿Sabías que...?</h4>
-                <p class="text-sm text-amber-700 leading-relaxed">
-                  Los equipos con <strong>ejercicios predefinidos</strong> aumentan la productividad en un
-                  <strong>73%</strong>.
-                  Sin ejercicios, tu equipo podría quedar <em>subutilizado</em> o abandonado.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Beneficios visuales -->
-          <div class="grid grid-cols-3 gap-3">
-            <div class="text-center p-3 bg-slate-50 rounded-xl">
-              <div class="w-10 h-10 mx-auto bg-emerald-100 rounded-full flex items-center justify-center mb-2">
-                <span class="text-xl">📈</span>
-              </div>
-              <p class="text-xs font-medium text-slate-600">Mejora el rendimiento</p>
-            </div>
-            <div class="text-center p-3 bg-slate-50 rounded-xl">
-              <div class="w-10 h-10 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-2">
-                <span class="text-xl">⏱️</span>
-              </div>
-              <p class="text-xs font-medium text-slate-600">Ahorra tiempo</p>
-            </div>
-            <div class="text-center p-3 bg-slate-50 rounded-xl">
-              <div class="w-10 h-10 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-2">
-                <span class="text-xl">🎯</span>
-              </div>
-              <p class="text-xs font-medium text-slate-600">Mayor precisión</p>
-            </div>
-          </div>
-
-          <!-- Pregunta principal -->
-          <div class="text-center">
-            <p class="text-slate-700 font-medium mb-2">¿Deseas maximizar el potencial de tu equipo?</p>
-            <p class="text-sm text-slate-500">Agrega ejercicios ahora y comienza a ver resultados inmediatos.</p>
-          </div>
-        </div>
-      </template>
-
-      <template #footer>
-        <button type="button" @click="handleOnlyEquipment"
-          class="px-5 py-2.5 text-sm font-semibold text-slate-600 bg-slate-100 rounded-xl border-2 border-slate-200 hover:bg-slate-200 transition-all duration-300">
-          Solo crear equipo
-        </button>
-        <button type="button" v-motion :hovered="{ scale: 1.02 }" :tapped="{ scale: 0.98 }" @click="handleAddExercises"
-          class="px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl shadow-lg shadow-amber-500/30 hover:shadow-xl hover:shadow-amber-500/40 transition-all duration-300 flex items-center gap-2">
-          <span>Agregar ejercicios</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
-        </button>
-      </template>
-    </BaseModal>
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- MODAL DE DATAGRID DE EJERCICIOS -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <BaseModal :is-open="showExercisesModal" max-with-class="max-w-6xl" @close="closeExercisesModal">
-      <template #header>
-        <div class="flex items-center justify-between max-w-4xl mx-auto">
-          <div class="flex items-center gap-3">
-            <div
-              class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-2xl font-serif font-bold text-white">Gestión de Ejercicios</h3>
-              <p class="text-white/80 text-sm">Equipo: {{ savedEquipmentId }}</p>
-            </div>
-          </div>
-          <div class="bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1.5">
-            <span class="text-white text-sm font-medium">{{ exercises.length }} ejercicio(s)</span>
-          </div>
-        </div>
-      </template>
-
-      <template #content>
-        <div class="space-y-4 max-w-4xl mx-auto">
-          <!-- Toolbar -->
-          <div class="flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center">
-            <div class="flex items-center gap-2">
-              <button type="button" v-motion :hovered="{ scale: 1.02 }" :tapped="{ scale: 0.98 }" @click="addExercise"
-                class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-500 to-purple-600 text-white rounded-xl font-medium text-sm shadow-lg shadow-violet-500/20 hover:shadow-xl transition-all duration-300">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Agregar ejercicio
-              </button>
-            </div>
-            <p class="text-xs text-slate-500">Completa los campos obligatorios (*) para cada ejercicio</p>
-          </div>
-
-          <!-- DataGrid de Ejercicios -->
-          <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
-            <table class="w-full min-w-[800px]">
-              <thead class="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
-                <tr>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-12">#
-                  </th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Nombre <span class="text-rose-500">*</span>
-                  </th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Grupo Muscular <span class="text-rose-500">*</span>
-                  </th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Dificultad <span class="text-rose-500">*</span>
-                  </th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Video (Opcional)
-                  </th>
-                  <th class="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider w-20">
-                    Acción</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-100">
-                <tr v-for="(exercise, index) in exercises" :key="exercise.id" v-motion :initial="{ opacity: 0, x: -20 }"
-                  :enter="{ opacity: 1, x: 0 }" :transition="{ duration: 300, delay: index * 50 }"
-                  class="hover:bg-slate-50/50 transition-colors">
-                  <!-- Número -->
-                  <td class="px-4 py-3">
-                    <span
-                      class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 text-slate-600 text-sm font-medium">
-                      {{ index + 1 }}
-                    </span>
-                  </td>
-
-                  <!-- Nombre -->
-                  <td class="px-4 py-3">
-                    <div class="space-y-1">
-                      <input v-model="exercise.name" type="text" placeholder="Ej: Press de banca"
-                        class="w-full px-3 py-2 bg-white border rounded-lg text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all"
-                        :class="exerciseErrors[`${index}-name`] ? 'border-rose-300 bg-rose-50' : 'border-slate-200'"
-                        @blur="validateExercise(exercise, index)" />
-                      <p v-if="exerciseErrors[`${index}-name`]" class="text-xs text-rose-500 flex items-center gap-1">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01" />
-                        </svg>
-                        {{ exerciseErrors[`${index}-name`] }}
-                      </p>
-                    </div>
-                  </td>
-
-                  <!-- Grupo Muscular -->
-                  <td class="px-4 py-3">
-                    <div class="space-y-1">
-                      <select v-model="exercise.muscle_group"
-                        class="w-full px-3 py-2 bg-white border rounded-lg text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all cursor-pointer"
-                        :class="exerciseErrors[`${index}-muscle_group`] ? 'border-rose-300 bg-rose-50' : 'border-slate-200'"
-                        @change="validateExercise(exercise, index)">
-                        <option value="" disabled>Seleccionar...</option>
-                        <option v-for="group in muscleGroups" :key="group.value" :value="group.value">
-                          {{ group.icon }} {{ group.label }}
-                        </option>
-                      </select>
-                      <p v-if="exerciseErrors[`${index}-muscle_group`]"
-                        class="text-xs text-rose-500 flex items-center gap-1">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01" />
-                        </svg>
-                        {{ exerciseErrors[`${index}-muscle_group`] }}
-                      </p>
-                    </div>
-                  </td>
-
-                  <!-- Dificultad -->
-                  <td class="px-4 py-3">
-                    <div class="flex flex-wrap gap-2">
-                      <button v-for="level in difficultyLevels" :key="level.value" type="button"
-                        @click="exercise.difficulty = level.value as any"
-                        class="px-3 py-1.5 rounded-lg text-xs font-medium border-2 transition-all duration-200"
-                        :class="exercise.difficulty === level.value ? level.color + ' border-current' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'">
-                        {{ level.label }}
-                      </button>
-                    </div>
-                  </td>
-
-                  <!-- Video URL -->
-                  <td class="px-4 py-3">
-                    <div class="space-y-2">
-                      <input type="url" v-model="exercise.video_url"
-                        placeholder="https://www.youtube.com/watch?v=..."
-                        class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all" />
-                    </div>
-                  </td>
-
-                  <!-- Eliminar -->
-                  <td class="px-4 py-3 text-center">
-                    <button type="button" v-motion :hovered="{ scale: 1.05 }" :tapped="{ scale: 0.95 }"
-                      @click="removeExercise(index)"
-                      class="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-all duration-200"
-                      :disabled="exercises.length === 1"
-                      :class="{ 'opacity-30 cursor-not-allowed': exercises.length === 1 }">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <!-- Empty state -->
-            <div v-if="exercises.length === 0" class="p-8 text-center">
-              <div class="w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center">
-                <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-              </div>
-              <p class="text-slate-500 mb-3">No hay ejercicios registrados</p>
-              <button type="button" @click="addExercise"
-                class="px-4 py-2 bg-violet-500 text-white rounded-lg text-sm font-medium hover:bg-violet-600 transition-colors">
-                Agregar el primero
-              </button>
-            </div>
-          </div>
-        </div>
-      </template>
-
-      <template #footer>
-        <!-- Mensaje de error del store -->
-        <div v-if="exerciseError" class="flex-1 mr-4">
-          <p class="text-xs text-rose-500 flex items-center gap-1.5 bg-rose-50 px-3 py-2 rounded-lg">
-            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            {{ exerciseError }}
-          </p>
-        </div>
-
-        <button type="button" @click="closeExercisesModal" :disabled="isSavingExercises"
-          class="px-5 py-2.5 text-sm font-semibold text-slate-600 bg-slate-100 rounded-xl border-2 border-slate-200 hover:bg-slate-200 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-          Cancelar
-        </button>
-        <button type="button" v-motion :hovered="isSavingExercises ? {} : { scale: 1.02 }"
-          :tapped="isSavingExercises ? {} : { scale: 0.98 }" @click="saveExercises" :disabled="isSavingExercises"
-          class="px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-violet-500 to-purple-600 rounded-xl shadow-lg shadow-violet-500/30 hover:shadow-xl hover:shadow-violet-500/40 transition-all duration-300 flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
-          <Transition mode="out-in">
-            <span v-if="isSavingExercises" class="flex items-center gap-2">
-              <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                <path class="opacity-75" fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-              </svg>
-              Guardando...
-            </span>
-            <span v-else class="flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              Guardar {{ exercises.length }} ejercicio(s)
-            </span>
-          </Transition>
-        </button>
-      </template>
-    </BaseModal>
-
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!-- VISOR DE IMAGEN EN PANTALLA COMPLETA -->
     <!-- ═══════════════════════════════════════════════════════════ -->
@@ -1239,6 +880,45 @@ const saveExercises = async (): Promise<void> => {
       :initial-index="0"
       @close="closeImageViewer"
     />
+
+    <!-- Modal de éxito - Equipo -->
+    <SuccessModal
+      :is-open="showSuccessMessage"
+      :equipment-name="registeredEquipmentName"
+      @close="closeSuccessModal"
+    />
+
+    <!-- Modal de éxito - Ejercicio -->
+    <SuccessModal
+      :is-open="showExerciseSuccessModal"
+      title="Ejercicio registrado exitosamente"
+      message="El ejercicio fue guardado en el sistema correctamente."
+      :equipment-name="registeredExerciseName"
+      @close="showExerciseSuccessModal = false"
+    />
+
+    <!-- Modal de ejercicios -->
+    <ExerciseModal
+      :is-open="showExerciseModal"
+      :equipment-id="lastCreatedEquipmentId"
+      @close="showExerciseModal = false"
+      @saved="handleExerciseSaved"
+    />
+
+    <!-- Botón flotante para agregar ejercicios -->
+    <button
+      v-motion
+      :initial="{ opacity: 0, scale: 0 }"
+      :enter="{ opacity: 1, scale: 1, transition: { type: 'spring', stiffness: 260, damping: 20, delay: 600 } }"
+      @click="openExerciseModal"
+      class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-500 text-white rounded-full shadow-lg hover:from-amber-600 hover:to-orange-600 hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center group"
+      aria-label="Agregar ejercicio"
+      title="Agregar ejercicio"
+    >
+      <svg class="w-6 h-6 transition-transform duration-300 group-hover:rotate-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M5 12h14" />
+      </svg>
+    </button>
   </section>
 </template>
 

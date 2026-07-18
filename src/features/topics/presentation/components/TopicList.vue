@@ -1,10 +1,31 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useTopicStore } from '../../application/useTopicStore';
 import type { Topic, TopicType } from '../../domain/entities/Topic';
+import TopicDetailModal from './TopicDetailModal.vue';
+import AssignResearchModal from './AssignResearchModal.vue';
+import type { ResearchForm } from './AssignResearchModal.vue';
 
+const selectedTopic = ref<Topic | null>(null);
+const isDetailModalOpen = ref(false);
+const isAssignModalOpen = ref(false);
+
+const openDetail = (topic: Topic) => {
+    selectedTopic.value = topic;
+    isDetailModalOpen.value = true;
+};
+
+const openAssign = (event: Event, topic: Topic) => {
+    event.stopPropagation();
+    selectedTopic.value = topic;
+    isAssignModalOpen.value = true;
+};
+
+const handleAssignResearch = (data: ResearchForm) => {
+    console.log('Investigación asignada:', data);
+};
 
 const topicStore = useTopicStore();
 const { topicsList, isLoadingList } = storeToRefs(topicStore);
@@ -76,7 +97,7 @@ const getTopicLabel = (type: TopicType): string => {
         <!-- Contenedor principal  -->
         <div v-motion :initial="{ opacity: 0, y: 20 }"
             :enter="{ opacity: 1, y: 0, transition: { duration: 600, ease: 'easeOut' } }"
-            class="relative max-w-4xl mx-auto">
+            class="relative max-w-5xl mx-auto">
             <!-- Card principal -->
             <div class="bg-white rounded-2xl shadow-2xl border border-amber-100/60 overflow-hidden">
                 <!-- Header con decoracion -->
@@ -98,7 +119,11 @@ const getTopicLabel = (type: TopicType): string => {
                     <!-- Contenido del header -->
                     <div class="relative z-10">
                         <div class="flex items-center gap-3 mb-2">
-                            <div class="p-2.5 bg-white/20 rounded-lg backdrop-blur-sm">
+                            <div class="p-2.5 bg-white/20 rounded-lg backdrop-blur-sm" v-motion
+                                :initial="{ opacity: 0, scale: 0.5, rotate: -30 }"
+                                :enter="{ opacity: 1, scale: 1, rotate: 0, transition: { type: 'spring', stiffness: 200, damping: 12, delay: 200 } }"
+                                :hovered="{ scale: 1.15, rotate: 5, transition: { type: 'spring', stiffness: 300, damping: 15 } }"
+                                :leave="{ scale: 1, rotate: 0, transition: { duration: 200 } }">
                                 <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -117,8 +142,10 @@ const getTopicLabel = (type: TopicType): string => {
                     </div>
 
                     <!-- Badge de contador -->
-                    <div
-                        class="absolute top-6 right-6 md:right-8 md:top-8 bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-4 py-2.5">
+                    <div class="absolute top-6 right-6 md:right-8 md:top-8 bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-4 py-2.5"
+                        v-motion :initial="{ opacity: 0, y: -10, scale: 0.8 }"
+                        :enter="{ opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 180, damping: 14, delay: 400 } }"
+                        :hovered="{ scale: 1.05, transition: { type: 'spring', stiffness: 300, damping: 15 } }">
                         <div class="text-white/80 text-xs font-medium mb-0.5">Total de Temas</div>
                         <div class="text-3xl font-bold text-white">{{ topicsList?.length ?? 0 }}</div>
                     </div>
@@ -164,101 +191,93 @@ const getTopicLabel = (type: TopicType): string => {
                     </div>
 
                     <!-- Lista de tópicos -->
-                    <transition-group v-else name="list-fade" tag="div" class="space-y-4">
+                    <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <article v-for="(topic, index) in topicsList" :key="topic.id || topic.name" v-motion
-                            :initial="{ opacity: 0, x: -20 }"
-                            :enter="{ opacity: 1, x: 0, transition: { delay: index * 50, duration: 400 } }"
-                            class="group relative p-5 md:p-6 rounded-xl border-2 border-transparent hover:border-amber-200 bg-gradient-to-br from-white to-amber-50/30 hover:from-amber-50 hover:to-orange-50/30 transition-all duration-300 hover:shadow-lg cursor-pointer">
-                            <!-- Indicador de tipo - coloreado -->
-                            <div class="absolute top-0 left-0 w-1 h-full rounded-l-xl"
-                                :style="{ backgroundColor: getTopicTypeColor(topic.type) }" />
-
-                            <div class="space-y-3">
-                                <!-- Encabezado con tipo -->
-                                <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3 md:gap-4">
-                                    <div class="flex-1 min-w-0">
-                                        <h4
-                                            class="text-lg md:text-xl font-serif font-semibold text-gray-900 group-hover:text-amber-700 transition-colors break-words">
-                                            {{ topic.name }}
-                                        </h4>
-                                        <p class="text-xs text-gray-500 mt-1 font-medium">
-                                            {{ getTopicEmoji(topic.type) }} {{ getTopicLabel(topic.type) }}
-                                        </p>
-                                    </div>
-
-                                    <!-- Badge de tipo -->
-                                    <div class="flex-shrink-0">
-                                        <span
-                                            :style="{ backgroundColor: getTopicTypeColor(topic.type) + '20', color: getTopicTypeColor(topic.type), borderColor: getTopicTypeColor(topic.type) + '40' }"
-                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border-2 transition-all duration-200">
-                                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                            </svg>
-                                            {{ getTopicLabel(topic.type) }}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Descripción -->
-                                <p
-                                    class="text-sm text-gray-700 leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
-                                    {{ topic.description }}
-                                </p>
-
-                                <!-- Footer con metadatos -->
-                                <div class="flex flex-wrap items-center gap-4 pt-3 border-t border-amber-100/50">
-                                    <div class="flex items-center gap-2 text-xs text-gray-500">
-                                        <svg class="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        <time :datetime="topic.createdAt?.toString()">
-                                            {{ formatDate(topic.createdAt) }}
-                                        </time>
-                                    </div>
-
-                                    <div class="flex-1"></div>
-
-                                    <!-- Icono de interacción -->
-                                    <div
-                                        class="p-2 rounded-lg bg-amber-100/0 group-hover:bg-amber-100 transition-colors duration-300">
-                                        <svg class="w-4 h-4 text-amber-600 group-hover:translate-x-1 transition-transform duration-300"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Efecto hover de brillo -->
+                            :initial="{ opacity: 0, y: 30, scale: 0.95 }"
+                            :enter="{ opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 120, damping: 14, delay: index * 80 } }"
+                            class="group relative p-[1.5px] rounded-xl bg-gradient-to-br from-orange-300/60 via-amber-200/40 to-orange-200/60 cursor-pointer"
+                            @click="openDetail(topic)">
                             <div
-                                class="absolute inset-0 rounded-xl bg-gradient-to-r from-white/0 via-white/0 to-white/0 group-hover:via-white/10 transition-all duration-500 pointer-events-none">
+                                class="rounded-[10px] bg-white p-5 md:p-6 transition-all duration-500">
+
+                                <div class="space-y-3">
+                                    <!-- Encabezado con tipo -->
+                                    <div
+                                        class="flex flex-col md:flex-row md:items-start md:justify-between gap-3 md:gap-4">
+                                        <div class="flex-1 min-w-0">
+                                            <h4
+                                                class="text-lg md:text-xl font-serif font-semibold text-gray-900 transition-colors break-words">
+                                                {{ topic.name }}
+                                            </h4>
+                                            <p class="text-xs text-gray-500 mt-1 font-medium">
+                                                {{ getTopicEmoji(topic.type) }} {{ getTopicLabel(topic.type) }}
+                                            </p>
+                                        </div>
+
+                                        <!-- Badge de tipo -->
+                                        <div class="flex-shrink-0">
+                                            <span v-motion :initial="{ opacity: 0, scale: 0.7, rotate: -10 }"
+                                                :enter="{ opacity: 1, scale: 1, rotate: 0, transition: { type: 'spring', stiffness: 250, damping: 14, delay: index * 50 + 100 } }"
+                                                :hovered="{ scale: 1.1, rotate: 3, transition: { type: 'spring', stiffness: 300, damping: 15 } }"
+                                                :leave="{ scale: 1, rotate: 0, transition: { duration: 150 } }"
+                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border-2 border-amber-400/40 text-amber-900 bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 shadow-sm shadow-amber-200/50 transition-colors duration-200 hover:border-amber-500 hover:from-amber-300 hover:via-yellow-300 hover:to-amber-400">
+                                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                </svg>
+                                                {{ getTopicLabel(topic.type) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Descripción -->
+                                    <p
+                                        class="text-sm text-gray-700 leading-relaxed line-clamp-3 transition-all duration-300">
+                                        {{ topic.description }}
+                                    </p>
+
+                                    <!-- Footer con metadatos -->
+                                    <div class="flex flex-wrap items-center gap-3 pt-3 border-t border-amber-100/50">
+                                        <div
+                                            class="inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-full bg-gradient-to-r from-orange-200 via-amber-200 to-orange-300 text-orange-900 border border-orange-300/40 shadow-sm shadow-orange-200/40">
+                                            <svg class="w-3.5 h-3.5 text-orange-600" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                            <time :datetime="topic.createdAt?.toString()">
+                                                {{ formatDate(topic.createdAt) }}
+                                            </time>
+                                        </div>
+
+                                        <div class="flex-1"></div>
+
+                                        <!-- Botón Asignar Investigación -->
+                                        <button type="button"
+                                            @click="openAssign($event, topic)"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider rounded-lg border-2 border-amber-400/40 text-amber-800 bg-gradient-to-r from-amber-100 via-orange-100 to-amber-200 hover:border-amber-500 hover:from-amber-200 hover:to-orange-200 transition-all duration-200 active:scale-95">
+                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                            </svg>
+                                            Asignar investigación
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
+
                         </article>
-                    </transition-group>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <TopicDetailModal :is-open="isDetailModalOpen" :topic="selectedTopic"
+        @close="isDetailModalOpen = false" />
+
+    <AssignResearchModal :is-open="isAssignModalOpen" :topic="selectedTopic"
+        @close="isAssignModalOpen = false" @submit="handleAssignResearch" />
 </template>
 
-<style scoped>
-/* Animación fluida de entrada y salida de elementos para una UI dinámica */
-.list-fade-enter-active,
-.list-fade-leave-active {
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.list-fade-enter-from {
-    opacity: 0;
-    transform: translateX(-15px);
-}
-
-.list-fade-leave-to {
-    opacity: 0;
-    transform: translateX(15px);
-}
-</style>
+<style scoped></style>

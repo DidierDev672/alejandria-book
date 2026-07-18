@@ -29,6 +29,25 @@ Configuración requerida en el dashboard de Supabase:
 - Copiar `Project URL` y `anon public` key
 - Configurar en `.env`
 
+### Supabase Storage
+
+El proyecto utiliza Supabase Storage para almacenar videos de ejercicios.
+
+**Bucket:** `gallary`
+
+**URL pública:**
+```
+https://{project-ref}.supabase.co/storage/v1/object/public/gallary/{filename}
+```
+
+**Subida de video:**
+- Endpoint: `POST /storage/v1/object/gallary/{filename}`
+- Headers: `Authorization: Bearer {service-key}`, `Content-Type: video/mp4`
+- Límite: 2GB por archivo
+- Return: URL pública del archivo
+
+**Implementación:** `SupabaseVideoRepository.uploadToSupabase()`
+
 ---
 
 ## Autenticación
@@ -330,17 +349,46 @@ formData.append('video', file) // File object
 
 #### `PUT /exercises/:id`
 
-Actualiza un ejercicio existente.
+Actualiza un ejercicio existente. Acepta actualización **parcial** — solo se modifican los campos enviados.
 
-**Request body:**
+**Comportamiento:**
+- `equipment_id` es **inmutable** (ignorado en actualizaciones)
+- `name` se valida individualmente (longitud ≤ 100 caracteres)
+- `difficulty` se valida individualmente (enum: BEGINNER, INTERMEDIATE, ADVANCED)
+- `video_url` siempre se sobrescribe (puede ser vacío para limpiar el video)
+
+**Request body (ejemplo parcial):**
 
 ```json
 {
   "name": "Press de banca inclinado",
-  "muscleGroup": "Pectorales",
-  "difficulty": "ADVANCED"
+  "difficulty": "ADVANCED",
+  "video_url": "https://xxx.supabase.co/storage/v1/object/public/gallary/video.mp4"
 }
 ```
+
+**Request body (solo actualizar video):**
+
+```json
+{
+  "video_url": "https://xxx.supabase.co/storage/v1/object/public/gallary/nuevo-video.mp4"
+}
+```
+
+**Request body (limpiar video):**
+
+```json
+{
+  "video_url": ""
+}
+```
+
+**Errores:**
+
+| Código | Significado |
+|--------|-------------|
+| `400` | Nombre vacío o demasiado largo (>100), difficulty inválido |
+| `404` | Ejercicio no encontrado |
 
 **Implementación frontend:** `ExerciseService.update(id, payload)`
 

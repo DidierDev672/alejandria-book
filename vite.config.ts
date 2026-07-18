@@ -38,6 +38,22 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      // Proxy para el servicio de respaldos (Go backend en puerto 8083)
+      "/api/status": {
+        target: "http://localhost:8083",
+        changeOrigin: true,
+        secure: false,
+      },
+      "/api/backups": {
+        target: "http://localhost:8083",
+        changeOrigin: true,
+        secure: false,
+      },
+      "/api/backups/download": {
+        target: "http://localhost:8083",
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 });

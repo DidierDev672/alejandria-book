@@ -32,6 +32,17 @@ const usuarioItems = [
   { label: 'Usuarios', icon: 'user-list', route: '/dashboard/users' }
 ]
 
+// Dropdown Configuración
+const configOpen = ref(false)
+const configItems = [
+  { label: 'Copia de seguridad', icon: 'backup', route: '/dashboard/backups', disabled: false },
+  { label: 'Documentación (Alfa)', icon: 'docs', route: '', disabled: true },
+]
+
+function toggleConfig() {
+  configOpen.value = !configOpen.value
+}
+
 // Dropdown Coliseo
 const coliseoOpen = ref(false)
 const coliseoItems = [
@@ -41,7 +52,9 @@ const coliseoItems = [
   { label: 'Lista de equipos', icon: 'equipment-list', route: '/dashboard/coliseo/equipment/list' },
   { label: 'Historial de ejercicios', icon: 'exercise-list', route: '/dashboard/coliseo/exercises' },
   { label: 'Objetivo de gladiadores', icon: 'gladiator-progress', route: '/dashboard/coliseo/objetivo-gladiadores' },
-  { label: 'Progreso de gladiadores', icon: 'gladiator-progress', route: '/dashboard/coliseo/progreso-gladiadores' }
+  { label: 'Progreso de gladiadores', icon: 'gladiator-progress', route: '/dashboard/coliseo/progreso-gladiadores' },
+  { label: 'Asignar Roles', icon: 'assign-roles', route: '/dashboard/coliseo/asignar-roles' },
+  { label: 'Lista de roles', icon: 'role-list', route: '/dashboard/coliseo/lista-roles' }
 ]
 
 function toggleAlejandria() {
@@ -333,7 +346,74 @@ function logout() {
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
+                <!-- Icono asignar roles -->
+                <svg v-else-if="item.icon === 'assign-roles'" class="h-5 w-5 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
                 {{ item.label }}
+              </button>
+            </div>
+          </Transition>
+        </div>
+
+        <!-- ═══ DROPDOWN CONFIGURACIÓN ═══ -->
+        <div v-motion :initial="{ opacity: 0, x: -20 }" :enter="{ opacity: 1, x: 0 }"
+          :transition="{ duration: 400, delay: 200, ease: [0.16, 1, 0.3, 1] }" class="space-y-0.5">
+          <button type="button"
+            class="flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 text-stone-400 hover:bg-stone-800 hover:text-amber-100"
+            @click="toggleConfig">
+            <div class="flex items-center gap-3">
+              <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>Configuración</span>
+            </div>
+            <svg class="h-4 w-4 shrink-0 transition-transform duration-300" :class="{ 'rotate-180': configOpen }"
+              fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <!-- Subitems de Configuración con Motion staggered -->
+          <Transition enter-active-class="transition-all duration-300 ease-out"
+            enter-from-class="opacity-0 -translate-y-2" enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 translate-y-0"
+            leave-to-class="opacity-0 -translate-y-2">
+            <div v-if="configOpen" class="ml-4 space-y-0.5 border-l border-amber-500/20 pl-3">
+              <button v-for="(item, index) in configItems" :key="item.label" v-motion :initial="{ opacity: 0, x: -15 }"
+                :enter="{ opacity: 1, x: 0 }"
+                :transition="{ duration: 300, delay: index * 80, ease: [0.16, 1, 0.3, 1] }" type="button"
+                class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200"
+                :class="item.disabled
+                  ? 'text-stone-500 opacity-50 cursor-not-allowed'
+                  : route.path === item.route
+                    ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/10 text-amber-500 shadow-sm ring-1 ring-amber-500/20'
+                    : 'text-stone-400 hover:bg-stone-800 hover:text-amber-100'"
+                :disabled="item.disabled"
+                @click="!item.disabled && navigateTo(item.route)">
+                <!-- Indicador activo -->
+                <span v-if="!item.disabled && route.path === item.route"
+                  class="absolute left-0 h-7 w-1 rounded-r-full bg-gradient-to-b from-amber-400 to-orange-500" />
+
+                <!-- Icono backup -->
+                <svg v-if="item.icon === 'backup'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+                <!-- Icono docs -->
+                <svg v-else-if="item.icon === 'docs'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                {{ item.label }}
+                <span v-if="item.disabled"
+                  class="ml-auto text-[10px] font-semibold px-1.5 py-0.5 rounded bg-stone-200 text-stone-500">ALFA</span>
               </button>
             </div>
           </Transition>

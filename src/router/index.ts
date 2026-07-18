@@ -151,6 +151,24 @@ const router = createRouter({
           component: () =>
             import("@/features/member-progress/presentation/pages/MemberProgressListPage.vue"),
         },
+        {
+          path: "backups",
+          name: "backups",
+          component: () =>
+            import("@/features/backup/presentation/pages/BackupPage.vue"),
+        },
+        {
+          path: "coliseo/asignar-roles",
+          name: "assign-roles",
+          component: () =>
+            import("@/features/colesio/presentation/pages/AssignRolesPage.vue"),
+        },
+        {
+          path: "coliseo/lista-roles",
+          name: "assigned-roles-list",
+          component: () =>
+            import("@/features/colesio/presentation/pages/AssignedRolesListPage.vue"),
+        },
       ],
     },
   ],

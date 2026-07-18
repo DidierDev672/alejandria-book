@@ -1,14 +1,19 @@
 <script setup>
-import axiosInstance from '@/infrastructure/http/axiosInstance'
+import { useExerciseEdit } from '@/features/exercise/application/composables/useExerciseEdit'
+import { useExerciseViewer } from '@/features/exercise/application/composables/useExerciseViewer'
 import axiosExercise from '@/features/exercise/infrastructure/http/axiosExercise'
+import ExerciseEditModal from '@/features/exercise/presentation/components/organisms/ExerciseEditModal.vue'
+import ExerciseViewerModal from '@/features/exercise/presentation/components/organisms/ExerciseViewerModal.vue'
+import { SupabaseVideoRepository, getSupabaseVideoConfig, useVideoUpload } from '@/features/video'
+import axiosInstance from '@/infrastructure/http/axiosInstance'
 import { useEquipmentStore } from '@/stores/equipmentStore.js'
 import BaseErrorDisplay from '@/utils/components/BaseErrorDisplay.vue'
 import BaseLoading from '@/utils/components/BaseLoading.vue'
 import CustomVideoPlayer from '@/utils/components/CustomVideoPlayer.vue'
 import EmptyBox from '@/utils/components/EmptyBox.vue'
-import { useVideoUpload, SupabaseVideoRepository, getSupabaseVideoConfig } from '@/features/video'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 // ============================================================
 // STORE
@@ -16,6 +21,9 @@ import { computed, onMounted, ref, watch } from 'vue'
 
 // Inicializar el store de equipos
 const equipmentStore = useEquipmentStore()
+
+// Router para navegación
+const router = useRouter()
 
 // Extraer estado reactivo con storeToRefs (mejora la reactividad)
 const { equipmentList, loading, error } = storeToRefs(equipmentStore)
@@ -63,12 +71,26 @@ const exerciseForm = ref({
 const isSubmittingExercise = ref(false)
 const exerciseError = ref(null)
 
+// Estado de eliminación de equipo
+const isDeleting = ref(false)
+const deleteError = ref(null)
+
 // ============================================================
 // STATE - EQUIPMENT EXERCISES (para el modal de detalle)
 // ============================================================
 const equipmentExercises = ref([])
 const isLoadingExercises = ref(false)
 const exerciseLoadError = ref(null)
+
+// ============================================================
+// EXERCISE VIEWER
+// ============================================================
+const exerciseViewer = useExerciseViewer()
+
+// ============================================================
+// EXERCISE EDIT
+// ============================================================
+const exerciseEdit = useExerciseEdit()
 
 // ============================================================
 // STATE - DELETE EXERCISE MODAL
@@ -82,6 +104,7 @@ const isDeletingExercise = ref(false)
 // ============================================================
 const isLoading = ref(false)
 const loadingText = ref('')
+const isUploadingVideoModalOpen = ref(false)
 
 // ============================================================
 // STATE - VIDEO UPLOAD ERROR
@@ -103,6 +126,20 @@ const isTestingUrl = ref(false)
 const urlTestError = ref('')
 const isConfirmingUrl = ref(false)
 const pendingVideoStoragePath = ref('') // Para poder eliminar si se rechaza
+
+// ============================================================
+// STATE - CONFIRM SEND TO API MODAL
+// ============================================================
+const isConfirmApiModalOpen = ref(false)
+const confirmApiMode = ref('confirm_url') // 'empty_url' | 'confirm_url'
+const pendingApiUrl = ref('')
+
+// ============================================================
+// STATE - EXERCISE RESULT MODALS
+// ============================================================
+const isExerciseSuccessModalOpen = ref(false)
+const isExerciseErrorModalOpen = ref(false)
+const exerciseResultError = ref('')
 
 // Watcher para depurar cambios en la URL confirmada
 watch(confirmedVideoUrl, (newVal, oldVal) => {
@@ -248,6 +285,17 @@ const getStatusLabel = (status) => {
   return labelMap[status] || status
 }
 
+const getTypeLabel = (type) => {
+  console.log('type', type)
+  const labelMap = {
+    'pneumatic': 'Neumático',
+    'hydraulic': 'Hidráulico',
+    'electronic': 'Eléctrico',
+    'mechanical': 'Mecánico',
+  }
+  return labelMap[type] || type
+}
+
 // ============================================================
 // MODAL ACTIONS
 // ============================================================
@@ -308,6 +356,16 @@ const closeViewModal = () => {
 }
 
 /**
+ * Maneja el guardado exitoso de un ejercicio editado
+ * Recarga la lista de ejercicios vinculados al equipo actual
+ */
+const handleExerciseSaved = async () => {
+  if (selectedEquipment.value?.id) {
+    await fetchEquipmentExercises(selectedEquipment.value.id)
+  }
+}
+
+/**
  * Abre el modal de confirmación de eliminación
  * @param {Object} equipment - Equipo a eliminar
  */
@@ -322,6 +380,7 @@ const openDeleteModal = (equipment) => {
 const closeDeleteModal = () => {
   isDeleteModalOpen.value = false
   selectedEquipment.value = null
+  deleteError.value = null
 }
 
 /**
@@ -421,12 +480,21 @@ const getDifficultyLabel = (difficulty) => {
  * Confirma la eliminación del equipo
  */
 const confirmDelete = async () => {
-  // Aquí iría la llamada al API para eliminar
-  console.log('Eliminando equipo:', selectedEquipment.value.id)
-  // Simulación de éxito
-  closeDeleteModal()
-  // Recargar lista
-  await equipmentStore.fetchEquipment()
+  if (!selectedEquipment.value?.id) return
+
+  isDeleting.value = true
+  deleteError.value = null
+
+  try {
+    await axiosInstance.delete(`/equipment/${selectedEquipment.value.id}`)
+    closeDeleteModal()
+    await equipmentStore.fetchEquipment()
+  } catch (err) {
+    deleteError.value = err.response?.data?.error || err.message || 'Error al eliminar el equipo'
+    console.error('[EquipmentPage] Error al eliminar equipo:', err)
+  } finally {
+    isDeleting.value = false
+  }
 }
 
 // ============================================================
@@ -546,13 +614,11 @@ const submitExercise = async () => {
     return
   }
 
-  // Mostrar loading con BaseLoading
-  isLoading.value = true
-  loadingText.value = 'Subiendo video...'
+  // Mostrar modal de subida de video
+  isUploadingVideoModalOpen.value = true
 
   try {
     // PASO 1: Subir video a Supabase Storage
-    loadingText.value = 'Subiendo video a almacenamiento...'
 
     // Crear payload para subida
     const uploadPayload = {
@@ -590,15 +656,15 @@ const submitExercise = async () => {
     console.log('[EquipmentPage] ✅ Storage path:', pendingVideoStoragePath.value)
     console.log('[EquipmentPage] ✅ File name:', uploadResult.fileName)
 
-    // Ocultar loading y mostrar modal de confirmación
-    isLoading.value = false
+    // Cerrar modal de subida y mostrar modal de confirmación de URL
+    isUploadingVideoModalOpen.value = false
     showUrlConfirmationModal.value = true
 
   } catch (uploadErr) {
     console.error('[EquipmentPage] Error al subir video a Supabase:', uploadErr)
+    isUploadingVideoModalOpen.value = false
     videoUploadError.value.show = true
     videoUploadError.value.message = uploadErr.message || 'No se pudo subir el video al almacenamiento. Por favor, intenta nuevamente.'
-    isLoading.value = false
   }
 }
 
@@ -620,9 +686,9 @@ const saveExerciseToAPI = async (videoUrl) => {
 
   try {
     const exerciseData = {
-      equipmentId: selectedEquipment.value.id,
+      equipment_id: selectedEquipment.value.id,
       name: exerciseForm.value.name,
-      muscleGroup: exerciseForm.value.muscle_group,
+      muscle_group: exerciseForm.value.muscle_group,
       difficulty: exerciseForm.value.difficulty,
       video: finalVideoUrl // URL editada por el usuario o null
     }
@@ -639,25 +705,50 @@ const saveExerciseToAPI = async (videoUrl) => {
 
     // Cerrar modal de confirmación si está abierto
     showUrlConfirmationModal.value = false
+    isConfirmApiModalOpen.value = false
 
     // Recargar la lista de ejercicios del equipo
     if (selectedEquipment.value?.id) {
       await fetchEquipmentExercises(selectedEquipment.value.id)
     }
 
-    // Cerrar modales y resetear
+    // Cerrar modales de entrada y resetear
     closeAddExerciseModal()
     resetUploadState()
     resetUrlConfirmation()
 
+    // Mostrar modal de éxito
+    isExerciseSuccessModalOpen.value = true
+
   } catch (err) {
     console.error('[EquipmentPage] Error en proceso de guardado:', err)
-    exerciseError.value = err.response?.data?.error || err.message || 'Error al crear el ejercicio'
 
-    // Si falló después de confirmar la URL, mantener el modal abierto para reintentar
-    if (showUrlConfirmationModal.value) {
-      urlTestError.value = 'Error al guardar en la API. Puedes reintentar o cancelar.'
+    // Cerrar modal de confirmación de API
+    isConfirmApiModalOpen.value = false
+
+    // Determinar mensaje de error con contexto psicológico
+    const statusCode = err.response?.status
+    const serverError = err.response?.data?.error
+
+    if (statusCode === 409) {
+      exerciseResultError.value = 'Ya existe un ejercicio con ese nombre para este equipo. Prueba con un nombre diferente para identificarlo.'
+    } else if (statusCode === 400) {
+      exerciseResultError.value = serverError || 'Los datos enviados no son válidos. Revisa que el nombre y el grupo muscular estén correctos.'
+    } else if (statusCode === 404) {
+      exerciseResultError.value = 'El equipo seleccionado ya no existe en el sistema. Puede que haya sido eliminado recientemente.'
+    } else if (statusCode === 500) {
+      exerciseResultError.value = 'Hubo un problema interno del servidor. No es tu culpa, inténtalo de nuevo en unos momentos.'
+    } else if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
+      exerciseResultError.value = 'La conexión tardó demasiado. Verifica tu internet y vuelve a intentar.'
+    } else if (!navigator.onLine) {
+      exerciseResultError.value = 'Parece que no tienes conexión a internet. Revisa tu red y vuelve a intentar cuando estés en línea.'
+    } else {
+      exerciseResultError.value = serverError || 'No pudimos guardar el ejercicio. Intenta nuevamente, si el problema persiste contacta al administrador.'
     }
+
+    // Mostrar modal de error
+    isExerciseErrorModalOpen.value = true
+
   } finally {
     isLoading.value = false
     isConfirmingUrl.value = false
@@ -705,27 +796,12 @@ const confirmVideoUrl = async () => {
 
   // Validar que la URL no esté vacía si se subió un video
   if (!confirmedVideoUrl.value.trim()) {
-    const proceedWithoutVideo = window.confirm(
-      '⚠️ La URL está vacía.\n\n' +
-      '¿Deseas guardar el ejercicio SIN video?\n\n' +
-      'Presiona "Aceptar" para guardar sin video, o "Cancelar" para agregar una URL.'
-    )
-    if (!proceedWithoutVideo) {
-      console.log('[EquipmentPage] ❌ Usuario decidió agregar URL')
-      return
-    }
-  }
-
-  // Confirmación visual para el usuario mostrando la URL exacta que se enviará
-  const displayUrl = confirmedVideoUrl.value || '(sin video)'
-  const confirmMessage = `¿Confirmas que quieres enviar esta URL a la API?\n\n${displayUrl}\n\n⚠️ Esta es la URL EXACTA que se almacenará en la base de datos.`
-
-  if (!window.confirm(confirmMessage)) {
-    console.log('[EquipmentPage] ❌ Usuario canceló la confirmación')
+    openConfirmApiModal('empty_url')
     return
   }
 
-  await saveExerciseToAPI(confirmedVideoUrl.value.trim() || null)
+  // Abrir modal de confirmación mostrando la URL exacta que se enviará
+  openConfirmApiModal('confirm_url')
 }
 
 /**
@@ -793,6 +869,58 @@ const resetUrlConfirmation = () => {
 }
 
 /**
+ * Abre el modal de confirmación para enviar URL a la API
+ */
+const openConfirmApiModal = (mode) => {
+  confirmApiMode.value = mode
+  pendingApiUrl.value = confirmedVideoUrl.value
+  isConfirmApiModalOpen.value = true
+}
+
+/**
+ * Cierra el modal de confirmación de envío a API
+ */
+const closeConfirmApiModal = () => {
+  isConfirmApiModalOpen.value = false
+}
+
+/**
+ * Acción al confirmar envío a API desde el modal
+ */
+const handleConfirmApiAction = async () => {
+  isConfirmApiModalOpen.value = false
+  if (confirmApiMode.value === 'empty_url') {
+    await saveExerciseToAPI(null)
+  } else {
+    await saveExerciseToAPI(confirmedVideoUrl.value.trim() || null)
+  }
+}
+
+/**
+ * Cierra el modal de éxito y recarga la lista
+ */
+const closeExerciseSuccessModal = () => {
+  isExerciseSuccessModalOpen.value = false
+}
+
+/**
+ * Cierra el modal de error
+ */
+const closeExerciseErrorModal = () => {
+  isExerciseErrorModalOpen.value = false
+  exerciseResultError.value = ''
+}
+
+/**
+ * Reintenta el ejercicio desde el modal de error
+ */
+const retryFromErrorModal = () => {
+  isExerciseErrorModalOpen.value = false
+  exerciseResultError.value = ''
+  // El modal de agregar ejercicio sigue abierto, el usuario puede reintentar
+}
+
+/**
  * Cierra el modal de confirmación de URL (cancelar todo)
  */
 const closeUrlConfirmationModal = async () => {
@@ -845,27 +973,57 @@ const closeVideoUploadError = () => {
 
     <!-- ── Header ── -->
     <div class="max-w-6xl mx-auto mb-8">
-      <div
-        class="relative overflow-hidden rounded-3xl border border-amber-500/20 bg-white/80 backdrop-blur-sm px-8 py-6 shadow-xl shadow-amber-100/60">
-        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/60 to-transparent" />
-        <div class="pointer-events-none absolute right-0 top-0 opacity-10">
+      <div v-motion :initial="{ opacity: 0, y: 20 }"
+        :enter="{ opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } }"
+        class="relative overflow-hidden rounded-3xl border border-orange-300/30 bg-gradient-to-br from-white/90 via-orange-50/60 to-amber-100/40 backdrop-blur-sm px-8 py-6 shadow-xl shadow-orange-200/50">
+        <!-- Chromatic gradient overlay -->
+        <div class="absolute inset-0 chromatic-gradient opacity-30" />
+        <!-- Top edge glow -->
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-orange-400/70 to-transparent" />
+        <!-- Bottom edge glow -->
+        <div
+          class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-amber-400/50 to-transparent" />
+        <!-- Decorative orbs -->
+        <div class="pointer-events-none absolute right-0 top-0 opacity-15">
           <svg width="220" height="140" viewBox="0 0 220 140" fill="none">
-            <circle cx="200" cy="-10" r="100" fill="#f59e0b" />
+            <circle cx="200" cy="-10" r="100" fill="#f97316" />
             <circle cx="160" cy="40" r="55" fill="#ea580c" />
           </svg>
         </div>
-        <div class="relative flex items-center gap-4">
-          <div
-            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-amber-500/30">
-            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+        <div class="pointer-events-none absolute left-0 bottom-0 opacity-10">
+          <svg width="140" height="100" viewBox="0 0 140 100" fill="none">
+            <circle cx="0" cy="100" r="80" fill="#fb923c" />
+          </svg>
+        </div>
+        <div class="relative flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <div v-motion :initial="{ scale: 0.8, opacity: 0 }"
+              :enter="{ scale: 1, opacity: 1, transition: { delay: 0.2, duration: 0.4, ease: 'easeOut' } }"
+              class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-400 via-orange-500 to-amber-600 shadow-lg shadow-orange-400/30 ring-2 ring-orange-200/50">
+              <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+              </svg>
+            </div>
+            <div v-motion :initial="{ opacity: 0, x: -15 }"
+              :enter="{ opacity: 1, x: 0, transition: { delay: 0.15, duration: 0.4, ease: 'easeOut' } }">
+              <h1
+                class="font-serif text-2xl font-bold bg-gradient-to-r from-orange-700 via-orange-600 to-amber-600 bg-clip-text text-transparent">
+                Lista de Equipos</h1>
+              <p class="text-sm text-orange-400/80 mt-0.5">Gestiona el inventario de equipos del gimnasio</p>
+            </div>
+          </div>
+          <button v-motion :initial="{ opacity: 0, scale: 0.9 }"
+            :enter="{ opacity: 1, scale: 1, transition: { delay: 0.3, duration: 0.4, ease: 'easeOut' } }"
+            @click="router.push('/dashboard/coliseo/equipment/create')"
+            class="relative overflow-hidden inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-orange-500 via-orange-500 to-amber-500 hover:from-orange-600 hover:via-orange-600 hover:to-amber-600 shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-300 active:scale-95 group ring-1 ring-orange-400/20">
+            <div
+              class="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+            <svg class="w-4 h-4 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
-          </div>
-          <div>
-            <h1 class="font-serif text-2xl font-bold text-stone-800">Lista de Equipos</h1>
-            <p class="text-sm text-stone-400 mt-0.5">Gestiona el inventario de equipos del gimnasio</p>
-          </div>
+            <span class="relative">Registrar equipo</span>
+          </button>
         </div>
       </div>
     </div>
@@ -988,7 +1146,7 @@ const closeVideoUploadError = () => {
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span
                     class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                    {{ equipment.type }}
+                    {{ getTypeLabel(equipment.type) }}
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
@@ -1213,7 +1371,7 @@ const closeVideoUploadError = () => {
                       <span class="text-xs text-stone-400 block mb-0.5 uppercase tracking-wider">Tipo</span>
                       <span
                         class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                        {{ selectedEquipment.type }}
+                        {{ getTypeLabel(selectedEquipment.type) }}
                       </span>
                     </div>
                     <div class="p-3 bg-amber-50/60 rounded-xl border border-amber-100">
@@ -1299,6 +1457,14 @@ const closeVideoUploadError = () => {
                               d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                         </a>
+                        <button @click.stop="exerciseEdit.openModal(exercise)"
+                          class="flex-shrink-0 p-2 text-stone-400 hover:text-amber-600 hover:bg-amber-100 rounded-xl transition-colors"
+                          title="Editar ejercicio">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
                         <button @click.stop="openDeleteExerciseModal(exercise)"
                           class="flex-shrink-0 p-2 text-stone-400 hover:text-rose-600 hover:bg-rose-100 rounded-xl transition-colors"
                           title="Eliminar ejercicio">
@@ -1313,11 +1479,27 @@ const closeVideoUploadError = () => {
                 </div>
               </div>
 
+              <!-- Botón ver ejercicios -->
+              <div v-if="!isLoadingExercises && !exerciseLoadError && equipmentExercises.length > 0" v-motion
+                :initial="{ opacity: 0, y: 10 }" :enter="{ opacity: 1, y: 0 }" :transition="{ delay: 0.45 }"
+                class="mt-4">
+                <button @click="exerciseViewer.openModal(equipmentExercises)"
+                  class="relative w-full overflow-hidden inline-flex justify-center items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-amber-700 bg-amber-50 border-2 border-amber-200 hover:border-amber-300 hover:bg-amber-100 hover:shadow-sm transition-all duration-300 active:scale-[0.98] group">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>Ver Ejercicios</span>
+                </button>
+              </div>
+
               <!-- Botón agregar ejercicio -->
               <div v-motion :initial="{ opacity: 0, y: 10 }" :enter="{ opacity: 1, y: 0 }" :transition="{ delay: 0.5 }"
                 class="mt-6 pt-4 border-t border-amber-100">
                 <button @click="openAddExerciseModal"
-                  class="relative w-full overflow-hidden inline-flex justify-center items-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 shadow-lg shadow-emerald-500/20 hover:shadow-xl transition-all duration-300 active:scale-[0.98] group">
+                  class="relative w-full overflow-hidden inline-flex justify-center items-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 shadow-lg shadow-amber-500/20 hover:shadow-xl transition-all duration-300 active:scale-[0.98] group">
                   <div
                     class="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                   <svg class="w-4 h-4 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1342,6 +1524,67 @@ const closeVideoUploadError = () => {
     </Teleport>
 
     <!-- ══════════════════════════════════════ -->
+    <!-- MODAL: SUBIENDO VIDEO A SUPABASE -->
+    <!-- ══════════════════════════════════════ -->
+    <Teleport to="body">
+      <div v-if="isUploadingVideoModalOpen" class="fixed inset-0 z-[58] overflow-y-auto" role="dialog"
+        aria-modal="true">
+        <div class="fixed inset-0 bg-stone-900/70 backdrop-blur-sm" />
+
+        <div class="flex min-h-full items-center justify-center p-4">
+          <div v-motion :initial="{ opacity: 0, scale: 0.9, y: 20 }" :enter="{ opacity: 1, scale: 1, y: 0 }"
+            :transition="{ duration: 0.35, ease: 'easeOut' }"
+            class="relative w-full max-w-sm overflow-hidden rounded-3xl bg-white shadow-2xl shadow-black/20">
+
+            <!-- Línea de acento superior animada -->
+            <div class="absolute inset-x-0 top-0 h-1 overflow-hidden">
+              <div v-motion :initial="{ x: '-100%' }" :enter="{ x: '100%' }"
+                :transition="{ duration: 1.5, repeat: Infinity, ease: 'linear' }"
+                class="w-full h-full bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
+            </div>
+
+            <!-- Body -->
+            <div class="px-6 py-8 flex flex-col items-center space-y-5">
+              <!-- Icono de videoclip animado -->
+              <div v-motion :initial="{ scale: 0, rotate: -15 }" :enter="{ scale: 1, rotate: 0 }"
+                :transition="{ delay: 0.15, type: 'spring', stiffness: 200, damping: 15 }" class="relative">
+                <!-- Anillo exterior pulsante -->
+                <div class="absolute inset-0 rounded-full bg-amber-400/20 animate-ping" />
+                <div class="absolute -inset-2 rounded-full bg-amber-400/10 animate-pulse" />
+                <!-- Icono -->
+                <div
+                  class="relative w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg shadow-amber-500/30">
+                  <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Texto -->
+              <div class="text-center space-y-2">
+                <h3 v-motion :initial="{ opacity: 0, y: 5 }" :enter="{ opacity: 1, y: 0 }" :transition="{ delay: 0.3 }"
+                  class="font-serif text-xl font-bold text-stone-800">Subiendo video</h3>
+                <p v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :transition="{ delay: 0.4 }"
+                  class="text-sm text-stone-500">Tu video se está guardando en el almacenamiento seguro</p>
+              </div>
+
+              <!-- Barra de progreso indeterminada -->
+              <div v-motion :initial="{ opacity: 0, scaleX: 0.8 }" :enter="{ opacity: 1, scaleX: 1 }"
+                :transition="{ delay: 0.5 }" class="w-full max-w-xs">
+                <div class="h-1.5 bg-stone-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full animate-loading-bar" />
+                </div>
+                <p class="text-xs text-stone-400 text-center mt-2">Esto puede tomar unos segundos...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+
+    <!-- ══════════════════════════════════════ -->
     <!-- MODAL: CONFIRMACIÓN DE URL DEL VIDEO -->
     <!-- ══════════════════════════════════════ -->
     <Teleport to="body">
@@ -1356,10 +1599,10 @@ const closeVideoUploadError = () => {
             class="relative w-full max-w-lg overflow-hidden rounded-3xl bg-white shadow-2xl shadow-black/20">
 
             <!-- Línea de acento superior -->
-            <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-teal-500 to-emerald-400" />
+            <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400" />
 
             <!-- Header -->
-            <div class="bg-gradient-to-r from-emerald-500 to-teal-600 px-6 py-5">
+            <div class="bg-gradient-to-r from-amber-500 to-orange-600 px-6 py-5">
               <div class="flex items-center gap-3">
                 <div class="rounded-xl bg-white/20 p-2">
                   <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1369,112 +1612,41 @@ const closeVideoUploadError = () => {
                 </div>
                 <div>
                   <h3 class="font-serif text-xl font-bold text-white">Video Subido Exitosamente</h3>
-                  <p class="text-emerald-100 text-sm">Verifica la URL antes de continuar</p>
+                  <p class="text-amber-100 text-sm">Verifica el video antes de continuar</p>
                 </div>
               </div>
             </div>
 
             <!-- Body -->
-            <div class="px-6 py-6 space-y-5">
-              <!-- URL del video -->
-              <div class="space-y-2">
-                <label class="block text-sm font-semibold text-stone-700">
-                  URL del Video
-                  <span class="text-amber-600 font-normal">(editable)</span>
-                </label>
-                <div class="relative">
-                  <input
-                    v-model="confirmedVideoUrl"
-                    type="text"
-                    class="w-full px-4 py-3 bg-white border-2 border-amber-300 rounded-xl text-sm text-stone-700 font-mono break-all pr-24 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
-                    placeholder="https://..."
-                  />
-                  <!-- Botones de acción -->
-                  <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                    <!-- Resetear a URL original -->
-                    <button
-                      @click="resetToOriginalUrl"
-                      class="p-2 text-stone-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                      title="Restaurar URL original de Supabase"
-                    >
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                      </svg>
-                    </button>
-                    <!-- Copiar URL -->
-                    <button
-                      @click="copyVideoUrl"
-                      class="p-2 text-stone-400 hover:text-amber-600 hover:bg-amber-100 rounded-lg transition-colors"
-                      title="Copiar URL al portapapeles"
-                    >
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <p class="text-xs text-stone-500">
-                  Puedes editar esta URL manualmente si es necesario, o pegar la URL de Supabase que conozcas.
-                </p>
-
-                <!-- Info de la URL que se enviará -->
-                <div class="mt-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
-                  <h5 class="text-xs font-semibold text-emerald-800 mb-1 flex items-center gap-1">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    URL que se enviará a la API:
-                  </h5>
-                  <p class="text-xs text-emerald-700 font-mono break-all bg-white p-2 rounded border border-emerald-100">
-                    {{ confirmedVideoUrl || 'Sin URL - se enviará null' }}
-                  </p>
-                </div>
-
-                <!-- Mensaje de validación -->
-                <div v-if="!confirmedVideoUrl" class="p-2 bg-rose-50 border border-rose-200 rounded-lg">
-                  <p class="text-xs text-rose-700 flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    <strong>Atención:</strong> No hay URL configurada. El ejercicio se guardará sin video.
-                  </p>
-                </div>
+            <div class="px-6 py-6 space-y-4">
+              <!-- Video Player -->
+              <div v-if="confirmedVideoUrl" class="rounded-2xl overflow-hidden border border-amber-200 shadow-sm">
+                <CustomVideoPlayer :video-src="confirmedVideoUrl" />
               </div>
 
-              <!-- Error de prueba -->
-              <div v-if="urlTestError" class="p-3 bg-rose-50 border border-rose-200 rounded-xl">
-                <p class="text-sm text-rose-600 flex items-center gap-2">
-                  <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <!-- URL que se enviará a la API -->
+              <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                <h5 class="text-xs font-semibold text-amber-800 mb-1 flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  {{ urlTestError }}
+                  URL que se enviará a la API:
+                </h5>
+                <p class="text-xs text-amber-700 font-mono break-all bg-white p-2 rounded border border-amber-100">
+                  {{ confirmedVideoUrl || 'Sin URL - se enviará null' }}
                 </p>
               </div>
 
-              <!-- Botón probar URL -->
-              <button @click="testVideoUrl" :disabled="isTestingUrl"
-                class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded-xl transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-                {{ isTestingUrl ? 'Abriendo...' : 'Probar URL en nueva pestaña' }}
-              </button>
-
-              <!-- Instrucciones -->
-              <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                <h4 class="font-semibold text-amber-800 text-sm mb-2 flex items-center gap-2">
+              <!-- Mensaje de validación -->
+              <div v-if="!confirmedVideoUrl" class="p-2 bg-rose-50 border border-rose-200 rounded-lg">
+                <p class="text-xs text-rose-700 flex items-center gap-1">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                   </svg>
-                  ¿La URL funciona correctamente?
-                </h4>
-                <ul class="text-sm text-amber-700 space-y-1 list-disc list-inside">
-                  <li>Si el video se reproduce: haz clic en <strong>"Aceptar y Guardar"</strong></li>
-                  <li>Si hay error: haz clic en <strong>"Rechazar y Reintentar"</strong></li>
-                </ul>
+                  <strong>Atención:</strong> No hay URL configurada. El ejercicio se guardará sin video.
+                </p>
               </div>
             </div>
 
@@ -1483,14 +1655,13 @@ const closeVideoUploadError = () => {
               <button @click="rejectVideoUrl" :disabled="isConfirmingUrl"
                 class="order-2 sm:order-1 flex-1 flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold text-rose-600 bg-white border-2 border-rose-200 rounded-xl hover:bg-rose-50 transition-colors disabled:opacity-50">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
                 Rechazar y Reintentar
               </button>
 
               <button @click="confirmVideoUrl" :disabled="isConfirmingUrl"
-                class="order-1 sm:order-2 flex-1 flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl shadow-lg shadow-emerald-500/20 hover:shadow-xl transition-all disabled:opacity-50">
+                class="order-1 sm:order-2 flex-1 flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl shadow-lg shadow-amber-500/20 hover:shadow-xl transition-all disabled:opacity-50">
                 <svg v-if="isConfirmingUrl" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
                   <path class="opacity-75" fill="currentColor"
@@ -1500,6 +1671,245 @@ const closeVideoUploadError = () => {
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
                 {{ isConfirmingUrl ? 'Guardando...' : 'Aceptar y Guardar' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- MODAL: CONFIRMAR ENVÍO A LA API -->
+    <!-- ══════════════════════════════════════ -->
+    <Teleport to="body">
+      <div v-if="isConfirmApiModalOpen" class="fixed inset-0 z-[60] overflow-y-auto" role="dialog" aria-modal="true">
+        <div v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :leave="{ opacity: 0 }"
+          :transition="{ duration: 0.2 }" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm"
+          @click="closeConfirmApiModal" />
+
+        <div class="flex min-h-full items-center justify-center p-4">
+          <div v-motion :initial="{ opacity: 0, scale: 0.95, y: 10 }" :enter="{ opacity: 1, scale: 1, y: 0 }"
+            :leave="{ opacity: 0, scale: 0.95, y: 10 }" :transition="{ duration: 0.25, ease: 'easeOut' }"
+            class="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl shadow-black/20">
+
+            <!-- Línea de acento superior -->
+            <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400" />
+
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-amber-500 to-orange-600 px-6 py-5">
+              <div class="flex items-center gap-3">
+                <div class="rounded-xl bg-white/20 p-2">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-white">
+                  {{ confirmApiMode === 'empty_url' ? 'URL Vacía' : 'Confirmar Envío' }}
+                </h3>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="px-6 py-6 space-y-4">
+              <!-- Mensaje según modo -->
+              <div v-if="confirmApiMode === 'empty_url'" class="space-y-3">
+                <div class="flex items-start gap-3 p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                  <svg class="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <p class="text-sm text-amber-800 leading-relaxed">
+                    La URL del video está vacía. El ejercicio se guardará <strong>sin video</strong>.
+                  </p>
+                </div>
+              </div>
+
+              <div v-else class="space-y-3">
+                <p class="text-sm text-stone-600 leading-relaxed">
+                  ¿Confirmas que quieres enviar esta URL a la API?
+                </p>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                  <p class="text-xs text-amber-800 mb-1 font-semibold">URL que se enviará:</p>
+                  <p class="text-xs text-amber-700 font-mono break-all bg-white p-2 rounded border border-amber-100">
+                    {{ confirmedVideoUrl || '(sin video)' }}
+                  </p>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-rose-50 border border-rose-200 rounded-xl">
+                  <svg class="w-4 h-4 text-rose-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <p class="text-xs text-rose-700 leading-relaxed">
+                    Esta es la URL <strong>exacta</strong> que se almacenará en la base de datos.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="bg-stone-50 border-t border-stone-100 px-6 py-4 flex flex-row-reverse gap-3">
+              <button @click="handleConfirmApiAction"
+                class="inline-flex justify-center items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 shadow-lg shadow-amber-500/20 hover:shadow-xl transition-all duration-200 active:scale-95">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                {{ confirmApiMode === 'empty_url' ? 'Guardar sin video' : 'Sí, enviar a la API' }}
+              </button>
+              <button @click="closeConfirmApiModal"
+                class="inline-flex justify-center items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-stone-600 bg-white border-2 border-stone-200 hover:border-amber-200 hover:bg-amber-50 transition-all duration-200 active:scale-95">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- MODAL: EJERCICIO REGISTRADO CON ÉXITO -->
+    <!-- ══════════════════════════════════════ -->
+    <Teleport to="body">
+      <div v-if="isExerciseSuccessModalOpen" class="fixed inset-0 z-[65] overflow-y-auto" role="dialog"
+        aria-modal="true">
+        <div v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :leave="{ opacity: 0 }"
+          :transition="{ duration: 0.2 }" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm"
+          @click="closeExerciseSuccessModal" />
+
+        <div class="flex min-h-full items-center justify-center p-4">
+          <div v-motion :initial="{ opacity: 0, scale: 0.9, y: 15 }" :enter="{ opacity: 1, scale: 1, y: 0 }"
+            :leave="{ opacity: 0, scale: 0.9, y: 15 }" :transition="{ duration: 0.3, ease: 'easeOut' }"
+            class="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl shadow-black/20">
+
+            <!-- Línea de acento superior -->
+            <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-green-500 to-emerald-400" />
+
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-emerald-500 to-green-600 px-6 py-5">
+              <div class="flex items-center gap-3">
+                <div v-motion :initial="{ scale: 0 }" :enter="{ scale: 1 }"
+                  :transition="{ delay: 0.2, type: 'spring', stiffness: 300 }" class="rounded-xl bg-white/20 p-2">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-serif text-xl font-bold text-white">Ejercicio Registrado</h3>
+                  <p class="text-emerald-100 text-sm">Se guardó correctamente en el sistema</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="px-6 py-6 space-y-4">
+              <div class="text-center space-y-2">
+                <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto">
+                  <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p class="text-sm text-stone-600 leading-relaxed">
+                  El ejercicio <strong class="text-stone-800">"{{ exerciseForm.name }}"</strong> fue registrado
+                  exitosamente para el equipo <strong class="text-stone-800">"{{ selectedEquipment?.name }}"</strong>.
+                </p>
+              </div>
+
+              <div class="flex items-center gap-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+                <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p class="text-xs text-emerald-700">
+                  Ahora puedes verlo en la lista de ejercicios del equipo, o crear otro ejercicio si lo necesitas.
+                </p>
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="bg-stone-50 border-t border-stone-100 px-6 py-4 flex justify-end">
+              <button @click="closeExerciseSuccessModal"
+                class="inline-flex justify-center items-center gap-2 rounded-xl px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/20 hover:shadow-xl transition-all duration-200 active:scale-95">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Entendido
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- MODAL: ERROR AL REGISTRAR EJERCICIO -->
+    <!-- ══════════════════════════════════════ -->
+    <Teleport to="body">
+      <div v-if="isExerciseErrorModalOpen" class="fixed inset-0 z-[65] overflow-y-auto" role="dialog" aria-modal="true">
+        <div v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :leave="{ opacity: 0 }"
+          :transition="{ duration: 0.2 }" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm"
+          @click="closeExerciseErrorModal" />
+
+        <div class="flex min-h-full items-center justify-center p-4">
+          <div v-motion :initial="{ opacity: 0, scale: 0.9, y: 15 }" :enter="{ opacity: 1, scale: 1, y: 0 }"
+            :leave="{ opacity: 0, scale: 0.9, y: 15 }" :transition="{ duration: 0.3, ease: 'easeOut' }"
+            class="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl shadow-black/20">
+
+            <!-- Línea de acento superior -->
+            <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-rose-400 via-rose-500 to-rose-400" />
+
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-rose-500 to-red-600 px-6 py-5">
+              <div class="flex items-center gap-3">
+                <div v-motion :initial="{ scale: 0 }" :enter="{ scale: 1 }"
+                  :transition="{ delay: 0.2, type: 'spring', stiffness: 300 }" class="rounded-xl bg-white/20 p-2">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-serif text-xl font-bold text-white">No se pudo guardar</h3>
+                  <p class="text-rose-100 text-sm">Ocurrió un problema al registrar el ejercicio</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="px-6 py-6 space-y-4">
+              <div class="p-4 bg-rose-50 border border-rose-200 rounded-2xl">
+                <p class="text-sm text-rose-700 leading-relaxed">{{ exerciseResultError }}</p>
+              </div>
+
+              <div class="flex items-start gap-3 p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                <svg class="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+                <p class="text-xs text-amber-800 leading-relaxed">
+                  <strong>Sugerencia:</strong> Verifica los datos e intenta nuevamente. Si el problema persiste, es
+                  posible que haya un inconveniente temporal con el servidor.
+                </p>
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="bg-stone-50 border-t border-stone-100 px-6 py-4 flex flex-row-reverse gap-3">
+              <button @click="retryFromErrorModal"
+                class="inline-flex justify-center items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 shadow-lg shadow-amber-500/20 hover:shadow-xl transition-all duration-200 active:scale-95">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Reintentar
+              </button>
+              <button @click="closeExerciseErrorModal"
+                class="inline-flex justify-center items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-stone-600 bg-white border-2 border-stone-200 hover:border-amber-200 hover:bg-amber-50 transition-all duration-200 active:scale-95">
+                Cerrar
               </button>
             </div>
           </div>
@@ -1522,10 +1932,10 @@ const closeVideoUploadError = () => {
             class="relative w-full max-w-3xl overflow-hidden rounded-3xl bg-white shadow-2xl shadow-black/20 max-h-[90vh] flex flex-col">
 
             <div
-              class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent" />
+              class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-400/60 to-transparent" />
 
             <!-- Header -->
-            <div class="bg-gradient-to-r from-emerald-500 to-teal-600 px-6 py-4 flex-shrink-0">
+            <div class="bg-gradient-to-r from-amber-500 to-orange-600 px-6 py-4 flex-shrink-0">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
                   <div v-motion :initial="{ scale: 0, rotate: -180 }" :enter="{ scale: 1, rotate: 0 }"
@@ -1540,7 +1950,7 @@ const closeVideoUploadError = () => {
                       :transition="{ delay: 0.3 }" class="font-serif text-xl font-bold text-white">Agregar Ejercicio
                     </h3>
                     <p v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :transition="{ delay: 0.4 }"
-                      class="text-emerald-100 text-sm">Equipo: {{ selectedEquipment?.name }}</p>
+                      class="text-amber-100 text-sm">Equipo: {{ selectedEquipment?.name }}</p>
                   </div>
                 </div>
                 <button @click="closeAddExerciseModal"
@@ -1554,17 +1964,10 @@ const closeVideoUploadError = () => {
 
             <!-- Error de subida de video a Supabase -->
             <div v-if="videoUploadError.show" class="mx-6 mt-4">
-              <BaseErrorDisplay
-                :title="videoUploadError.title"
-                :message="videoUploadError.message"
-                mode="container"
-                action-text="Reintentar"
-                show-secondary-action
-                secondary-action-text="Cancelar"
-                :is-retrying="videoUploadError.isRetrying"
-                @retry="retryVideoUpload"
-                @secondary-action="closeVideoUploadError"
-              />
+              <BaseErrorDisplay :title="videoUploadError.title" :message="videoUploadError.message" mode="container"
+                action-text="Reintentar" show-secondary-action secondary-action-text="Cancelar"
+                :is-retrying="videoUploadError.isRetrying" @retry="retryVideoUpload"
+                @secondary-action="closeVideoUploadError" />
             </div>
 
             <div v-if="exerciseError" class="mx-6 mt-4">
@@ -1671,10 +2074,10 @@ const closeVideoUploadError = () => {
                 </div>
 
                 <div v-else class="space-y-3">
-                  <div class="flex items-center gap-3 p-3 bg-emerald-50 rounded-xl border border-emerald-200">
+                  <div class="flex items-center gap-3 p-3 bg-amber-50 rounded-xl border border-amber-200">
                     <div
-                      class="w-10 h-10 bg-emerald-100 border border-emerald-200 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      class="w-10 h-10 bg-amber-100 border border-amber-200 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1713,7 +2116,7 @@ const closeVideoUploadError = () => {
               class="bg-amber-50/40 border-t border-amber-100 px-6 py-4 flex flex-row-reverse gap-3 flex-shrink-0">
               <button @click="submitExercise"
                 :disabled="isSubmittingExercise || !exerciseForm.name || !exerciseForm.muscle_group"
-                class="relative overflow-hidden inline-flex justify-center items-center gap-2 rounded-xl px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 shadow-lg shadow-emerald-500/20 hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] group">
+                class="relative overflow-hidden inline-flex justify-center items-center gap-2 rounded-xl px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 shadow-lg shadow-amber-500/20 hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] group">
                 <div
                   class="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                 <svg v-if="isSubmittingExercise" class="animate-spin h-4 w-4 relative" fill="none" viewBox="0 0 24 24">
@@ -1739,13 +2142,8 @@ const closeVideoUploadError = () => {
     <!-- ══════════════════════════════════════ -->
     <!-- LOADING: Subida Supabase + API (BaseLoading) -->
     <!-- ══════════════════════════════════════ -->
-    <BaseLoading
-      :is-loading="isLoading"
-      :full-screen="true"
-      type="spinner"
-      color="text-amber-600"
-      :text="loadingText"
-    />
+    <BaseLoading :is-loading="isLoading" :full-screen="true" type="spinner" color="text-amber-600"
+      :text="loadingText" />
 
     <!-- ══════════════════════════════════════ -->
     <!-- MODAL: CONFIRMAR ELIMINACIÓN -->
@@ -1782,6 +2180,16 @@ const closeVideoUploadError = () => {
                 <p class="text-xs font-mono text-stone-400 mt-0.5">{{ selectedEquipment.id }}</p>
               </div>
 
+              <div v-if="deleteError" class="p-3 bg-rose-50 border border-rose-200 rounded-xl">
+                <p class="text-sm text-rose-600 flex items-center gap-2">
+                  <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {{ deleteError }}
+                </p>
+              </div>
+
               <p class="text-sm text-stone-600 leading-relaxed">
                 <strong class="text-rose-600">Esta acción no se puede deshacer.</strong>
                 Una vez que elimines este equipo, toda su información será permanentemente borrada del sistema.
@@ -1802,16 +2210,21 @@ const closeVideoUploadError = () => {
 
             <!-- Footer -->
             <div class="bg-stone-50/60 border-t border-stone-100 px-6 py-4 flex flex-row-reverse gap-3">
-              <button @click="confirmDelete"
-                class="inline-flex justify-center items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold text-white bg-rose-500 hover:bg-rose-600 shadow-lg shadow-rose-500/20 hover:shadow-xl transition-all duration-200 active:scale-95">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button @click="confirmDelete" :disabled="isDeleting"
+                class="inline-flex justify-center items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold text-white bg-rose-500 hover:bg-rose-600 shadow-lg shadow-rose-500/20 hover:shadow-xl transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                <svg v-if="isDeleting" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                  <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
-                Sí, eliminar permanentemente
+                {{ isDeleting ? 'Eliminando...' : 'Sí, eliminar permanentemente' }}
               </button>
-              <button @click="closeDeleteModal"
-                class="inline-flex justify-center items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-stone-600 bg-white border-2 border-stone-200 hover:border-amber-200 hover:bg-amber-50 transition-all duration-200 active:scale-95">
+              <button @click="closeDeleteModal" :disabled="isDeleting"
+                class="inline-flex justify-center items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-stone-600 bg-white border-2 border-stone-200 hover:border-amber-200 hover:bg-amber-50 transition-all duration-200 active:scale-95 disabled:opacity-50">
                 No, mantener el equipo
               </button>
             </div>
@@ -1830,11 +2243,8 @@ const closeVideoUploadError = () => {
           @click="closeDeleteExerciseModal" />
 
         <div class="flex min-h-full items-center justify-center p-4">
-          <div v-motion
-            :initial="{ opacity: 0, scale: 0.9, y: 20 }"
-            :enter="{ opacity: 1, scale: 1, y: 0 }"
-            :leave="{ opacity: 0, scale: 0.9, y: 20 }"
-            :transition="{ duration: 0.3, ease: 'easeOut' }"
+          <div v-motion :initial="{ opacity: 0, scale: 0.9, y: 20 }" :enter="{ opacity: 1, scale: 1, y: 0 }"
+            :leave="{ opacity: 0, scale: 0.9, y: 20 }" :transition="{ duration: 0.3, ease: 'easeOut' }"
             class="relative w-full max-w-lg overflow-hidden rounded-3xl bg-white shadow-2xl shadow-black/20">
 
             <!-- Borde superior rojo -->
@@ -1843,9 +2253,7 @@ const closeVideoUploadError = () => {
             <!-- Header -->
             <div class="bg-rose-50 px-6 py-5 border-b border-rose-100">
               <div class="flex items-center gap-3">
-                <div v-motion
-                  :initial="{ scale: 0, rotate: -180 }"
-                  :enter="{ scale: 1, rotate: 0 }"
+                <div v-motion :initial="{ scale: 0, rotate: -180 }" :enter="{ scale: 1, rotate: 0 }"
                   :transition="{ delay: 0.2, type: 'spring', stiffness: 200 }"
                   class="w-10 h-10 bg-rose-100 border border-rose-200 rounded-xl flex items-center justify-center flex-shrink-0">
                   <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1855,10 +2263,9 @@ const closeVideoUploadError = () => {
                 </div>
                 <div>
                   <h3 v-motion :initial="{ opacity: 0, x: -10 }" :enter="{ opacity: 1, x: 0 }"
-                    :transition="{ delay: 0.3 }"
-                    class="font-serif text-lg font-bold text-rose-800">¿Eliminar este ejercicio?</h3>
-                  <p v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }"
-                    :transition="{ delay: 0.4 }"
+                    :transition="{ delay: 0.3 }" class="font-serif text-lg font-bold text-rose-800">¿Eliminar este
+                    ejercicio?</h3>
+                  <p v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1 }" :transition="{ delay: 0.4 }"
                     class="text-xs text-rose-500 mt-0.5">Esta acción es permanente e irreversible</p>
                 </div>
               </div>
@@ -1867,23 +2274,20 @@ const closeVideoUploadError = () => {
             <!-- Body -->
             <div class="px-6 py-6 space-y-4">
               <!-- Info del ejercicio -->
-              <div v-if="exerciseToDelete" v-motion
-                :initial="{ opacity: 0, y: 10 }"
-                :enter="{ opacity: 1, y: 0 }"
-                :transition="{ delay: 0.3 }"
-                class="p-4 bg-amber-50/60 rounded-2xl border border-amber-100">
+              <div v-if="exerciseToDelete" v-motion :initial="{ opacity: 0, y: 10 }" :enter="{ opacity: 1, y: 0 }"
+                :transition="{ delay: 0.3 }" class="p-4 bg-amber-50/60 rounded-2xl border border-amber-100">
                 <p class="text-xs text-stone-400 uppercase tracking-widest mb-1">Ejercicio seleccionado</p>
                 <p class="text-base font-bold text-stone-800">{{ exerciseToDelete.name }}</p>
                 <div class="flex items-center gap-2 mt-1">
-                  <span class="text-xs text-stone-400">{{ exerciseToDelete.muscleGroup || exerciseToDelete.muscle_group }}</span>
+                  <span
+                    class="text-xs text-stone-400">{{ exerciseToDelete.muscleGroup || exerciseToDelete.muscle_group }}</span>
                   <span class="text-amber-200">•</span>
                   <span class="text-xs text-stone-400">{{ getDifficultyLabel(exerciseToDelete.difficulty) }}</span>
                 </div>
               </div>
 
               <!-- Advertencia principal -->
-              <p v-motion :initial="{ opacity: 0, y: 10 }" :enter="{ opacity: 1, y: 0 }"
-                :transition="{ delay: 0.4 }"
+              <p v-motion :initial="{ opacity: 0, y: 10 }" :enter="{ opacity: 1, y: 0 }" :transition="{ delay: 0.4 }"
                 class="text-sm text-stone-600 leading-relaxed">
                 <strong class="text-rose-600">Esta acción no se puede deshacer.</strong>
                 Estás a punto de eliminar permanentemente este ejercicio vinculado al equipo
@@ -1891,45 +2295,50 @@ const closeVideoUploadError = () => {
               </p>
 
               <!-- Consecuencias -->
-              <div v-motion :initial="{ opacity: 0, y: 10 }" :enter="{ opacity: 1, y: 0 }"
-                :transition="{ delay: 0.5 }"
+              <div v-motion :initial="{ opacity: 0, y: 10 }" :enter="{ opacity: 1, y: 0 }" :transition="{ delay: 0.5 }"
                 class="space-y-3">
-                <p class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Consecuencias de esta acción:</p>
+                <p class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Consecuencias de esta acción:
+                </p>
 
                 <div class="space-y-2">
                   <div class="flex items-start gap-3 p-3 bg-rose-50 border border-rose-100 rounded-xl">
-                    <svg class="w-4 h-4 text-rose-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-rose-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                      viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <p class="text-xs text-rose-700 leading-relaxed">
-                      <strong>Historial de entrenamientos afectado:</strong> Los usuarios que completaron este ejercicio perderán ese registro de su progreso.
+                      <strong>Historial de entrenamientos afectado:</strong> Los usuarios que completaron este ejercicio
+                      perderán ese registro de su progreso.
                     </p>
                   </div>
 
                   <div class="flex items-start gap-3 p-3 bg-rose-50 border border-rose-100 rounded-xl">
-                    <svg class="w-4 h-4 text-rose-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-rose-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                      viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <p class="text-xs text-rose-700 leading-relaxed">
-                      <strong>Rutinas personalizadas rotas:</strong> Si algún usuario tenía este ejercicio en su rutina personalizada, esa rutina quedará incompleta.
+                      <strong>Rutinas personalizadas rotas:</strong> Si algún usuario tenía este ejercicio en su rutina
+                      personalizada, esa rutina quedará incompleta.
                     </p>
                   </div>
 
                   <div v-if="exerciseToDelete?.video || exerciseToDelete?.video_url"
                     class="flex items-start gap-3 p-3 bg-rose-50 border border-rose-100 rounded-xl">
-                    <svg class="w-4 h-4 text-rose-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-rose-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                      viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <p class="text-xs text-rose-700 leading-relaxed">
-                      <strong>Video tutorial eliminado:</strong> El video explicativo associado a este ejercicio también será removido permanentemente.
+                      <strong>Video tutorial eliminado:</strong> El video explicativo associado a este ejercicio también
+                      será removido permanentemente.
                     </p>
                   </div>
                 </div>
               </div>
 
               <!-- Consejo -->
-              <div v-motion :initial="{ opacity: 0, y: 10 }" :enter="{ opacity: 1, y: 0 }"
-                :transition="{ delay: 0.6 }"
+              <div v-motion :initial="{ opacity: 0, y: 10 }" :enter="{ opacity: 1, y: 0 }" :transition="{ delay: 0.6 }"
                 class="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-2xl">
                 <svg class="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
                   viewBox="0 0 24 24">
@@ -1938,14 +2347,14 @@ const closeVideoUploadError = () => {
                 </svg>
                 <p class="text-xs text-amber-800 leading-relaxed">
                   <strong>Consejo:</strong> Si este ejercicio tiene errores menores o está desactualizado, considera
-                  <strong class="text-amber-900">editarlo en su lugar</strong> para conservar el historial de datos y las rutinas existentes.
+                  <strong class="text-amber-900">editarlo en su lugar</strong> para conservar el historial de datos y
+                  las rutinas existentes.
                 </p>
               </div>
             </div>
 
             <!-- Footer -->
-            <div v-motion :initial="{ opacity: 0, y: 10 }" :enter="{ opacity: 1, y: 0 }"
-              :transition="{ delay: 0.7 }"
+            <div v-motion :initial="{ opacity: 0, y: 10 }" :enter="{ opacity: 1, y: 0 }" :transition="{ delay: 0.7 }"
               class="bg-stone-50/60 border-t border-stone-100 px-6 py-4 flex flex-row-reverse gap-3">
               <button @click="deleteExercise" :disabled="isDeletingExercise"
                 class="inline-flex justify-center items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold text-white bg-rose-500 hover:bg-rose-600 shadow-lg shadow-rose-500/20 hover:shadow-xl transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -1969,9 +2378,64 @@ const closeVideoUploadError = () => {
         </div>
       </div>
     </Teleport>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- MODAL: VISUALIZAR EJERCICIOS -->
+    <!-- ══════════════════════════════════════ -->
+    <ExerciseViewerModal :is-open="exerciseViewer.isOpen.value" :exercises="exerciseViewer.exerciseList.value"
+      :selected-exercise="exerciseViewer.selectedExercise.value" :get-video-url="exerciseViewer.getVideoUrl"
+      :get-muscle-group-info="exerciseViewer.getMuscleGroupInfo" :get-difficulty-info="exerciseViewer.getDifficultyInfo"
+      @close="exerciseViewer.closeModal" @select="exerciseViewer.selectExercise" />
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- MODAL: EDITAR EJERCICIO -->
+    <!-- ══════════════════════════════════════ -->
+    <ExerciseEditModal :exercise="exerciseEdit.state.exercise" @close="exerciseEdit.closeModal"
+      @saved="handleExerciseSaved" />
   </div>
 </template>
 
 <style scoped>
-/* Estilos adicionales si son necesarios */
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-loading-bar {
+  animation: loading-bar 1.8s ease-in-out infinite;
+}
+
+@keyframes chromatic-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.chromatic-gradient {
+  background: linear-gradient(135deg,
+      rgba(251, 146, 60, 0.4) 0%,
+      rgba(249, 115, 22, 0.3) 25%,
+      rgba(245, 158, 11, 0.4) 50%,
+      rgba(234, 88, 12, 0.3) 75%,
+      rgba(251, 146, 60, 0.4) 100%);
+  background-size: 200% 200%;
+  animation: chromatic-shift 6s ease-in-out infinite;
+}
 </style>

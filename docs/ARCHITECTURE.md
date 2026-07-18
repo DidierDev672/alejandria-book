@@ -314,19 +314,53 @@ VITE_SUPABASE_ANON_KEY=your-anon-key-here
 ```
 exercise/
 ├── domain/
-│   └── Exercise.ts           # Entidad Exercise
+│   ├── Exercise.ts           # Entidad Exercise
+│   └── services/
+│       └── ExerciseVideoUploadService.ts  # Servicio de dominio para subida de video
 ├── infrastructure/
 │   ├── http/
 │   │   └── axiosExercise.ts  # Instancia axios con proxy
 │   └── services/
 │       └── exerciseService.ts # CRUD completo
 ├── application/
-│   └── stores/
-│       └── useExerciseStore.ts
+│   ├── stores/
+│   │   └── useExerciseStore.ts
+│   └── composables/
+│       └── useExerciseVideoUpload.ts  # Composable reactivo para upload
 └── presentation/
+    ├── pages/
+    │   └── ExerciseListPage.vue  # Lista con acordeón y upload flow
     └── components/
-        └── ExerciseList.vue
+        └── molecules/
+            ├── VideoUploadingModal.vue    # Modal de progreso de subida
+            └── VideoVerificationModal.vue # Modal de verificación post-upload
 ```
+
+### Flujo de Upload de Video
+
+```
+ExerciseListPage
+  → selectEditVideo()          # Usuario selecciona archivo
+    → createObjectURL()        # Preview local
+  → submitEdit()
+    → useExerciseVideoUpload.upload()
+      → ExerciseVideoUploadService.upload()
+        → VideoRepository.uploadToSupabase()
+          → POST /storage/v1/object/gallary/{filename}
+      → Retorna public URL
+    → VideoVerificationModal   # Usuario verifica video
+  → confirmUpdateExercise()
+    → ExerciseService.update(id, { video_url: publicUrl })
+      → PUT /exercises/{id}
+```
+
+### Comportamiento de PUT /exercises/{id}
+
+El endpoint acepta actualización parcial:
+- `equipment_id` es **inmutable** (ignorado en updates)
+- `name` se valida individualmente (longitud ≤ 100)
+- `difficulty` se valida individualmente (enum)
+- `video_url` siempre se sobrescribe (puede ser vacío para limpiar)
 
 ### Proxy Vite
 

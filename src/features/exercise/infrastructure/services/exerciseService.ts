@@ -84,10 +84,10 @@ export const ExerciseService = {
   async create(exerciseData: CreateExerciseDTO): Promise<Exercise> {
     const { data } = await axiosExercise.post<Exercise>("", {
       name: exerciseData.name,
-      muscleGroup: exerciseData.muscle_group,
+      muscle_group: exerciseData.muscle_group,
       difficulty: exerciseData.difficulty,
-      equipmentId: exerciseData.equipment_id,
-      video: exerciseData.video_url || "",
+      equipment_id: exerciseData.equipment_id,
+      video_url: exerciseData.video_url || "",
     });
     return data;
   },
@@ -113,9 +113,9 @@ export const ExerciseService = {
   async update(id: string, updateData: UpdateExerciseDTO): Promise<Exercise> {
     const payload: Record<string, string> = {};
     if (updateData.name) payload.name = updateData.name;
-    if (updateData.muscle_group) payload.muscleGroup = updateData.muscle_group;
+    if (updateData.muscle_group) payload.muscle_group = updateData.muscle_group;
     if (updateData.difficulty) payload.difficulty = updateData.difficulty;
-    if (updateData.video_url) payload.video = updateData.video_url;
+    if (updateData.video_url) payload.video_url = updateData.video_url;
 
     const { data } = await axiosExercise.put<Exercise>(`/${id}`, payload);
     return data;

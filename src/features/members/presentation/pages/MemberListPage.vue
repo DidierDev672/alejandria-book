@@ -733,18 +733,22 @@ async function handleRetry() {
     <!-- ── Header ── -->
     <template #header>
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center shadow-sm">
-          <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-          </svg>
+        <div class="relative inline-flex">
+          <div class="absolute inset-0 rounded-xl bg-white/20 blur-sm scale-110" />
+          <div
+            class="relative w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center shadow-sm">
+            <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </div>
         </div>
         <div>
-          <h3 class="font-serif text-xl font-bold text-white">Datos del Gladiador</h3>
-          <p class="text-xs text-amber-100/70 mt-0.5">
-            Perfil completo de
-            <span class="font-semibold text-amber-100">{{ detailMember?.name_full }}</span>
+          <h3 class="font-serif text-xl font-bold text-white leading-tight">{{ detailMember?.name_full }}</h3>
+          <p class="text-xs text-amber-100/60 mt-0.5 flex items-center gap-1.5">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            Perfil del gladiador
           </p>
         </div>
       </div>
@@ -752,223 +756,171 @@ async function handleRetry() {
 
     <!-- ── Content ── -->
     <template #content>
-      <div v-if="detailMember" class="space-y-7">
+      <div v-if="detailMember" class="space-y-6">
 
-        <!-- ════════════════════════════
-           SECCIÓN 1 · Datos Básicos
-      ════════════════════════════ -->
-        <section>
-          <!-- Label de sección -->
-          <div class="flex items-center gap-2.5 mb-4">
-            <div
-              class="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 shadow-sm shadow-amber-300/40 shrink-0">
-              <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        <!-- ══════════════════════════════
+           § 1  IDENTIDAD
+      ══════════════════════════════ -->
+        <section aria-label="Datos básicos">
+
+          <!-- Encabezado de sección — patrón consistente en todo el modal -->
+          <header class="flex items-center gap-2 mb-3">
+            <span
+              class="flex h-5 w-5 items-center justify-center rounded-md bg-gradient-to-br from-amber-500 to-orange-600 shadow-sm shrink-0">
+              <svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                   d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
-            </div>
-            <h4 class="text-xs font-bold text-stone-500 uppercase tracking-widest">Datos Básicos</h4>
-            <div class="flex-1 h-px bg-gradient-to-r from-amber-200/80 to-transparent" />
+            </span>
+            <h4 class="text-[10px] font-black text-stone-400 uppercase tracking-[0.15em]">Identidad</h4>
+            <div class="flex-1 h-px bg-gradient-to-r from-amber-200/70 to-transparent" />
+          </header>
+
+          <!--
+          Fila primaria — nombre grande como ancla visual de la sección.
+          El nombre es lo que el lector busca primero (patrón F-scan).
+        -->
+          <div
+            class="mb-2.5 bg-gradient-to-r from-amber-50 to-orange-50/40 rounded-2xl px-5 py-4 border border-amber-100">
+            <span class="text-[9px] font-black text-amber-600/70 uppercase tracking-[0.18em]">Nombre completo</span>
+            <p class="font-serif font-bold text-stone-800 text-lg leading-tight mt-0.5">{{ detailMember.name_full }}</p>
           </div>
 
-          <div class="grid grid-cols-2 gap-2.5">
-            <!-- Nombre -->
-            <div class="col-span-2 bg-amber-50/60 rounded-2xl px-4 py-3.5 border border-amber-100">
-              <span class="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">Nombre completo</span>
-              <p class="font-serif font-bold text-stone-800 text-base mt-0.5">{{ detailMember.name_full }}</p>
-            </div>
+          <!--
+          Fila secundaria — datos en 2 columnas.
+          Agrupación Gestalt por proximidad: pares relacionados juntos.
+        -->
+          <div class="grid grid-cols-2 gap-2 mb-2">
+            <DataCell label="Documento" :mono="true">
+              {{ detailMember.number_document }}
+              <template #sub>{{ MemberDomainService.getDocumentTypeLabel(detailMember.type_document) }}</template>
+            </DataCell>
+            <DataCell label="Teléfono" :mono="true">{{ detailMember.phone_number }}</DataCell>
+            <DataCell label="Edad">
+              <span class="font-bold text-stone-800">{{ calculateAge(detailMember.date_of_birth) }}</span>
+              <span class="text-stone-400 text-xs ml-1">años</span>
+            </DataCell>
+            <DataCell label="Género">{{ MemberDomainService.getGenderLabel(detailMember.gender) }}</DataCell>
+          </div>
 
-            <!-- Documento -->
-            <div class="bg-amber-50/60 rounded-2xl px-4 py-3.5 border border-amber-100">
-              <span class="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">Documento</span>
-              <p class="font-mono font-bold text-stone-800 text-sm mt-0.5">{{ detailMember.number_document }}</p>
-              <p class="text-[10px] text-stone-400 mt-0.5">
-                {{ MemberDomainService.getDocumentTypeLabel(detailMember.type_document) }}</p>
-            </div>
-
-            <!-- Edad -->
-            <div class="bg-amber-50/60 rounded-2xl px-4 py-3.5 border border-amber-100">
-              <span class="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">Edad</span>
-              <p class="font-bold text-stone-800 text-sm mt-0.5">
-                {{ calculateAge(detailMember.date_of_birth) }}
-                <span class="font-normal text-stone-400 text-xs">años</span>
-              </p>
-            </div>
-
-            <!-- Género -->
-            <div class="bg-amber-50/60 rounded-2xl px-4 py-3.5 border border-amber-100">
-              <span class="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">Género</span>
-              <p class="font-bold text-stone-800 text-sm mt-0.5">
-                {{ MemberDomainService.getGenderLabel(detailMember.gender) }}</p>
-            </div>
-
-            <!-- Teléfono -->
-            <div class="bg-amber-50/60 rounded-2xl px-4 py-3.5 border border-amber-100">
-              <span class="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">Teléfono</span>
-              <p class="font-bold text-stone-800 text-sm mt-0.5 font-mono">{{ detailMember.phone_number }}</p>
-            </div>
-
-            <!-- Dirección -->
-            <div class="col-span-2 bg-amber-50/60 rounded-2xl px-4 py-3.5 border border-amber-100">
-              <span class="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">Dirección</span>
-              <p class="font-medium text-stone-700 text-sm mt-0.5 leading-relaxed">{{ detailMember.address }}</p>
-            </div>
+          <!-- Dirección — ancho completo, menor jerarquía -->
+          <div class="bg-amber-50/40 rounded-xl px-4 py-3 border border-amber-100/80 flex items-start gap-2">
+            <svg class="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <p class="text-sm text-stone-600 leading-relaxed">{{ detailMember.address }}</p>
           </div>
         </section>
 
-        <!-- Divider -->
-        <div class="h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent" />
+        <SectionDivider color="amber" />
 
-        <!-- ════════════════════════════
-           SECCIÓN 2 · Métricas
-      ════════════════════════════ -->
-        <section>
-          <div class="flex items-center gap-2.5 mb-4">
-            <div
-              class="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 shadow-sm shadow-emerald-300/40 shrink-0">
-              <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- ══════════════════════════════
+           § 2  CUERPO
+      ══════════════════════════════ -->
+        <section aria-label="Métricas corporales">
+
+          <header class="flex items-center gap-2 mb-3">
+            <span
+              class="flex h-5 w-5 items-center justify-center rounded-md bg-gradient-to-br from-emerald-500 to-teal-600 shadow-sm shrink-0">
+              <svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
-            </div>
-            <h4 class="text-xs font-bold text-stone-500 uppercase tracking-widest">Métricas Corporales</h4>
-            <div class="flex-1 h-px bg-gradient-to-r from-emerald-200/80 to-transparent" />
+            </span>
+            <h4 class="text-[10px] font-black text-stone-400 uppercase tracking-[0.15em]">Composición Corporal</h4>
+            <div class="flex-1 h-px bg-gradient-to-r from-emerald-200/70 to-transparent" />
+          </header>
+
+          <!--
+          Tres KPIs de mayor jerarquía — tamaño de fuente grande, serif.
+          La diferencia de tamaño crea ritmo visual y reduce carga cognitiva.
+        -->
+          <div class="grid grid-cols-3 gap-2 mb-2">
+            <KpiCard color="emerald" label="Peso" unit="kg" :value="detailMember.weight_kg" />
+            <KpiCard color="emerald" label="Altura" unit="cm" :value="detailMember.height_cm" />
+            <KpiCard color="emerald" label="IMC" :value="detailMember.bmi ?? '—'" unit="kg/m²" />
           </div>
 
-          <!-- KPIs principales destacados -->
-          <div class="grid grid-cols-3 gap-2.5 mb-2.5">
-            <div
-              class="relative overflow-hidden rounded-2xl border border-emerald-200/80 bg-emerald-50/60 px-4 py-4 text-center">
-              <div
-                class="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent" />
-              <span class="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">Peso</span>
-              <p class="font-serif font-bold text-emerald-700 text-2xl mt-1 leading-none">{{ detailMember.weight_kg }}
-              </p>
-              <p class="text-[10px] text-emerald-500 mt-0.5 font-medium">kilogramos</p>
-            </div>
-            <div
-              class="relative overflow-hidden rounded-2xl border border-emerald-200/80 bg-emerald-50/60 px-4 py-4 text-center">
-              <div
-                class="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent" />
-              <span class="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">Altura</span>
-              <p class="font-serif font-bold text-emerald-700 text-2xl mt-1 leading-none">{{ detailMember.height_cm }}
-              </p>
-              <p class="text-[10px] text-emerald-500 mt-0.5 font-medium">centímetros</p>
-            </div>
-            <div
-              class="relative overflow-hidden rounded-2xl border border-emerald-200/80 bg-emerald-50/60 px-4 py-4 text-center">
-              <div
-                class="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent" />
-              <span class="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">IMC</span>
-              <p class="font-serif font-bold text-emerald-700 text-2xl mt-1 leading-none">{{ detailMember.bmi ?? '—' }}
-              </p>
-              <p class="text-[10px] text-emerald-500 mt-0.5 font-medium">índice masa</p>
-            </div>
-          </div>
-
-          <!-- Métricas secundarias (compactas) -->
-          <div class="grid grid-cols-4 gap-2">
-            <div v-if="detailMember.body_fat_percentage"
-              class="bg-emerald-50/40 rounded-xl px-3 py-2.5 border border-emerald-100 text-center">
-              <span
-                class="text-[9px] font-semibold text-stone-400 uppercase tracking-wider leading-tight block">Grasa</span>
-              <p class="font-bold text-emerald-700 text-sm mt-0.5">{{ detailMember.body_fat_percentage }}<span
-                  class="text-[9px] font-normal ml-0.5">%</span></p>
-            </div>
-            <div v-if="detailMember.muscle_mass_kg"
-              class="bg-emerald-50/40 rounded-xl px-3 py-2.5 border border-emerald-100 text-center">
-              <span
-                class="text-[9px] font-semibold text-stone-400 uppercase tracking-wider leading-tight block">Músculo</span>
-              <p class="font-bold text-emerald-700 text-sm mt-0.5">{{ detailMember.muscle_mass_kg }}<span
-                  class="text-[9px] font-normal ml-0.5">kg</span></p>
-            </div>
-            <div v-if="detailMember.chest_cm"
-              class="bg-emerald-50/40 rounded-xl px-3 py-2.5 border border-emerald-100 text-center">
-              <span
-                class="text-[9px] font-semibold text-stone-400 uppercase tracking-wider leading-tight block">Pecho</span>
-              <p class="font-bold text-emerald-700 text-sm mt-0.5">{{ detailMember.chest_cm }}<span
-                  class="text-[9px] font-normal ml-0.5">cm</span></p>
-            </div>
-            <div v-if="detailMember.waist_cm"
-              class="bg-emerald-50/40 rounded-xl px-3 py-2.5 border border-emerald-100 text-center">
-              <span
-                class="text-[9px] font-semibold text-stone-400 uppercase tracking-wider leading-tight block">Cintura</span>
-              <p class="font-bold text-emerald-700 text-sm mt-0.5">{{ detailMember.waist_cm }}<span
-                  class="text-[9px] font-normal ml-0.5">cm</span></p>
-            </div>
-            <div v-if="detailMember.hip_cm"
-              class="bg-emerald-50/40 rounded-xl px-3 py-2.5 border border-emerald-100 text-center">
-              <span
-                class="text-[9px] font-semibold text-stone-400 uppercase tracking-wider leading-tight block">Cadera</span>
-              <p class="font-bold text-emerald-700 text-sm mt-0.5">{{ detailMember.hip_cm }}<span
-                  class="text-[9px] font-normal ml-0.5">cm</span></p>
-            </div>
-            <div v-if="detailMember.arm_cm"
-              class="bg-emerald-50/40 rounded-xl px-3 py-2.5 border border-emerald-100 text-center">
-              <span
-                class="text-[9px] font-semibold text-stone-400 uppercase tracking-wider leading-tight block">Brazo</span>
-              <p class="font-bold text-emerald-700 text-sm mt-0.5">{{ detailMember.arm_cm }}<span
-                  class="text-[9px] font-normal ml-0.5">cm</span></p>
-            </div>
-            <div v-if="detailMember.leg_cm"
-              class="bg-emerald-50/40 rounded-xl px-3 py-2.5 border border-emerald-100 text-center">
-              <span
-                class="text-[9px] font-semibold text-stone-400 uppercase tracking-wider leading-tight block">Pierna</span>
-              <p class="font-bold text-emerald-700 text-sm mt-0.5">{{ detailMember.leg_cm }}<span
-                  class="text-[9px] font-normal ml-0.5">cm</span></p>
-            </div>
+          <!--
+          Métricas secundarias — tipografía más pequeña, sin acento de color.
+          El contraste de jerarquía guía el ojo: primero los 3 KPIs, luego el detalle.
+        -->
+          <div
+            v-if="detailMember.body_fat_percentage || detailMember.muscle_mass_kg || detailMember.chest_cm || detailMember.waist_cm || detailMember.hip_cm || detailMember.arm_cm || detailMember.leg_cm"
+            class="grid grid-cols-4 gap-1.5">
+            <MiniStat v-if="detailMember.body_fat_percentage" label="Grasa" :value="detailMember.body_fat_percentage"
+              unit="%" />
+            <MiniStat v-if="detailMember.muscle_mass_kg" label="Músculo" :value="detailMember.muscle_mass_kg"
+              unit="kg" />
+            <MiniStat v-if="detailMember.chest_cm" label="Pecho" :value="detailMember.chest_cm" unit="cm" />
+            <MiniStat v-if="detailMember.waist_cm" label="Cintura" :value="detailMember.waist_cm" unit="cm" />
+            <MiniStat v-if="detailMember.hip_cm" label="Cadera" :value="detailMember.hip_cm" unit="cm" />
+            <MiniStat v-if="detailMember.arm_cm" label="Brazo" :value="detailMember.arm_cm" unit="cm" />
+            <MiniStat v-if="detailMember.leg_cm" label="Pierna" :value="detailMember.leg_cm" unit="cm" />
           </div>
         </section>
 
-        <!-- ════════════════════════════
-           SECCIÓN 3 · Salud
-      ════════════════════════════ -->
+        <!-- ══════════════════════════════
+           § 3  SALUD FÍSICA
+      ══════════════════════════════ -->
         <template v-if="detailMember.health_conditions?.length">
-          <div class="h-px bg-gradient-to-r from-transparent via-rose-200 to-transparent" />
+          <SectionDivider color="rose" />
 
-          <section>
-            <div class="flex items-center gap-2.5 mb-4">
-              <div
-                class="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-rose-500 to-rose-600 shadow-sm shadow-rose-300/40 shrink-0">
-                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <section aria-label="Condiciones de salud">
+            <header class="flex items-center gap-2 mb-3">
+              <span
+                class="flex h-5 w-5 items-center justify-center rounded-md bg-gradient-to-br from-rose-500 to-rose-600 shadow-sm shrink-0">
+                <svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
-              </div>
-              <h4 class="text-xs font-bold text-stone-500 uppercase tracking-widest">Condiciones de Salud</h4>
-              <div class="flex-1 h-px bg-gradient-to-r from-rose-200/80 to-transparent" />
-              <!-- Contador -->
-              <span
-                class="shrink-0 rounded-full border border-rose-200 bg-rose-50 px-2 py-0.5 text-[10px] font-bold text-rose-600">
-                {{ detailMember.health_conditions.length }}
               </span>
-            </div>
+              <h4 class="text-[10px] font-black text-stone-400 uppercase tracking-[0.15em]">Salud Física</h4>
+              <div class="flex-1 h-px bg-gradient-to-r from-rose-200/70 to-transparent" />
+              <!--
+              Contador de condiciones — reduce el trabajo de contar para el usuario
+              (principio de minimizar la carga cognitiva de Miller)
+            -->
+              <span
+                class="shrink-0 text-[10px] font-bold text-rose-600 bg-rose-50 border border-rose-200 rounded-full px-2 py-0.5">
+                {{detailMember.health_conditions.filter(c => c.is_active).length}}
+                activa{{detailMember.health_conditions.filter(c => c.is_active).length !== 1 ? 's' : ''}}
+                · {{ detailMember.health_conditions.length }} total
+              </span>
+            </header>
 
-            <div class="space-y-2">
+            <div class="space-y-1.5">
               <div v-for="(condition, idx) in detailMember.health_conditions" :key="idx"
-                class="flex items-center gap-3 rounded-2xl px-4 py-3.5 border transition-all duration-150" :class="condition.is_active
-                  ? 'bg-rose-50/60 border-rose-200/80'
-                  : 'bg-stone-50/60 border-stone-200/60'">
-                <!-- Indicador activo/inactivo -->
-                <div class="flex flex-col items-center gap-1 shrink-0">
-                  <div class="w-2.5 h-2.5 rounded-full shadow-sm"
-                    :class="condition.is_active ? 'bg-rose-500 shadow-rose-300/60' : 'bg-stone-300'" />
-                  <span class="text-[8px] font-semibold uppercase tracking-wider"
-                    :class="condition.is_active ? 'text-rose-500' : 'text-stone-400'">
-                    {{ condition.is_active ? 'Activa' : 'Inact.' }}
+                class="flex items-center gap-3 rounded-xl px-4 py-3 border" :class="condition.is_active
+                  ? 'bg-rose-50/50 border-rose-200/70'
+                  : 'bg-stone-50/50 border-stone-200/50'">
+                <!--
+                Semáforo visual — punto + texto diminuto.
+                Pre-attentive feature: el color es procesado antes que el texto.
+              -->
+                <div class="shrink-0 flex flex-col items-center gap-0.5 w-8 text-center">
+                  <div class="w-2 h-2 rounded-full" :class="condition.is_active ? 'bg-rose-500' : 'bg-stone-300'" />
+                  <span class="text-[8px] font-bold uppercase tracking-wide leading-none"
+                    :class="condition.is_active ? 'text-rose-400' : 'text-stone-300'">
+                    {{ condition.is_active ? 'activa' : 'pasada' }}
                   </span>
                 </div>
 
-                <!-- Info -->
+                <!-- Nombre y notas — jerarquía clara dentro del ítem -->
                 <div class="flex-1 min-w-0">
-                  <p class="font-bold text-stone-800 text-sm leading-tight">{{ condition.condition_name }}</p>
-                  <p v-if="condition.notes" class="text-xs text-stone-400 mt-0.5 leading-relaxed">{{ condition.notes }}
+                  <p class="font-bold text-stone-800 text-sm leading-tight truncate">{{ condition.condition_name }}</p>
+                  <p v-if="condition.notes" class="text-[11px] text-stone-400 mt-0.5 leading-relaxed line-clamp-1">
+                    {{ condition.notes }}
                   </p>
                 </div>
 
-                <!-- Severidad -->
+                <!-- Badge de severidad a la derecha — posición constante facilita el escaneo vertical -->
                 <span
-                  :class="['inline-flex items-center px-2.5 py-1 rounded-xl text-xs font-bold border shrink-0', getSeverityBadgeClass(condition.severity)]">
+                  :class="['shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-lg border', getSeverityBadgeClass(condition.severity)]">
                   {{ condition.severity }}
                 </span>
               </div>
@@ -976,66 +928,76 @@ async function handleRetry() {
           </section>
         </template>
 
-        <!-- ════════════════════════════
-           SECCIÓN 4 · Salud Mental
-      ════════════════════════════ -->
+        <!-- ══════════════════════════════
+           § 4  SALUD MENTAL
+      ══════════════════════════════ -->
         <template v-if="detailMember.mental_health">
-          <div class="h-px bg-gradient-to-r from-transparent via-violet-200 to-transparent" />
+          <SectionDivider color="violet" />
 
-          <section>
-            <div class="flex items-center gap-2.5 mb-4">
-              <div
-                class="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 shadow-sm shadow-violet-300/40 shrink-0">
-                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <section aria-label="Salud mental">
+            <header class="flex items-center gap-2 mb-3">
+              <span
+                class="flex h-5 w-5 items-center justify-center rounded-md bg-gradient-to-br from-violet-500 to-purple-600 shadow-sm shrink-0">
+                <svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>
-              </div>
-              <h4 class="text-xs font-bold text-stone-500 uppercase tracking-widest">Salud Mental</h4>
-              <div class="flex-1 h-px bg-gradient-to-r from-violet-200/80 to-transparent" />
-            </div>
+              </span>
+              <h4 class="text-[10px] font-black text-stone-400 uppercase tracking-[0.15em]">Salud Mental</h4>
+              <div class="flex-1 h-px bg-gradient-to-r from-violet-200/70 to-transparent" />
+            </header>
 
-            <!-- KPIs salud mental -->
-            <div class="grid grid-cols-3 gap-2.5 mb-2.5">
+            <div class="grid grid-cols-3 gap-2 mb-2">
+              <!--
+              Estrés con barra de progreso — convierte un número abstracto en señal
+              visual inmediata (codificación dual: número + color + longitud de barra).
+            -->
               <div
                 class="relative overflow-hidden rounded-2xl border border-violet-200/80 bg-violet-50/50 px-4 py-4 text-center">
                 <div
-                  class="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-transparent via-violet-400/60 to-transparent" />
-                <span class="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">Estrés</span>
-                <p class="font-serif font-bold text-violet-700 text-2xl mt-1 leading-none">
-                  {{ detailMember.mental_health.stress_level }}
-                  <span class="text-sm font-normal text-violet-400">/10</span>
-                </p>
-                <!-- Barra de nivel -->
-                <div class="mt-2 h-1 rounded-full bg-violet-100 overflow-hidden">
-                  <div
-                    class="h-full rounded-full bg-gradient-to-r from-violet-400 to-purple-500 transition-all duration-500"
+                  class="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-violet-400/60 to-transparent" />
+                <span class="text-[9px] font-black text-stone-400 uppercase tracking-[0.15em]">Estrés</span>
+                <div class="flex items-baseline justify-center gap-0.5 mt-1">
+                  <p class="font-serif font-bold text-violet-700 text-2xl leading-none">
+                    {{ detailMember.mental_health.stress_level }}</p>
+                  <span class="text-xs text-violet-300 font-normal">/10</span>
+                </div>
+                <!-- Barra semáforo: verde bajo, ámbar medio, rojo alto -->
+                <div class="mt-2.5 h-1.5 rounded-full bg-violet-100 overflow-hidden">
+                  <div class="h-full rounded-full transition-all duration-700" :class="detailMember.mental_health.stress_level <= 3
+                    ? 'bg-emerald-400'
+                    : detailMember.mental_health.stress_level <= 6
+                      ? 'bg-amber-400'
+                      : 'bg-rose-500'"
                     :style="{ width: (detailMember.mental_health.stress_level / 10 * 100) + '%' }" />
                 </div>
               </div>
+
               <div
                 class="relative overflow-hidden rounded-2xl border border-violet-200/80 bg-violet-50/50 px-4 py-4 text-center">
                 <div
-                  class="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-transparent via-violet-400/60 to-transparent" />
-                <span class="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">Ánimo</span>
-                <p class="font-serif font-bold text-violet-700 text-lg mt-1 leading-none">
-                  {{ getMoodLabel(detailMember.mental_health.mood) }}</p>
-              </div>
-              <div
-                class="relative overflow-hidden rounded-2xl border border-violet-200/80 bg-violet-50/50 px-4 py-4 text-center">
-                <div
-                  class="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-transparent via-violet-400/60 to-transparent" />
-                <span class="text-[10px] font-semibold text-stone-400 uppercase tracking-widest">Sueño</span>
-                <p class="font-serif font-bold text-violet-700 text-2xl mt-1 leading-none">
-                  {{ detailMember.mental_health.sleep_hours }}
-                  <span class="text-sm font-normal text-violet-400">h</span>
+                  class="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-violet-400/60 to-transparent" />
+                <span class="text-[9px] font-black text-stone-400 uppercase tracking-[0.15em]">Ánimo</span>
+                <p class="font-serif font-bold text-violet-700 text-base mt-1.5 leading-tight">
+                  {{ getMoodLabel(detailMember.mental_health.mood) }}
                 </p>
+              </div>
+
+              <div
+                class="relative overflow-hidden rounded-2xl border border-violet-200/80 bg-violet-50/50 px-4 py-4 text-center">
+                <div
+                  class="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-violet-400/60 to-transparent" />
+                <span class="text-[9px] font-black text-stone-400 uppercase tracking-[0.15em]">Sueño</span>
+                <div class="flex items-baseline justify-center gap-0.5 mt-1">
+                  <p class="font-serif font-bold text-violet-700 text-2xl leading-none">
+                    {{ detailMember.mental_health.sleep_hours }}</p>
+                  <span class="text-xs text-violet-300 font-normal">h</span>
+                </div>
               </div>
             </div>
 
-            <!-- Nota mental -->
             <div v-if="detailMember.mental_health.notes"
-              class="flex items-start gap-2.5 bg-violet-50/40 border border-violet-200/60 rounded-2xl px-4 py-3">
+              class="flex items-start gap-2.5 bg-violet-50/40 border border-violet-200/50 rounded-xl px-4 py-3">
               <svg class="w-3.5 h-3.5 text-violet-400 shrink-0 mt-0.5" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1046,68 +1008,82 @@ async function handleRetry() {
           </section>
         </template>
 
-        <!-- ════════════════════════════
-           SECCIÓN 5 · Objetivos
-      ════════════════════════════ -->
+        <!-- ══════════════════════════════
+           § 5  OBJETIVOS
+      ══════════════════════════════ -->
         <template v-if="detailMember.goals?.length">
-          <div class="h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent" />
+          <SectionDivider color="amber" />
 
-          <section>
-            <div class="flex items-center gap-2.5 mb-4">
-              <div
-                class="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 shadow-sm shadow-amber-300/40 shrink-0">
-                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <section aria-label="Objetivos">
+            <header class="flex items-center gap-2 mb-3">
+              <span
+                class="flex h-5 w-5 items-center justify-center rounded-md bg-gradient-to-br from-amber-500 to-orange-600 shadow-sm shrink-0">
+                <svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-              </div>
-              <h4 class="text-xs font-bold text-stone-500 uppercase tracking-widest">Objetivos</h4>
-              <div class="flex-1 h-px bg-gradient-to-r from-amber-200/80 to-transparent" />
-              <!-- Progreso global -->
-              <span
-                class="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-600">
-                {{detailMember.goals.filter(g => g.is_achieved).length}}/{{ detailMember.goals.length }} completados
               </span>
-            </div>
+              <h4 class="text-[10px] font-black text-stone-400 uppercase tracking-[0.15em]">Objetivos</h4>
+              <div class="flex-1 h-px bg-gradient-to-r from-amber-200/70 to-transparent" />
 
-            <div class="space-y-2">
+              <!--
+              Barra de progreso inline — visualiza la proporción completada
+              sin que el usuario cuente los ítems individualmente.
+            -->
+              <div class="shrink-0 flex items-center gap-2">
+                <div class="w-16 h-1.5 rounded-full bg-stone-100 overflow-hidden">
+                  <div
+                    class="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-500"
+                    :style="{ width: (detailMember.goals.filter(g => g.is_achieved).length / detailMember.goals.length * 100) + '%' }" />
+                </div>
+                <span
+                  class="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-2 py-0.5 whitespace-nowrap">
+                  {{detailMember.goals.filter(g => g.is_achieved).length}}/{{ detailMember.goals.length }}
+                </span>
+              </div>
+            </header>
+
+            <!--
+            Lista de objetivos — ícono + texto + badge en línea horizontal.
+            Posición constante del badge (derecha) permite escaneo vertical rápido.
+          -->
+            <div class="space-y-1.5">
               <div v-for="(goal, idx) in detailMember.goals" :key="idx"
-                class="flex items-center gap-3 rounded-2xl px-4 py-3.5 border transition-all duration-150" :class="goal.is_achieved
-                  ? 'bg-emerald-50/50 border-emerald-200/80'
-                  : 'bg-amber-50/50 border-amber-200/80'">
-                <!-- Ícono estado -->
-                <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm" :class="goal.is_achieved
-                  ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-emerald-300/40'
-                  : 'bg-gradient-to-br from-amber-400 to-orange-500 shadow-amber-300/40'">
-                  <svg v-if="goal.is_achieved" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24"
+                class="flex items-center gap-3 rounded-xl px-4 py-3 border transition-colors duration-150" :class="goal.is_achieved
+                  ? 'bg-emerald-50/50 border-emerald-200/70'
+                  : 'bg-amber-50/50 border-amber-200/70'">
+                <!-- Ícono de estado — señal pre-atentiva de color -->
+                <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" :class="goal.is_achieved
+                  ? 'bg-emerald-100 border border-emerald-200'
+                  : 'bg-amber-100 border border-amber-200'">
+                  <svg v-if="goal.is_achieved" class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
-                  <svg v-else class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  <svg v-else class="w-3.5 h-3.5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                     stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
                       d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
 
-                <!-- Info -->
+                <!-- Tipo de objetivo + meta — jerarquía clara en dos líneas -->
                 <div class="flex-1 min-w-0">
-                  <p class="font-bold text-stone-800 text-sm leading-tight">
+                  <p class="font-bold text-stone-800 text-sm leading-tight truncate">
                     {{ MemberDomainService.getGoalTypeLabel(goal.goal_type) }}
                   </p>
-                  <p class="text-xs text-stone-400 mt-0.5">
+                  <p class="text-[11px] text-stone-400 mt-0.5">
                     Meta: <span class="font-semibold text-stone-600">{{ goal.target_value }}</span>
                   </p>
                 </div>
 
-                <!-- Badge estado -->
-                <span class="shrink-0 inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-xl border"
-                  :class="goal.is_achieved
-                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                    : 'bg-amber-50 text-amber-700 border-amber-200'">
+                <!-- Estado — badge compacto, posición estable -->
+                <span class="shrink-0 flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-lg border" :class="goal.is_achieved
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : 'bg-amber-50 text-amber-700 border-amber-200'">
                   <span class="w-1.5 h-1.5 rounded-full"
                     :class="goal.is_achieved ? 'bg-emerald-500' : 'bg-amber-500'" />
-                  {{ goal.is_achieved ? 'Completado' : 'En progreso' }}
+                  {{ goal.is_achieved ? 'Listo' : 'Activo' }}
                 </span>
               </div>
             </div>

@@ -35,27 +35,38 @@ const handleSubmit = async () => {
 
 <template>
     <div
-        class="min-h-screen-svh  bg-gradient-to-br from-amber-50 via-white to-orange-50 py-8 px-4 relative overflow-hidden">
-        <!-- Efectos de fondo decorativas -->
-        <div class="fixed inset-0 pointer-events-none overflow-hidden">
-            <div class="absolute -top-40 -right-40 w-80 h-80 bg-orange-200 rounded-full blur-3xl opacity-15"></div>
+        class="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50/30 to-stone-100 py-8 px-4 relative overflow-hidden">
+
+        <!-- Decoradores globales -->
+        <div class="pointer-events-none fixed right-0 top-0 opacity-10 -z-10">
+            <svg width="380" height="270" viewBox="0 0 380 270" fill="none">
+                <circle cx="340" cy="-20" r="170" fill="#f59e0b" />
+                <circle cx="285" cy="60" r="85" fill="#ea580c" />
+            </svg>
         </div>
-        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-amber-200 rounded-full blur-3xl opacity-15"></div>
-        <div
-            class="absolute top-1/2 left-1/2 w-96 h-96 bg-yellow-100 rounded-full blur-3xl opacity-10 -translate-x-1/2 -translate-y-1/2">
+        <div class="pointer-events-none fixed bottom-0 left-0 opacity-5 -z-10">
+            <svg width="260" height="210" viewBox="0 0 260 210" fill="none">
+                <circle cx="0" cy="210" r="155" fill="#f59e0b" />
+            </svg>
         </div>
 
         <!-- Contenedor principal -->
         <div v-motion :initial="{ opacity: 0, y: 24 }"
             :enter="{ opacity: 1, y: 0, transition: { duration: 600, ease: 'easeOut' } }"
-            class="relative max-w-2xl mx-auto">
-            <!-- Card Principal -->
-            <div class="bg-white rounded-2xl shadow-2xl border border-amber-100/60 overflow-hidden backdrop-blur-sm">
-                <!-- Header decorativo con gradiente -->
+            class="relative max-w-2xl mx-auto space-y-0">
+
+            <!-- ── Card principal ── -->
+            <div
+                class="relative overflow-hidden rounded-3xl border border-amber-200/60 bg-white/80 backdrop-blur-sm shadow-2xl shadow-amber-100/60">
                 <div
-                    class="relative bg-gradient-to-r from-amber-600 via-orange-500 to-orange-600 px-8 md:px-12 py-14 overflow-hidden">
-                    <!-- Patron de decorativo -->
-                    <div class="absolute inset-0 opacity-10">
+                    class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/60 to-transparent" />
+
+                <!-- ── Header decorativo ── -->
+                <div
+                    class="relative bg-gradient-to-r from-amber-600 via-orange-500 to-orange-600 px-8 md:px-12 py-12 overflow-hidden">
+
+                    <!-- Patrón de libros SVG de fondo -->
+                    <div class="absolute inset-0 opacity-10 pointer-events-none">
                         <svg class="w-full h-full" viewBox="0 0 400 200" preserveAspectRatio="none">
                             <defs>
                                 <pattern id="books-pattern" x="0" y="0" width="80" height="80"
@@ -71,191 +82,250 @@ const handleSubmit = async () => {
 
                     <!-- Contenido del header -->
                     <div class="relative z-10">
-                        <div class="flex items-center gap-4 mb-3">
-                            <div class="p-2.5 bg-white/20 rounded-lg backdrop-blur-sm">
-                                <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        <div class="flex items-center gap-3 mb-4">
+                            <!-- Ícono con halo -->
+                            <div class="relative">
+                                <div class="absolute inset-0 rounded-xl bg-white/20 blur-sm scale-110" />
+                                <div
+                                    class="relative w-11 h-11 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center shadow-sm"
+                                    v-motion
+                                    :initial="{ opacity: 0, scale: 0.5, rotate: -20 }"
+                                    :enter="{ opacity: 1, scale: 1, rotate: 0, transition: { type: 'spring', stiffness: 200, damping: 12, delay: 200 } }"
+                                    :hovered="{ scale: 1.15, rotate: 5, transition: { type: 'spring', stiffness: 300, damping: 15 } }"
+                                    :leave="{ scale: 1, rotate: 0, transition: { duration: 200 } }">
+                                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <!-- Badge de tipo -->
+                            <span
+                                class="inline-flex items-center text-[10px] font-black uppercase tracking-[0.18em] text-amber-100/80 bg-white/15 border border-white/20 rounded-full px-3 py-1">
+                                Biblioteca · Alajandría
+                            </span>
+                        </div>
+
+                        <h1 class="font-serif text-3xl md:text-4xl font-bold text-white leading-tight tracking-wide">
+                            Nuevo Eje de Estudio
+                        </h1>
+                        <p class="text-amber-100/80 text-sm font-medium mt-1.5">
+                            Clasificación y Taxonomía de Conocimiento
+                        </p>
+                        <p class="text-amber-100/60 text-xs mt-3 max-w-md leading-relaxed uppercase tracking-widest">
+                            Define nuevos temas para organizar tu repositorio de conocimiento académico y literario
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ── Formulario ── -->
+                <form @submit.prevent="handleSubmit" class="p-8 md:p-10 space-y-7">
+
+                    <!-- ── Campo: Nombre del tema ── -->
+                    <div v-motion :initial="{ opacity: 0, x: -20 }"
+                        :enter="{ opacity: 1, x: 0, transition: { delay: 100, duration: 500 } }" class="space-y-2">
+                        <!-- Label con ícono badge -->
+                        <div class="flex items-center gap-2 mb-1">
+                            <span
+                                class="flex h-5 w-5 items-center justify-center rounded-md bg-gradient-to-br from-amber-500 to-orange-600 shadow-sm shrink-0">
+                                <svg class="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </span>
+                            <label class="text-xs font-black text-stone-500 uppercase tracking-[0.15em]">
+                                Nombre del tema
+                                <span class="text-orange-500 ml-0.5">*</span>
+                            </label>
+                        </div>
+
+                        <div class="relative">
+                            <input v-model="form.name" type="text" required
+                                placeholder="Ej. Arquitectura de Software y Patrones Decoupled"
+                                class="w-full bg-amber-50/40 border-2 border-amber-200/60 rounded-xl px-5 py-3.5 text-sm text-stone-700 placeholder-stone-400 focus:outline-none focus:bg-white focus:border-amber-500 focus:shadow-lg focus:shadow-amber-500/10 hover:border-amber-300 transition-all duration-200" />
+                            <!-- Indicador de campo válido -->
+                            <div v-if="form.name?.trim()"
+                                class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                                <svg class="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                         </div>
+                    </div>
 
-                        <div>
-                            <h1 class="text-3xl md:text-4xl font-serif text-white tracking-wide">Nuevo Eje de Estudio
-                            </h1>
-                            <p class="text-amber-50 text-sm font-medium mt-1">Clasificación y Taxonomía de Conocimiento
-                            </p>
+                    <!-- ── Campo: Tipo ── -->
+                    <div v-motion :initial="{ opacity: 0, x: -20 }"
+                        :enter="{ opacity: 1, x: 0, transition: { delay: 150, duration: 500 } }" class="space-y-2">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span
+                                class="flex h-5 w-5 items-center justify-center rounded-md bg-gradient-to-br from-amber-500 to-orange-600 shadow-sm shrink-0">
+                                <svg class="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </span>
+                            <label class="text-xs font-black text-stone-500 uppercase tracking-[0.15em]">
+                                Línea de Conocimiento
+                                <span class="text-orange-500 ml-0.5">*</span>
+                            </label>
+                        </div>
+
+                        <div class="relative">
+                            <select v-model="form.type"
+                                class="w-full appearance-none bg-amber-50/40 border-2 border-amber-200/60 rounded-xl px-5 py-3.5 pr-10 text-sm text-stone-700 focus:outline-none focus:bg-white focus:border-amber-500 focus:shadow-lg focus:shadow-amber-500/10 hover:border-amber-300 transition-all duration-200 cursor-pointer"
+                                :class="!form.type && 'text-stone-400'">
+                                <option value="" disabled>Seleccionar tipo…</option>
+                                <option v-for="type in topicTypes" :key="type.value" :value="type.value"
+                                    class="text-stone-700">
+                                    {{ type.label }}
+                                </option>
+                            </select>
+                            <!-- Chevron -->
+                            <div class="absolute inset-y-0 right-3.5 flex items-center pointer-events-none">
+                                <svg class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                    <p class="text-amber-100 text-xs font-medium uppercase tracking-widest max-w-md">
-                        Define nuevos temas para organizar tu repositorio de conocimiento académico y literario
-                    </p>
-                </div>
-            </div>
 
-            <!-- Formulario -->
-            <form @submit.prevent="handleSubmit" class="p-8 md:p-12 space-y-8">
-                <!-- Campo: nombre del Tema -->
-                <div v-motion :initial="{ opacity: 0, x: -20 }"
-                    :enter="{ opacity: 1, x: 0, transition: { delay: 100, duration: 500 } }" class="group">
-                    <label
-                        class="flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-gray-800 mb-3">
-                        <div class="p-2 bg-gradient-to-br from-amber-100 to-orange-100 rounded-lg">
-                            <svg class="w-5 h-5 text-amber-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                        </div>
-                        <span class="bg-gradient-to-r from-amber-900 to-orange-800 bg-clip-text text-transparent">
-                            Nombre del tema
-                        </span>
-                    </label>
-                    <input v-model="form.name" type="text" required
-                        placeholder="Ej. Arquitectura de Software y Patrones Decoupled"
-                        class="w-full bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl px-5 py-3.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all duration-300 group-hover:border-amber-300" />
-                </div>
-                <!-- Campo: Tipo de Línea de Conocimiento -->
-                <div v-motion :initial="{ opacity: 0, x: -20 }"
-                    :enter="{ opacity: 1, x: 0, transition: { delay: 150, duration: 500 } }" class="group">
-                    <label
-                        class="flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-gray-800 mb-3">
-                        <div class="p-2 bg-gradient-to-br from-amber-100 to-orange-100 rounded-lg">
-                            <svg class="w-5 h-5 text-amber-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                            </svg>
-                        </div>
-                        <span class="bg-gradient-to-r from-amber-900 to-orange-800 bg-clip-text text-transparent">
-                            Línea de Conocimiento (Type)
-                        </span>
-                    </label>
-                    <div class="relative">
-                        <select v-model="form.type"
-                            class="w-full bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl px-5 py-3.5 text-sm text-gray-800 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all duration-300 appearance-none cursor-pointer group-hover:border-amber-300 pr-12">
-                            <option value="">Seleccionar tipo...</option>
-                            <option v-for="type in topicTypes" :key="type.value" :value="type.value">
-                                {{ type.label }}
-                            </option>
-                            <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none"
-                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                            </svg>
-                        </select>
-                        <div
-                            class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-500">
-                            <svg width="14" height="14" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
+                    <!-- ── Divider ── -->
+                    <div class="h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent" />
 
-                <!-- Campo: Descripcion -->
-                <div v-motion :initial="{ opacity: 0, x: -20 }"
-                    :enter="{ opacity: 1, x: 0, transition: { delay: 200, duration: 500 } }" class="groups">
-                    <div class="flex justify-between items-center mb-3">
-                        <label class="flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-gray-800">
-                            <div class="p-2 bg-gradient-to-br from-amber-100 to-orange-100 rounded-lg">
-                                <svg class="w-5 h-5 text-amber-700" fill="none" viewBox="0 0 24 24"
+                    <!-- ── Campo: Descripción ── -->
+                    <div v-motion :initial="{ opacity: 0, x: -20 }"
+                        :enter="{ opacity: 1, x: 0, transition: { delay: 200, duration: 500 } }" class="space-y-2">
+                        <!-- Label + contador de caracteres -->
+                        <div class="flex items-center gap-2 mb-1">
+                            <span
+                                class="flex h-5 w-5 items-center justify-center rounded-md bg-gradient-to-br from-amber-500 to-orange-600 shadow-sm shrink-0">
+                                <svg class="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
-                            </div>
-                            <span class="bg-gradient-to-r from-amber-900 to-orange-800 bg-clip-text text-transparent">
-                                Descripción y Alcance
                             </span>
-                        </label>
-                        <div :class="[
-                            'text-xs font-mono font-bold tracking-wide transition-all duration-300',
-                            isDescriptionOverLimit ? 'text-red-600 animate-pulse' : 'text-gray-400'
-                        ]">
-                            {{ descriptionLength }}<span class="text-gray-300">/{{ maxDescriptionLength }}</span>
+                            <label class="text-xs font-black text-stone-500 uppercase tracking-[0.15em] flex-1">
+                                Descripción y Alcance
+                                <span class="text-orange-500 ml-0.5">*</span>
+                            </label>
+                            <!-- Contador — semáforo visual por color -->
+                            <div class="shrink-0 text-[10px] font-bold font-mono transition-all duration-300 px-2 py-0.5 rounded-full border"
+                                :class="isDescriptionOverLimit
+                                    ? 'text-rose-600 bg-rose-50 border-rose-200 animate-pulse'
+                                    : descriptionLength > maxDescriptionLength * 0.8
+                                        ? 'text-amber-600 bg-amber-50 border-amber-200'
+                                        : 'text-stone-400 bg-stone-50 border-stone-200'">
+                                {{ descriptionLength }}<span class="opacity-40">/{{ maxDescriptionLength }}</span>
+                            </div>
+                        </div>
+
+                        <textarea v-model="form.description" required rows="4"
+                            placeholder="Define los límites conceptuales, autores base u objetivos de aprendizaje de este tema..."
+                            class="w-full bg-amber-50/40 border-2 rounded-xl px-5 py-4 text-sm text-stone-700 placeholder-stone-400 focus:outline-none focus:bg-white focus:shadow-lg transition-all duration-200 resize-none hover:border-amber-300"
+                            :class="isDescriptionOverLimit
+                                ? 'border-rose-400 focus:border-rose-500 focus:shadow-rose-500/10'
+                                : 'border-amber-200/60 focus:border-amber-500 focus:shadow-amber-500/10'" />
+
+                        <!-- Nota informativa debajo del textarea -->
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <svg class="w-3.5 h-3.5 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <p class="text-[11px] text-stone-400">Este tema será asociado automáticamente con tus libros
+                                y notas.</p>
                         </div>
                     </div>
 
-                    <textarea v-model="form.description" required rows="4"
-                        placeholder="Define los límites conceptuales, autores base u objetivos de aprendizaje de este tema..."
-                        class="w-full bg-gradient-to-r from-amber-50 to-orange-50 border-2 rounded-xl px-5 py-4 text-sm
-                        text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 transition-all
-                        duration-300 resize-none group-hover:border-amber-300" :class="[
-                            isDescriptionOverLimit
-                                ? 'border-red-500 focus:border-red-500 focus:ring-red-200'
-                                : 'border-amber-200 focus:border-amber-500 focus:ring-amber-200'
-                        ]"></textarea>
-                    <p class="text-center text-xs text-gray-500 font-medium flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        Este tema será asociado automáticamente con tus libros y notas
-                    </p>
-                </div>
-
-                <div class="pt-2 space-y-3">
-                    <transition name="slide-fade">
-                        <div v-if="topicStore.feedbackError" v-motion :initial="{ opacity: 0, y: -10 }"
-                            :enter="{ opacity: 1, y: 0, transition: { duration: 300 } }"
-                            class="rounded-xl bg-red-50 border-l-4 border-red-500 p-4 flex items-start gap-4">
-                            <svg class="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                    <!-- ── Feedback: Error / Éxito ── -->
+                    <Transition enter-active-class="transition-all duration-300 ease-out"
+                        enter-from-class="opacity-0 -translate-y-2" enter-to-class="opacity-100 translate-y-0"
+                        leave-active-class="transition-all duration-200 ease-in"
+                        leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 -translate-y-2">
+                        <!-- Error -->
+                        <div v-if="topicStore.feedbackError"
+                            class="relative overflow-hidden flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50/80 px-4 py-4">
+                            <div
+                                class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-rose-400/60 to-transparent" />
+                            <div
+                                class="w-8 h-8 rounded-xl bg-rose-100 border border-rose-200 flex items-center justify-center shrink-0 mt-0.5">
+                                <svg class="w-4 h-4 text-rose-600" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
                             <div>
-                                <p class="font-semibold text-red-800">Error al registrar el tema</p>
-                                <p class="text-sm text-red-700 mt-1">{{ topicStore.feedbackError }}</p>
+                                <p class="font-bold text-rose-800 text-sm">Error al registrar el tema</p>
+                                <p class="text-xs text-rose-600 mt-0.5 leading-relaxed">{{ topicStore.feedbackError }}
+                                </p>
                             </div>
                         </div>
 
-                        <div v-else-if="isSuccess" v-motion :initial="{ opacity: 0, y: -10 }"
-                            :enter="{ opacity: 1, y: 0, transition: { duration: 300 } }"
-                            class="rounded-xl bg-emerald-50 border-l-4 border-emerald-500 p-4 flex items-start gap-4">
-                            <svg class="w-6 h-6 text-emerald-500 flex-shrink-0 mt-0.5" fill="currentColor"
-                                viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clip-rule="evenodd" />
-                            </svg>
+                        <!-- Éxito -->
+                        <div v-else-if="isSuccess"
+                            class="relative overflow-hidden flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/80 px-4 py-4">
+                            <div
+                                class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent" />
+                            <div
+                                class="w-8 h-8 rounded-xl bg-emerald-100 border border-emerald-200 flex items-center justify-center shrink-0 mt-0.5">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
                             <div>
-                                <p class="font-semibold text-emerald-800">¡Tema registrado exitosamente!</p>
-                                <p class="text-sm text-emerald-700 mt-1">El tema de estudio ha sido indexado en tu
-                                    repositorio de conocimiento.</p>
+                                <p class="font-bold text-emerald-800 text-sm">¡Tema registrado exitosamente!</p>
+                                <p class="text-xs text-emerald-600 mt-0.5 leading-relaxed">El tema de estudio ha sido
+                                    indexado en tu repositorio de conocimiento.</p>
                             </div>
                         </div>
-                    </transition>
+                    </Transition>
 
+                    <!-- ── Divider ── -->
+                    <div class="h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent" />
+
+                    <!-- ── Botón submit ── -->
                     <button type="submit" :disabled="topicStore.isSubmitting || isDescriptionOverLimit" v-motion
                         :initial="{ opacity: 0, y: 20 }"
                         :enter="{ opacity: 1, y: 0, transition: { delay: 300, duration: 500 } }"
-                        class="w-full relative group overflow-hidden rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold text-sm py-4 px-6 uppercase tracking-widest transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]">
-                        <!-- Efecto brillo en hover -->
+                        class="relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-sm py-4 px-6 shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] group">
+                        <!-- Efecto brillo -->
                         <div
-                            class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 transform -translate-x-full group-hover:translate-x-full transition-transform duration-500 ease-in-out">
-                        </div>
+                            class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
 
-                        <!-- Contenido del boton -->
                         <div class="relative flex items-center justify-center gap-3">
-                            <svg v-if="topicStore.isSubmitting" class="w-5 h-5 animate-spin" fill="none"
+                            <!-- Spinner -->
+                            <svg v-if="topicStore.isSubmitting" class="w-4 h-4 animate-spin" fill="none"
                                 viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                                     stroke-width="4" />
                                 <path class="opacity-75" fill="currentColor"
                                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                             </svg>
-                            <svg v-else class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <!-- Ícono enviar -->
+                            <svg v-else class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                             </svg>
-                            {{ topicStore.isSubmitting ? 'Indexando Tema...' : 'Registrar Tema de Estudio' }}
+                            <span class="tracking-wide uppercase text-xs font-black">
+                                {{ topicStore.isSubmitting ? 'Indexando Tema…' : 'Registrar Tema de Estudio' }}
+                            </span>
                         </div>
                     </button>
-                </div>
-            </form>
+
+                </form>
+            </div>
         </div>
     </div>
 </template>

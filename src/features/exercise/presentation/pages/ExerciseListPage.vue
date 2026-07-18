@@ -3,7 +3,13 @@ import { useExerciseStore } from '@/features/exercise/application/stores/useExer
 import axiosExercise from '@/features/exercise/infrastructure/http/axiosExercise'
 import { useEquipmentStore } from '@/stores/equipmentStore.js'
 import CustomVideoPlayer from '@/utils/components/CustomVideoPlayer.vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import VideoUploadingModal from '@/features/exercise/presentation/components/molecules/VideoUploadingModal.vue'
+import VideoVerificationModal from '@/features/exercise/presentation/components/molecules/VideoVerificationModal.vue'
+import { ExerciseVideoUploadService } from '@/features/exercise/domain/services/ExerciseVideoUploadService'
+import { useExerciseVideoUpload } from '@/features/exercise/application/composables/useExerciseVideoUpload'
+import { SupabaseVideoRepository } from '@/features/video/infrastructure/repositories/SupabaseVideoRepository'
+import { getSupabaseVideoConfig } from '@/features/video/infrastructure/config/supabase'
 
 // ============================================================
 // TYPES
@@ -28,6 +34,13 @@ interface ExerciseWithEquipment {
 
 const equipmentStore = useEquipmentStore()
 const exerciseStore = useExerciseStore()
+
+// ── Video Upload (Domain Service + Composable) ───────────────
+const videoUploadService = new ExerciseVideoUploadService({
+  videoRepository: new SupabaseVideoRepository(getSupabaseVideoConfig()),
+  currentUserId: 'user-system-001',
+})
+const videoUpload = useExerciseVideoUpload(videoUploadService)
 
 // ============================================================
 // STATE
@@ -68,6 +81,54 @@ const uniqueMuscleGroups = computed(() => {
   return Array.from(groups).sort()
 })
 
+// ── Accordion grouping ──────────────────────────────────────
+
+interface EquipmentGroup {
+  equipmentName: string
+  equipmentType: string
+  exercises: ExerciseWithEquipment[]
+}
+
+const exercisesByEquipment = computed<EquipmentGroup[]>(() => {
+  const map = new Map<string, EquipmentGroup>()
+  for (const ex of filteredExercises.value) {
+    const key = ex.equipmentName
+    if (!map.has(key)) {
+      map.set(key, {
+        equipmentName: ex.equipmentName,
+        equipmentType: ex.equipmentType,
+        exercises: [],
+      })
+    }
+    map.get(key)!.exercises.push(ex)
+  }
+  return Array.from(map.values()).sort((a, b) => a.equipmentName.localeCompare(b.equipmentName))
+})
+
+const openAccordions = ref<Set<string>>(new Set())
+
+function toggleAccordion(name: string) {
+  const next = new Set(openAccordions.value)
+  if (next.has(name)) {
+    next.delete(name)
+  } else {
+    next.add(name)
+  }
+  openAccordions.value = next
+}
+
+function isAccordionOpen(name: string) {
+  return openAccordions.value.has(name)
+}
+
+function expandAll() {
+  openAccordions.value = new Set(exercisesByEquipment.value.map((g) => g.equipmentName))
+}
+
+function collapseAll() {
+  openAccordions.value = new Set()
+}
+
 // ============================================================
 // HELPERS
 // ============================================================
@@ -89,11 +150,11 @@ function difficultyLabel(diff: string): string {
 
 function difficultyClasses(diff: string): string {
   const map: Record<string, string> = {
-    BEGINNER: 'bg-green-100 text-green-700',
-    INTERMEDIATE: 'bg-amber-100 text-amber-700',
-    ADVANCED: 'bg-red-100 text-red-700',
+    BEGINNER: 'bg-gradient-to-r from-emerald-400 via-green-500 to-teal-500',
+    INTERMEDIATE: 'bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500',
+    ADVANCED: 'bg-gradient-to-r from-rose-400 via-red-500 to-pink-600',
   }
-  return map[diff] ?? 'bg-stone-100 text-stone-600'
+  return map[diff] ?? 'bg-gradient-to-r from-stone-400 via-stone-500 to-stone-600'
 }
 
 function dotColor(diff: string): string {
@@ -126,6 +187,37 @@ const editForm = ref({
   video: '',
 })
 
+// ── Selección de video desde dispositivo ──────────────────────
+const editVideoFile = ref<File | null>(null)
+const editVideoPreviewUrl = ref('')
+const editFileInput = ref<HTMLInputElement | null>(null)
+
+function onEditVideoSelected(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (!file) return
+
+  editVideoFile.value = file
+  editForm.value.video = ''
+  editVideoPreviewUrl.value = URL.createObjectURL(file)
+}
+
+function removeEditVideo() {
+  if (editVideoPreviewUrl.value) {
+    URL.revokeObjectURL(editVideoPreviewUrl.value)
+  }
+  editVideoFile.value = null
+  editVideoPreviewUrl.value = ''
+  editForm.value.video = ''
+  if (editFileInput.value) editFileInput.value.value = ''
+}
+
+function onEditUrlInput() {
+  if (editForm.value.video.trim()) {
+    removeEditVideo()
+  }
+}
+
 function openEditModal(exercise: ExerciseWithEquipment) {
   editingExercise.value = exercise
   editForm.value = {
@@ -142,6 +234,8 @@ function closeEditModal() {
   showEditModal.value = false
   editingExercise.value = null
   editError.value = null
+  videoUpload.reset()
+  removeEditVideo()
 }
 
 async function submitEdit() {
@@ -155,32 +249,101 @@ async function submitEdit() {
   editError.value = null
 
   try {
-    await exerciseStore.updateExercise(editingExercise.value.id, {
-      name: editForm.value.name.trim(),
-      muscle_group: editForm.value.muscleGroup.trim(),
-      difficulty: editForm.value.difficulty,
-      video_url: editForm.value.video.trim() || undefined,
-    })
+    // If there's a new video file, upload to Supabase first
+    if (editVideoFile.value) {
+      showEditModal.value = false
+      const result = await videoUpload.upload({
+        title: `Ejercicio: ${editForm.value.name.trim()}`,
+        description: `Video del ejercicio ${editForm.value.name.trim()}`,
+        file: editVideoFile.value,
+      })
 
-    // Actualizar el ejercicio en la lista local del componente
-    const idx = exercises.value.findIndex((ex) => ex.id === editingExercise.value!.id)
-    if (idx !== -1) {
-      exercises.value[idx] = {
-        ...exercises.value[idx],
-        name: editForm.value.name.trim(),
-        muscleGroup: editForm.value.muscleGroup.trim(),
-        difficulty: editForm.value.difficulty,
-        video: editForm.value.video.trim() || exercises.value[idx].video,
+      if (result) {
+        // Upload succeeded — show verification modal
+        pendingVideoUrl.value = result.url
+        showVerificationModal.value = true
+        isSubmittingEdit.value = false
+        return
       }
+
+      // Upload failed — reopen edit modal with error
+      showEditModal.value = true
+      editError.value = videoUpload.state.error ?? 'Error al subir el video.'
+      isSubmittingEdit.value = false
+      return
     }
 
-    closeEditModal()
+    // No new video — just update the exercise directly
+    await updateExerciseWithVideo(editForm.value.video.trim() || undefined)
   } catch (err: any) {
     editError.value =
       err?.response?.data?.error ?? err?.message ?? 'Error al guardar los cambios.'
     console.error('[ExerciseListPage] submitEdit error:', err)
   } finally {
     isSubmittingEdit.value = false
+  }
+}
+
+// ── Verification modal state ──────────────────────────────────
+const showVerificationModal = ref(false)
+const pendingVideoUrl = ref('')
+
+async function confirmUpdateExercise() {
+  if (!editingExercise.value || !pendingVideoUrl.value) return
+  isSubmittingEdit.value = true
+
+  try {
+    await updateExerciseWithVideo(pendingVideoUrl.value)
+    showVerificationModal.value = false
+    pendingVideoUrl.value = ''
+    videoUpload.reset()
+    closeEditModal()
+  } catch (err: any) {
+    editError.value =
+      err?.response?.data?.error ?? err?.message ?? 'Error al actualizar el ejercicio.'
+    showVerificationModal.value = false
+    showEditModal.value = true
+  } finally {
+    isSubmittingEdit.value = false
+  }
+}
+
+async function retryUpload() {
+  showVerificationModal.value = false
+  pendingVideoUrl.value = ''
+  videoUpload.reset()
+  if (editVideoFile.value) {
+    showEditModal.value = false
+    await submitEdit()
+  }
+}
+
+function closeVerificationModal() {
+  showVerificationModal.value = false
+  pendingVideoUrl.value = ''
+  videoUpload.reset()
+  showEditModal.value = true
+}
+
+async function updateExerciseWithVideo(videoUrl: string | undefined) {
+  if (!editingExercise.value) return
+
+  await exerciseStore.updateExercise(editingExercise.value.id, {
+    name: editForm.value.name.trim(),
+    muscle_group: editForm.value.muscleGroup.trim(),
+    difficulty: editForm.value.difficulty,
+    video_url: videoUrl,
+  })
+
+  const idx = exercises.value.findIndex((ex) => ex.id === editingExercise.value!.id)
+  if (idx !== -1) {
+    exercises.value[idx] = {
+      ...exercises.value[idx],
+      name: editForm.value.name.trim(),
+      muscleGroup: editForm.value.muscleGroup.trim(),
+      difficulty: editForm.value.difficulty,
+      video: videoUrl || exercises.value[idx].video,
+    }
   }
 }
 
@@ -302,6 +465,8 @@ async function loadData() {
             const rawExercises: any[] = res.data?.data ?? res.data ?? []
             return rawExercises.map((ex: any) => ({
               ...ex,
+              muscleGroup: ex.muscle_group ?? '',
+              video: ex.video_url ?? '',
               equipmentName: equipment.name ?? 'Equipo desconocido',
               equipmentType: equipment.type ?? '',
             }))
@@ -338,6 +503,10 @@ function clearFilters() {
 // ============================================================
 
 onMounted(loadData)
+
+onUnmounted(() => {
+  if (editVideoPreviewUrl.value) URL.revokeObjectURL(editVideoPreviewUrl.value)
+})
 </script>
 
 <template>
@@ -362,6 +531,11 @@ onMounted(loadData)
       <div
         class="relative overflow-hidden rounded-3xl border border-amber-500/20 bg-white/80 backdrop-blur-sm px-6 py-5 shadow-xl shadow-amber-100/60">
         <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/60 to-transparent" />
+        <!-- Chromatic orange gradient overlay -->
+        <div v-motion
+          :initial="{ opacity: 0 }"
+          :enter="{ opacity: 1, transition: { delay: 300, duration: 800 } }"
+          class="pointer-events-none absolute inset-0 bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 opacity-80 animate-gradient-x" />
         <div class="pointer-events-none absolute right-0 top-0 opacity-10">
           <svg width="200" height="130" viewBox="0 0 200 130" fill="none">
             <circle cx="180" cy="-10" r="95" fill="#f59e0b" />
@@ -371,15 +545,18 @@ onMounted(loadData)
         <div class="relative flex flex-wrap items-center gap-4">
           <!-- Ícono + textos -->
           <div class="flex items-center gap-3 flex-1 min-w-0">
-            <div
+            <div v-motion
+              :initial="{ opacity: 0, scale: 0.5 }"
+              :enter="{ opacity: 1, scale: 1, transition: { delay: 200, duration: 500, ease: [0.16, 1, 0.3, 1] } }"
+              :hovered="{ scale: 1.1, rotate: 12, transition: { duration: 300, ease: [0.16, 1, 0.3, 1] } }"
               class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-amber-500/30">
               <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
             <div>
-              <h1 class="font-serif text-2xl font-bold text-stone-800">Historial de Ejercicios</h1>
-              <p class="text-xs text-stone-400 mt-0.5">Todos los ejercicios registrados y el equipo al que pertenecen
+              <h1 class="font-serif text-2xl font-bold text-white">Historial de Ejercicios</h1>
+              <p class="text-xs text-amber-100/80 mt-0.5">Todos los ejercicios registrados y el equipo al que pertenecen
               </p>
             </div>
           </div>
@@ -456,9 +633,9 @@ onMounted(loadData)
         <p v-if="!isLoading && !error" class="text-xs text-stone-400 mt-3">
           Mostrando
           <span class="font-bold text-amber-600">{{ filteredExercises.length }}</span>
-          de
-          <span class="font-bold text-stone-600">{{ exercises.length }}</span>
-          ejercicios
+          ejercicios en
+          <span class="font-bold text-stone-600">{{ exercisesByEquipment.length }}</span>
+          equipo{{ exercisesByEquipment.length !== 1 ? 's' : '' }}
         </p>
       </div>
 
@@ -529,47 +706,104 @@ onMounted(loadData)
         </div>
       </div>
 
-      <!-- ── Timeline ── -->
-      <div v-else class="relative">
-        <!-- Eje vertical -->
-        <div
-          class="absolute left-5 top-0 bottom-0 w-0.5 bg-gradient-to-b from-amber-300 via-amber-200 to-transparent rounded-full"
-          aria-hidden="true" />
+      <!-- ── Accordion grouped by equipment ── -->
+      <div v-else class="space-y-3">
+        <!-- Expand / Collapse controls -->
+        <div class="flex items-center justify-end gap-2 px-1">
+          <button @click="expandAll"
+            v-motion
+            :hovered="{ scale: 1.05, transition: { duration: 200, ease: [0.16, 1, 0.3, 1] } }"
+            class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/25 hover:shadow-lg hover:shadow-orange-500/30 transition-shadow">
+            Expandir todo
+          </button>
+          <button @click="collapseAll"
+            v-motion
+            :hovered="{ scale: 1.05, transition: { duration: 200, ease: [0.16, 1, 0.3, 1] } }"
+            class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-gradient-to-r from-rose-400 via-red-500 to-pink-600 text-white shadow-md shadow-red-500/25 hover:shadow-lg hover:shadow-red-500/30 transition-shadow">
+            Colapsar todo
+          </button>
+        </div>
 
-        <ol class="space-y-0">
-          <li v-for="(exercise, index) in filteredExercises" :key="exercise.id" class="relative flex gap-5 group"
-            :class="index < filteredExercises.length - 1 ? 'pb-6' : 'pb-1'">
-            <!-- Dot -->
-            <div class="relative z-10 shrink-0 flex flex-col items-center" style="width: 40px;">
-              <div
-                class="w-3.5 h-3.5 rounded-full ring-2 ring-white shadow-md transition-all duration-200 group-hover:scale-125 group-hover:ring-4 mt-3.5"
-                :class="dotColor(exercise.difficulty)" />
+        <div v-for="(group, gIdx) in exercisesByEquipment" :key="group.equipmentName"
+          v-motion
+          :initial="{ opacity: 0, y: 16 }"
+          :enter="{ opacity: 1, y: 0, transition: { delay: gIdx * 0.06, duration: 350, ease: [0.16, 1, 0.3, 1] } }"
+          class="relative overflow-hidden rounded-2xl border border-amber-200/60 bg-white/80 backdrop-blur-sm shadow-md hover:shadow-lg transition-shadow duration-200">
+
+          <!-- Accordion header -->
+          <button @click="toggleAccordion(group.equipmentName)"
+            class="w-full flex items-center gap-3 px-5 py-4 text-left group/header hover:bg-amber-50/40 transition-colors duration-150">
+            <!-- Chevron -->
+            <div class="shrink-0 w-6 h-6 flex items-center justify-center rounded-lg bg-amber-100 group-hover/header:bg-amber-200 transition-colors">
+              <svg class="w-3.5 h-3.5 text-amber-600 transition-transform duration-200"
+                :class="{ 'rotate-90': isAccordionOpen(group.equipmentName) }"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+              </svg>
             </div>
 
-            <!-- Card -->
+            <!-- Equipment icon -->
             <div
-              class="flex-1 relative overflow-hidden rounded-2xl border border-amber-200/60 bg-white/80 backdrop-blur-sm px-5 py-4 shadow-md hover:shadow-xl hover:shadow-amber-100/60 hover:border-amber-300 transition-all duration-200 cursor-default group">
-              <div
-                class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300/40 to-transparent" />
+              class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shrink-0 shadow-md shadow-amber-300/30">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            </div>
 
-              <!-- Top row -->
-              <div class="flex flex-wrap items-start gap-2 mb-3">
-                <h3
-                  class="font-serif text-base font-bold text-stone-800 flex-1 leading-snug group-hover:text-amber-800 transition-colors duration-200">
-                  {{ exercise.name }}
-                </h3>
+            <!-- Name + type -->
+            <div class="flex-1 min-w-0">
+              <h3 class="font-serif text-sm font-bold text-stone-800 truncate group-hover/header:text-amber-800 transition-colors">
+                {{ group.equipmentName }}
+              </h3>
+              <p v-if="group.equipmentType" class="text-xs text-stone-400 truncate mt-0.5">
+                {{ group.equipmentType }}
+              </p>
+            </div>
+
+            <!-- Exercise count badge -->
+            <span
+              class="shrink-0 inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-amber-100 text-amber-700 text-xs font-bold border border-amber-200/80">
+              {{ group.exercises.length }}
+            </span>
+          </button>
+
+          <!-- Accordion body -->
+          <div v-if="isAccordionOpen(group.equipmentName)" class="overflow-hidden">
+            <div class="border-t border-amber-100 px-5 py-3 space-y-2">
+              <div v-for="(exercise, idx) in group.exercises" :key="exercise.id"
+                v-motion
+                :initial="{ opacity: 0, y: 8 }"
+                :enter="{ opacity: 1, y: 0, transition: { delay: idx * 0.04, duration: 280, ease: [0.16, 1, 0.3, 1] } }"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl bg-amber-50/40 border border-amber-100 hover:border-amber-300 hover:bg-amber-50 transition-all duration-150 group/item">
+
+                <!-- Difficulty dot -->
+                <div class="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm" :class="dotColor(exercise.difficulty)" />
+
+                <!-- Name + muscle group -->
+                <div class="flex-1 min-w-0">
+                  <p
+                    class="text-sm font-semibold text-stone-800 truncate group-hover/item:text-amber-800 transition-colors">
+                    {{ exercise.name }}
+                  </p>
+                  <div class="flex items-center gap-2 mt-0.5">
+                    <span v-if="exercise.muscleGroup" class="text-xs text-stone-400">{{ exercise.muscleGroup }}</span>
+                    <span v-if="exercise.createdAt" class="text-xs text-stone-300">· {{ formatDate(exercise.createdAt) }}</span>
+                  </div>
+                </div>
 
                 <!-- Difficulty badge -->
-                <span
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide shrink-0 border"
+                <span v-motion
+                  :hovered="{ x: [0, -3, 3, -3, 3, 0], transition: { duration: 0.5, ease: 'easeInOut' } }"
+                  class="shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide text-white shadow-sm"
                   :class="difficultyClasses(exercise.difficulty)">
                   {{ difficultyLabel(exercise.difficulty) }}
                 </span>
 
                 <!-- Actions -->
-                <div class="flex items-center gap-1 shrink-0">
-                  <button @click="openDetail(exercise)"
-                    class="w-7 h-7 flex items-center justify-center rounded-xl text-stone-400 hover:text-amber-600 hover:bg-amber-50 border border-transparent hover:border-amber-200 transition-all duration-200"
+                <div class="flex items-center gap-0.5 shrink-0 opacity-0 group-hover/item:opacity-100 transition-opacity duration-150">
+                  <button @click.stop="openDetail(exercise)"
+                    class="w-7 h-7 flex items-center justify-center rounded-lg text-stone-400 hover:text-amber-600 hover:bg-amber-100 transition-colors"
                     title="Ver detalle">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -578,71 +812,37 @@ onMounted(loadData)
                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                   </button>
-                  <button @click="openEditModal(exercise)"
-                    class="w-7 h-7 flex items-center justify-center rounded-xl text-stone-400 hover:text-orange-600 hover:bg-orange-50 border border-transparent hover:border-orange-200 transition-all duration-200"
-                    title="Editar ejercicio">
+                  <button @click.stop="openEditModal(exercise)"
+                    class="w-7 h-7 flex items-center justify-center rounded-lg text-stone-400 hover:text-orange-600 hover:bg-orange-100 transition-colors"
+                    title="Editar">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
                   </button>
-                  <button @click="openDeleteModal(exercise)"
-                    class="w-7 h-7 flex items-center justify-center rounded-xl text-stone-400 hover:text-rose-500 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-all duration-200"
-                    title="Eliminar ejercicio">
+                  <button @click.stop="openDeleteModal(exercise)"
+                    class="w-7 h-7 flex items-center justify-center rounded-lg text-stone-400 hover:text-rose-500 hover:bg-rose-100 transition-colors"
+                    title="Eliminar">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                   </button>
-                </div>
-              </div>
-
-              <!-- Equipment row -->
-              <div class="flex items-center gap-2 mb-2.5">
-                <div class="flex items-center gap-2 bg-amber-50 rounded-xl px-3 py-1.5 border border-amber-200/80">
-                  <div
-                    class="w-5 h-5 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shrink-0">
-                    <svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <button v-if="exercise.video" @click.stop="openVideoModal(exercise)"
+                    class="w-7 h-7 flex items-center justify-center rounded-lg text-stone-400 hover:text-amber-600 hover:bg-amber-100 transition-colors"
+                    title="Ver video">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                  </div>
-                  <span class="text-xs font-semibold text-stone-700">{{ exercise.equipmentName }}</span>
-                  <span v-if="exercise.equipmentType" class="text-xs text-stone-400">·
-                    {{ exercise.equipmentType }}</span>
+                  </button>
                 </div>
-              </div>
-
-              <!-- Meta row -->
-              <div class="flex flex-wrap items-center gap-3 mt-2">
-                <div v-if="exercise.muscleGroup" class="flex items-center gap-1.5">
-                  <svg class="w-3 h-3 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                  <span class="text-xs text-stone-400">{{ exercise.muscleGroup }}</span>
-                </div>
-                <div v-if="exercise.createdAt" class="flex items-center gap-1.5">
-                  <svg class="w-3 h-3 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  <span class="text-xs text-stone-400">{{ formatDate(exercise.createdAt) }}</span>
-                </div>
-                <button v-if="exercise.video" @click="openVideoModal(exercise)"
-                  class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 hover:text-amber-800 transition-colors">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Ver video
-                </button>
               </div>
             </div>
-          </li>
-        </ol>
+          </div>
+        </div>
       </div>
 
       <!-- Footer count -->
@@ -650,7 +850,9 @@ onMounted(loadData)
         <div class="inline-flex items-center gap-2 text-xs text-stone-400">
           <div class="h-px w-12 bg-gradient-to-r from-transparent to-amber-200" />
           Fin del historial · <span class="font-semibold text-amber-600">{{ filteredExercises.length }}</span>
-          ejercicio{{ filteredExercises.length !== 1 ? 's' : '' }}
+          ejercicio{{ filteredExercises.length !== 1 ? 's' : '' }} en
+          <span class="font-semibold text-stone-600">{{ exercisesByEquipment.length }}</span>
+          equipo{{ exercisesByEquipment.length !== 1 ? 's' : '' }}
           <div class="h-px w-12 bg-gradient-to-l from-transparent to-amber-200" />
         </div>
       </div>
@@ -733,12 +935,49 @@ onMounted(loadData)
                 </div>
               </div>
 
-              <!-- URL video -->
+              <!-- Video: seleccionar desde dispositivo -->
               <div class="space-y-1.5">
                 <label class="block text-sm font-semibold text-stone-700">
-                  URL del video <span class="text-stone-400 font-normal text-xs ml-1">(opcional)</span>
+                  Video <span class="text-stone-400 font-normal text-xs ml-1">(opcional)</span>
                 </label>
-                <input v-model="editForm.video" type="url" placeholder="https://…" :disabled="isSubmittingEdit"
+
+                <!-- Hidden file input -->
+                <input ref="editFileInput" type="file" accept="video/*" class="hidden"
+                  :disabled="isSubmittingEdit" @change="onEditVideoSelected" />
+
+                <!-- Preview del video seleccionado -->
+                <div v-if="editVideoPreviewUrl || editForm.video"
+                  class="rounded-2xl overflow-hidden border border-amber-200 shadow-sm relative group/video">
+                  <CustomVideoPlayer :video-src="editVideoPreviewUrl || editForm.video" />
+                  <button type="button" @click="removeEditVideo" :disabled="isSubmittingEdit"
+                    class="absolute top-2 right-2 z-10 w-7 h-7 flex items-center justify-center rounded-lg bg-stone-900/70 text-white hover:bg-rose-500/90 backdrop-blur-sm transition-all duration-200 opacity-0 group-hover/video:opacity-100"
+                    title="Eliminar video">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Botón seleccionar archivo -->
+                <button type="button" @click="editFileInput?.click()" :disabled="isSubmittingEdit"
+                  class="w-full flex items-center justify-center gap-2 border-2 border-dashed border-amber-300 rounded-xl px-4 py-3 text-sm font-semibold text-amber-700 bg-amber-50/40 hover:bg-amber-50 hover:border-amber-400 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  {{ editVideoPreviewUrl || editForm.video ? 'Cambiar video' : 'Seleccionar video del dispositivo' }}
+                </button>
+
+                <!-- Divider -->
+                <div class="flex items-center gap-3 py-1">
+                  <div class="h-px flex-1 bg-amber-200/60" />
+                  <span class="text-[10px] text-stone-400 uppercase tracking-widest">o ingresa URL</span>
+                  <div class="h-px flex-1 bg-amber-200/60" />
+                </div>
+
+                <!-- URL input -->
+                <input v-model="editForm.video" type="url" placeholder="https://…"
+                  :disabled="isSubmittingEdit" @input="onEditUrlInput"
                   class="w-full border-2 border-amber-200/60 rounded-xl px-4 py-2.5 text-sm text-stone-700 bg-amber-50/40 placeholder-stone-400 focus:outline-none focus:border-amber-500 focus:bg-white focus:shadow-lg focus:shadow-amber-500/10 transition-all duration-200 font-mono" />
               </div>
 
@@ -842,16 +1081,19 @@ onMounted(loadData)
   <!-- MODAL: Detalle del ejercicio                              -->
   <!-- ══════════════════════════════════════════════════════════ -->
   <Teleport to="body">
-    <Transition enter-active-class="transition-all duration-200 ease-out" enter-from-class="opacity-0"
-      enter-to-class="opacity-100" leave-active-class="transition-all duration-150 ease-in"
-      leave-from-class="opacity-100" leave-to-class="opacity-0">
-      <div v-if="showDetailModal && selectedExercise" class="fixed inset-0 z-50 flex items-center justify-center p-4"
-        @click.self="closeDetail">
-        <div class="absolute inset-0 bg-stone-900/50 backdrop-blur-sm" />
-        <Transition enter-active-class="transition-all duration-200 ease-out"
-          enter-from-class="opacity-0 scale-95 translate-y-2" enter-to-class="opacity-100 scale-100 translate-y-0">
-          <div v-if="showDetailModal"
-            class="relative w-full max-w-3xl overflow-hidden rounded-3xl bg-white shadow-2xl shadow-black/20 border border-amber-200/60">
+    <div v-if="showDetailModal && selectedExercise"
+      v-motion
+      :initial="{ opacity: 0 }"
+      :enter="{ opacity: 1, transition: { duration: 200, ease: 'easeOut' } }"
+      :leave="{ opacity: 0, transition: { duration: 150, ease: 'easeIn' } }"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4"
+      @click.self="closeDetail">
+      <div class="absolute inset-0 bg-stone-900/50 backdrop-blur-sm" />
+      <div v-motion
+        :initial="{ opacity: 0, scale: 0.95, y: 8 }"
+        :enter="{ opacity: 1, scale: 1, y: 0, transition: { duration: 250, ease: [0.16, 1, 0.3, 1] } }"
+        :leave="{ opacity: 0, scale: 0.95, y: 8, transition: { duration: 150, ease: 'easeIn' } }"
+        class="relative w-full max-w-3xl overflow-hidden rounded-3xl bg-white shadow-2xl shadow-black/20 border border-amber-200/60">
             <div
               class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/60 to-transparent" />
 
@@ -958,13 +1200,20 @@ onMounted(loadData)
               </div>
 
               <!-- Video -->
-              <div v-if="selectedExercise.video">
+              <div>
                 <p class="text-xs font-semibold uppercase tracking-widest text-stone-400 mb-2 flex items-center gap-2">
                   <span class="inline-block h-px flex-1 bg-gradient-to-r from-amber-200 to-transparent" />
                   Video de referencia
                 </p>
-                <div class="rounded-2xl overflow-hidden border border-amber-200 shadow-sm">
+                <div v-if="selectedExercise.video" class="rounded-2xl overflow-hidden border border-amber-200 shadow-sm">
                   <CustomVideoPlayer :video-src="selectedExercise.video" />
+                </div>
+                <div v-else class="rounded-2xl border border-dashed border-stone-200 bg-stone-50/50 px-6 py-8 text-center">
+                  <svg class="mx-auto h-10 w-10 text-stone-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                      d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  <p class="text-sm text-stone-400">No se encuentra video vinculado al ejercicio</p>
                 </div>
               </div>
             </div>
@@ -987,10 +1236,8 @@ onMounted(loadData)
               </button>
             </div>
           </div>
-        </Transition>
       </div>
-    </Transition>
-  </Teleport>
+    </Teleport>
 
   <!-- ══════════════════════════════════════════════════════════ -->
   <!-- MODAL: Confirmar eliminación                              -->
@@ -1100,4 +1347,25 @@ onMounted(loadData)
       </div>
     </Transition>
   </Teleport>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- MODAL: Subiendo video a Supabase                          -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <VideoUploadingModal
+    :state="videoUpload.state"
+    :file-name="editVideoFile?.name"
+    @cancel="videoUpload.reset(); isSubmittingEdit = false"
+  />
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- MODAL: Verificar video subido                             -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <VideoVerificationModal
+    :visible="showVerificationModal"
+    :video-url="pendingVideoUrl"
+    :is-saving="isSubmittingEdit"
+    @retry="retryUpload"
+    @confirm="confirmUpdateExercise"
+    @close="closeVerificationModal"
+  />
 </template>
