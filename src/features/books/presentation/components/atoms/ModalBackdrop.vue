@@ -1,11 +1,13 @@
 <script setup lang="ts">
 defineProps<{
   visible: boolean
+  dismissible?: boolean
 }>()
 
 defineEmits<{
   close: []
 }>()
+
 </script>
 
 <template>
@@ -13,7 +15,7 @@ defineEmits<{
     <div
       v-if="visible"
       class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-stone-900/40 backdrop-blur-sm"
-      @click.self="$emit('close')"
+      @click.self="dismissible !== false && $emit('close')"
     >
       <slot />
     </div>

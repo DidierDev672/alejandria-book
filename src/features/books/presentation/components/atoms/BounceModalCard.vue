@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  accent?: 'success' | 'error'
+  accent?: 'success' | 'error' | 'progress'
 }>()
 </script>
 
@@ -21,7 +21,11 @@ defineProps<{
     }"
     :class="[
       'w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden border',
-      accent === 'error' ? 'border-rose-200' : 'border-emerald-200',
+      accent === 'error'
+        ? 'border-rose-200'
+        : accent === 'progress'
+          ? 'border-amber-200'
+          : 'border-emerald-200',
     ]"
     role="dialog"
     aria-modal="true"
@@ -31,7 +35,9 @@ defineProps<{
         'h-1.5',
         accent === 'error'
           ? 'bg-gradient-to-r from-rose-400 via-red-500 to-rose-600'
-          : 'bg-gradient-to-r from-emerald-400 via-green-500 to-emerald-600',
+          : accent === 'progress'
+            ? 'bg-gradient-to-r from-orange-400 via-amber-500 to-orange-600'
+            : 'bg-gradient-to-r from-emerald-400 via-green-500 to-emerald-600',
       ]"
     />
     <div class="px-6 py-8 text-center space-y-4 modal-rebote">

@@ -51,6 +51,38 @@ export class DigitalBookFeedbackMessages {
     }
   }
 
+  static translationBooting(): DigitalBookFeedbackCopy {
+    return {
+      title: 'Estamos despertando a llama3',
+      message:
+        'Ollama aún no estaba en la sala. Lo estamos iniciando con calma (ollama run llama3). No tienes que hacer nada: como encender la lámpara de una biblioteca.',
+    }
+  }
+
+  static translationInProgress(languageLabel: string): DigitalBookFeedbackCopy {
+    return {
+      title: `llama3 está traduciendo al ${languageLabel}`,
+      message:
+        'El modelo está leyendo el libro por ti. Puede tardar un poco si hay muchas páginas. Quédate: las palabras están de camino.',
+    }
+  }
+
+  static translationRendering(): DigitalBookFeedbackCopy {
+    return {
+      title: 'Colocando la traducción en la página',
+      message:
+        'La traducción ya está lista. La estamos sentando en la sección de contenido, línea a línea. Un instante más.',
+    }
+  }
+
+  static translationUnavailable(): DigitalBookFeedbackCopy {
+    return {
+      title: 'No pudimos despertar a llama3',
+      message:
+        'No es un problema de tu libro. Ollama no respondió al llamado. Si puedes, ejecuta ollama run llama3 en tu equipo y vuelve a pulsar Español o Inglés.',
+    }
+  }
+
   static fromListHttpError(status?: number, raw?: string): DigitalBookFeedbackCopy {
     if (status === 401 || status === 403) {
       return {

@@ -3,12 +3,18 @@
  * PAGE - Detalle de libro digital
  * GET /digital-books/{id} · Vertical slice + Onion + Atomic Design
  */
-import { computed, defineAsyncComponent, onBeforeUnmount, watch } from 'vue'
+import { computed, defineAsyncComponent, onBeforeUnmount, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import { useDigitalBookDetailStore } from '../../application/useDigitalBookDetailStore'
 import { DigitalBookCoverResolver } from '../../domain/services/DigitalBookCoverResolver'
+import {
+  PENCIL_DEFAULT_KIT,
+  type PencilKit,
+  type PencilSize,
+} from '../../domain/entities/DigitalBookPencil.types'
 import GenreChromaticBadge from '../components/atoms/GenreChromaticBadge.vue'
+import DigitalBookPencilMenu from '../components/organisms/DigitalBookPencilMenu.vue'
 
 const DigitalBookPhotoCarousel = defineAsyncComponent(
   () => import('../components/molecules/DigitalBookPhotoCarousel.vue'),
@@ -16,12 +22,26 @@ const DigitalBookPhotoCarousel = defineAsyncComponent(
 const DigitalBookZReader = defineAsyncComponent(
   () => import('../components/organisms/DigitalBookZReader.vue'),
 )
+const DigitalBookTranslationModal = defineAsyncComponent(
+  () => import('../components/organisms/DigitalBookTranslationModal.vue'),
+)
 
 const route = useRoute()
 const router = useRouter()
 const detailStore = useDigitalBookDetailStore()
-const { book, isLoading, kind, feedback, pdfUrl, pdfKind, pdfFeedback } =
-  storeToRefs(detailStore)
+const {
+  book,
+  isLoading,
+  kind,
+  feedback,
+  contentHtml,
+  contentKind,
+  contentFeedback,
+  translationPhase,
+  translationLanguage,
+  translationCopy,
+  translationProgress,
+} = storeToRefs(detailStore)
 
 const photoSrcs = computed(() =>
   DigitalBookCoverResolver.fromPhotos(book.value?.photos ?? []),
@@ -47,6 +67,18 @@ onBeforeUnmount(() => {
 function goToShelf() {
   void router.push({ name: 'digital-books' })
 }
+
+const isTranslating = computed(
+  () =>
+    translationPhase.value === 'booting' ||
+    translationPhase.value === 'translating' ||
+    translationPhase.value === 'rendering',
+)
+
+const pencilSize = ref<PencilSize>('medium')
+const pencilColors = ref<PencilKit>({ ...PENCIL_DEFAULT_KIT })
+const pencilArmed = ref(false)
+const activePencilColor = computed(() => pencilColors.value[pencilSize.value])
 </script>
 
 <template>
@@ -73,7 +105,7 @@ function goToShelf() {
             Ficha del libro
           </h1>
           <p class="mt-1 text-sm text-orange-50/95 max-w-xl">
-            Portadas, autor, géneros y lectura en patrón Z.
+            Portadas, autor, géneros y lectura lineal, renglón a renglón.
           </p>
         </div>
         <button
@@ -158,13 +190,25 @@ function goToShelf() {
           />
         </div>
 
+        <DigitalBookPencilMenu
+          v-model:size="pencilSize"
+          v-model:colors="pencilColors"
+          v-model:armed="pencilArmed"
+        />
+
         <Suspense>
           <DigitalBookZReader
-            :pdf-url="pdfUrl"
-            :pdf-kind="pdfKind"
-            :pdf-feedback="pdfFeedback"
+            :content-html="contentHtml"
+            :content-kind="contentKind"
+            :content-feedback="contentFeedback"
             :book-name="book.name"
+            :active-language="translationLanguage"
+            :translating="isTranslating"
+            :highlight-enabled="pencilArmed"
+            :highlight-color="activePencilColor"
+            :highlight-size="pencilSize"
             @back="goToShelf"
+            @translate="detailStore.translateTo"
           />
           <template #fallback>
             <p class="text-sm text-stone-500">Preparando la lectura…</p>
@@ -172,5 +216,14 @@ function goToShelf() {
         </Suspense>
       </article>
     </div>
+
+    <DigitalBookTranslationModal
+      :visible="translationPhase !== 'idle'"
+      :phase="translationPhase"
+      :title="translationCopy?.title ?? ''"
+      :message="translationCopy?.message ?? ''"
+      :progress-label="translationProgress"
+      @close="detailStore.closeTranslationModal()"
+    />
   </div>
 </template>

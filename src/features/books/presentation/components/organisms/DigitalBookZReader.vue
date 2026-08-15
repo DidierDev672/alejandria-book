@@ -1,31 +1,144 @@
 <script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import type { DigitalBookFeedbackCopy } from '../../../domain/services/DigitalBookFeedbackMessages'
+import type { BookLanguage } from '../../../domain/entities/DigitalBookTranslation.types'
+import {
+  pencilCursorDiameter,
+  type PencilColor,
+  type PencilSize,
+} from '../../../domain/entities/DigitalBookPencil.types'
+import { DigitalBookHighlighter } from '../../../domain/services/DigitalBookHighlighter'
+import HighlightCursor from '../atoms/HighlightCursor.vue'
 
-defineProps<{
-  pdfUrl: string
-  pdfKind: 'idle' | 'loading' | 'ok' | 'error'
-  pdfFeedback: DigitalBookFeedbackCopy | null
+const props = defineProps<{
+  contentHtml: string
+  contentKind: 'idle' | 'loading' | 'ok' | 'error'
+  contentFeedback: DigitalBookFeedbackCopy | null
   bookName: string
+  activeLanguage: BookLanguage | null
+  translating: boolean
+  highlightEnabled: boolean
+  highlightColor: PencilColor
+  highlightSize: PencilSize
 }>()
 
 defineEmits<{
   back: []
+  translate: [language: BookLanguage]
 }>()
+
+const contentRef = ref<HTMLElement | null>(null)
+const cursorVisible = ref(false)
+const drawing = ref(false)
+const cursorX = ref(0)
+const cursorY = ref(0)
+
+const cursorDiameter = computed(() => pencilCursorDiameter(props.highlightSize))
+
+function updateCursor(event: PointerEvent) {
+  cursorX.value = event.clientX
+  cursorY.value = event.clientY
+}
+
+function onPointerEnter(event: PointerEvent) {
+  if (!props.highlightEnabled) return
+  cursorVisible.value = true
+  updateCursor(event)
+}
+
+function onPointerMove(event: PointerEvent) {
+  if (!props.highlightEnabled) return
+  cursorVisible.value = true
+  updateCursor(event)
+}
+
+function onPointerLeave() {
+  if (!drawing.value) cursorVisible.value = false
+}
+
+function onPointerDown(event: PointerEvent) {
+  if (!props.highlightEnabled || event.button !== 0) return
+  drawing.value = true
+  updateCursor(event)
+}
+
+function onWindowPointerMove(event: PointerEvent) {
+  if (!drawing.value) return
+  updateCursor(event)
+}
+
+function commitHighlight() {
+  const root = contentRef.value
+  if (!root || !props.highlightEnabled) return
+  DigitalBookHighlighter.wrapSelection(root, props.highlightColor, props.highlightSize)
+}
+
+function onPointerUp() {
+  if (!drawing.value) return
+  commitHighlight()
+  drawing.value = false
+}
+
+function onPointerCancel() {
+  drawing.value = false
+}
+
+onMounted(() => {
+  window.addEventListener('pointerup', onPointerUp)
+  window.addEventListener('pointercancel', onPointerCancel)
+  window.addEventListener('pointermove', onWindowPointerMove)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('pointerup', onPointerUp)
+  window.removeEventListener('pointercancel', onPointerCancel)
+  window.removeEventListener('pointermove', onWindowPointerMove)
+})
 </script>
 
 <template>
   <section class="space-y-4">
-    <div class="flex items-end justify-between gap-4">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
       <h2 class="font-serif text-2xl font-semibold text-stone-800">
         Contenido del libro
       </h2>
-      <p class="hidden sm:block text-xs font-medium uppercase tracking-widest text-stone-400">
-        Lectura en patrón Z
-      </p>
+      <div class="flex flex-col items-stretch sm:items-end gap-2">
+        <div class="flex justify-end gap-2">
+          <button
+            type="button"
+            class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+            :class="
+              activeLanguage === 'es'
+                ? 'bg-amber-600 text-white shadow-sm'
+                : 'border border-amber-600 text-amber-700 hover:bg-amber-50'
+            "
+            :disabled="translating || contentKind !== 'ok'"
+            @click="$emit('translate', 'es')"
+          >
+            Español
+          </button>
+          <button
+            type="button"
+            class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+            :class="
+              activeLanguage === 'en'
+                ? 'bg-amber-600 text-white shadow-sm'
+                : 'border border-amber-600 text-amber-700 hover:bg-amber-50'
+            "
+            :disabled="translating || contentKind !== 'ok'"
+            @click="$emit('translate', 'en')"
+          >
+            Inglés
+          </button>
+        </div>
+        <p class="text-xs font-medium uppercase tracking-widest text-stone-400 text-right">
+          Lectura lineal · serif
+        </p>
+      </div>
     </div>
 
     <div
-      v-if="pdfKind === 'loading'"
+      v-if="contentKind === 'loading'"
       class="flex items-center justify-center py-16 rounded-xl border border-amber-200 bg-amber-100"
     >
       <div class="w-8 h-8 border-4 border-amber-200 border-t-amber-600 rounded-full animate-spin" />
@@ -33,7 +146,7 @@ defineEmits<{
     </div>
 
     <div
-      v-else-if="pdfKind === 'error'"
+      v-else-if="contentKind === 'error'"
       v-motion
       :initial="{ opacity: 0, y: 12 }"
       :enter="{ opacity: 1, y: 0, transition: { duration: 0.35 } }"
@@ -50,46 +163,37 @@ defineEmits<{
         </svg>
       </div>
       <h3 class="font-serif text-lg font-semibold text-stone-700 mb-1 max-w-md">
-        {{ pdfFeedback?.title ?? 'Las páginas se quedaron a medias' }}
+        {{ contentFeedback?.title ?? 'Las páginas se quedaron a medias' }}
       </h3>
       <p class="text-sm text-stone-500 max-w-md leading-relaxed">
-        {{ pdfFeedback?.message }}
+        {{ contentFeedback?.message }}
       </p>
     </div>
 
     <div
-      v-else-if="pdfKind === 'ok' && pdfUrl"
+      v-else-if="contentKind === 'ok' && contentHtml"
       class="overflow-hidden rounded-2xl border border-amber-200 bg-[#FFF8EE] shadow-sm"
     >
-      <!-- Recorrido Z: título izq → acción der / páginas / volver izq → abrir der -->
       <div class="flex items-center justify-between gap-3 px-4 py-3 border-b border-amber-200">
         <span class="text-sm font-medium text-stone-700 truncate">{{ bookName }}</span>
-        <a
-          :href="pdfUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="shrink-0 text-sm font-medium text-amber-700 hover:underline"
-        >
-          Abrir en otra pestaña
-        </a>
+        <span class="shrink-0 text-xs font-medium uppercase tracking-widest text-stone-400">
+          HTML
+        </span>
       </div>
 
-      <div class="relative">
-        <div
-          class="pointer-events-none absolute inset-y-0 left-1/2 z-10 w-10 -translate-x-1/2
-                 bg-gradient-to-r from-stone-900/10 via-transparent to-stone-900/10"
-          aria-hidden="true"
-        />
-        <div
-          class="pointer-events-none absolute inset-y-0 left-1/2 z-10 w-px bg-amber-300/70"
-          aria-hidden="true"
-        />
-        <iframe
-          :src="pdfUrl"
-          :title="`Lectura de ${bookName}`"
-          class="block min-h-[70vh] w-full bg-[#FFFBF5]"
-        />
-      </div>
+      <article
+        ref="contentRef"
+        data-digital-book-content
+        class="digital-book-html relative text-stone-800"
+        :class="{ 'is-highlighting': highlightEnabled }"
+        :style="{ '--pencil-highlight': highlightColor }"
+        :lang="activeLanguage === 'en' ? 'en' : 'es'"
+        @pointerenter="onPointerEnter"
+        @pointermove="onPointerMove"
+        @pointerleave="onPointerLeave"
+        @pointerdown="onPointerDown"
+        v-html="contentHtml"
+      />
 
       <div class="flex items-center justify-between gap-3 px-4 py-3 border-t border-amber-200">
         <button
@@ -99,8 +203,128 @@ defineEmits<{
         >
           Volver a la estantería
         </button>
-        <span class="text-xs text-stone-400">Izquierda → derecha, como un libro abierto</span>
+        <span class="text-xs text-stone-400">Izquierda a derecha · arriba abajo</span>
       </div>
     </div>
   </section>
+
+  <HighlightCursor
+    :color="highlightColor"
+    :diameter="cursorDiameter"
+    :x="cursorX"
+    :y="cursorY"
+    :visible="highlightEnabled && cursorVisible"
+    :drawing="drawing"
+  />
 </template>
+
+<style scoped>
+.digital-book-html {
+  font-family: Georgia, 'Playfair Display', 'Times New Roman', serif;
+  font-size: 1.125rem;
+  line-height: 1.9;
+  max-width: 42rem;
+  margin-inline: auto;
+  padding-inline: 1.75rem;
+  padding-block: 2.75rem;
+  color: #1c1917;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+@media (min-width: 640px) {
+  .digital-book-html {
+    font-size: 1.2rem;
+    padding-inline: 3.25rem;
+    padding-block: 3.5rem;
+  }
+}
+
+.digital-book-html :deep(.book-page) {
+  margin-bottom: 3.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.digital-book-html :deep(.book-page:last-child) {
+  margin-bottom: 0;
+}
+
+.digital-book-html :deep(p) {
+  margin: 0 0 1.35em;
+}
+
+.digital-book-html :deep(p:last-child) {
+  margin-bottom: 0;
+}
+
+.digital-book-html :deep(h1),
+.digital-book-html :deep(h2),
+.digital-book-html :deep(h3) {
+  font-family: 'Playfair Display', Georgia, serif;
+  color: #1c1917;
+  margin: 1.75rem 0 0.85rem;
+  text-align: left;
+  hyphens: none;
+}
+
+.digital-book-html :deep(h1:first-child),
+.digital-book-html :deep(h2:first-child),
+.digital-book-html :deep(h3:first-child) {
+  margin-top: 0;
+}
+
+.digital-book-html :deep(a) {
+  color: #b45309;
+  text-decoration: underline;
+}
+
+.digital-book-html :deep(img) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 2rem auto;
+}
+
+.digital-book-html.is-highlighting {
+  cursor: none;
+}
+
+.digital-book-html.is-highlighting ::selection {
+  background-color: color-mix(in srgb, var(--pencil-highlight) 48%, transparent);
+  color: inherit;
+}
+
+.digital-book-html :deep(mark.pencil-highlight) {
+  color: inherit;
+  border-radius: 0.12em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  background-color: color-mix(in srgb, var(--pencil-highlight) 42%, transparent);
+}
+
+.digital-book-html :deep(mark.pencil-highlight[data-size='small']) {
+  padding: 0;
+  background-color: transparent;
+  background-image: linear-gradient(
+    transparent 68%,
+    color-mix(in srgb, var(--pencil-highlight) 78%, transparent) 68%
+  );
+}
+
+.digital-book-html :deep(mark.pencil-highlight[data-size='medium']) {
+  padding: 0.04em 0.06em;
+}
+
+.digital-book-html :deep(mark.pencil-highlight[data-size='large']) {
+  padding: 0.12em 0.08em;
+  background-color: color-mix(in srgb, var(--pencil-highlight) 52%, transparent);
+}
+
+.digital-book-html :deep(mark.pencil-highlight[data-size='xlarge']) {
+  padding: 0.2em 0.1em;
+  background-color: color-mix(in srgb, var(--pencil-highlight) 62%, transparent);
+}
+</style>
