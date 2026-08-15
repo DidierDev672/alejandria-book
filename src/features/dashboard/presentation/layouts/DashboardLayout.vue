@@ -17,7 +17,8 @@ const dashboardItem = { label: 'Dashboard', icon: 'grid', route: '/dashboard' }
 const alejandriaOpen = ref(false)
 const alejandriaItems = [
   { label: 'Libros', icon: 'book', route: '/dashboard/books' },
-  { label: 'Crear Libro', icon: 'book-plus', route: '/dashboard/books/create' },
+  { label: 'Libros digitales', icon: 'books-digital', route: '/dashboard/digital-books' },
+  { label: 'Libro digital', icon: 'book-digital', route: '/dashboard/books/create' },
   { label: 'Autores', icon: 'users', route: '/dashboard/authors' },
   { label: 'Crear nota', icon: 'note', route: '/dashboard/note' },
   { label: 'Bitácora de notas', icon: 'note-list', route: '/dashboard/notes' },
@@ -54,7 +55,12 @@ const coliseoItems = [
   { label: 'Objetivo de gladiadores', icon: 'gladiator-progress', route: '/dashboard/coliseo/objetivo-gladiadores' },
   { label: 'Progreso de gladiadores', icon: 'gladiator-progress', route: '/dashboard/coliseo/progreso-gladiadores' },
   { label: 'Asignar Roles', icon: 'assign-roles', route: '/dashboard/coliseo/asignar-roles' },
-  { label: 'Lista de roles', icon: 'role-list', route: '/dashboard/coliseo/lista-roles' }
+  { label: 'Lista de roles', icon: 'role-list', route: '/dashboard/coliseo/lista-roles' },
+  { label: 'Rutinas genéricas', icon: 'timer', route: '/dashboard/coliseo/rutinas' },
+  { label: 'Lista de rutinas', icon: 'timer', route: '/dashboard/coliseo/rutinas/list' },
+  { label: 'Crea rutina de ejercicio', icon: 'timer', route: '/dashboard/coliseo/rutinas-miembro/create' },
+  { label: 'Lista de rutinas asignadas', icon: 'timer', route: '/dashboard/coliseo/rutinas-miembro/list' },
+  { label: 'Rutinas asistidas por AI', icon: 'ai-sparkle', route: '/dashboard/coliseo/rutinas-ai' }
 ]
 
 function toggleAlejandria() {
@@ -162,7 +168,7 @@ function logout() {
             leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 translate-y-0"
             leave-to-class="opacity-0 -translate-y-2">
             <div v-if="alejandriaOpen" class="ml-4 space-y-0.5 border-l border-amber-500/20 pl-3">
-              <button v-for="(item, index) in alejandriaItems" :key="item.route" v-motion
+              <button v-for="(item, index) in alejandriaItems" :key="item.label" v-motion
                 :initial="{ opacity: 0, x: -15 }" :enter="{ opacity: 1, x: 0 }"
                 :transition="{ duration: 300, delay: index * 60, ease: [0.16, 1, 0.3, 1] }" type="button"
                 class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200"
@@ -179,12 +185,20 @@ function logout() {
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
-                <!-- Icono Book Plus -->
-                <svg v-else-if="item.icon === 'book-plus'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                <!-- Icono Libros digitales (lista) -->
+                <svg v-else-if="item.icon === 'books-digital'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
                   stroke="currentColor" stroke-width="1.8">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M20 12h-4m2-2v4" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16 8h3v10" />
+                </svg>
+                <!-- Icono Libro digital (PDF) -->
+                <svg v-else-if="item.icon === 'book-digital'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M7 3h7l5 5v13a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6M9 17h3" />
                 </svg>
                 <!-- Icono Users -->
                 <svg v-else-if="item.icon === 'users'" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24"
@@ -351,6 +365,12 @@ function logout() {
                   viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <!-- Icono rutinas asistidas por AI -->
+                <svg v-else-if="item.icon === 'ai-sparkle'" class="h-5 w-5 shrink-0" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
                 </svg>
                 {{ item.label }}
               </button>

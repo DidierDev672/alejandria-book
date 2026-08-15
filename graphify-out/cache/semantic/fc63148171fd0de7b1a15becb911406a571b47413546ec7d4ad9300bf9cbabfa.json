@@ -1,0 +1,1 @@
+{"nodes": [{"id": "http_axiosequipment_axiosequipment", "label": "axiosEquipment (Axios Instance)", "file_type": "code", "source_file": "src/features/maintenance/infrastructure/http/axiosEquipment.ts", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [], "hyperedges": []}

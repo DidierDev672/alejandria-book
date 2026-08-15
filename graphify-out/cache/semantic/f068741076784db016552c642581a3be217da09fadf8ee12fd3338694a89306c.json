@@ -1,0 +1,1 @@
+{"nodes": [{"id": "entities_backup", "label": "Backup Entity Types (Backup, ServerStatus)", "file_type": "code", "source_file": "src/features/backup/domain/entities/Backup.ts", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [], "hyperedges": []}

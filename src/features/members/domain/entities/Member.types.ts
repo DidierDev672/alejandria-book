@@ -7,6 +7,7 @@ export type Gender = 'MASCULINO' | 'FEMENINO' | 'OTRO'
 export type HealthConditionSeverity = 'LEVE' | 'MODERADO' | 'GRAVE'
 export type GoalType = 'PERDIDA_PESO' | 'GANANCIA_MUSCULAR' | 'RESISTENCIA' | 'MANTENIMIENTO' | 'REHABILITACION'
 export type MoodType = 'POSITIVO' | 'NEUTRO' | 'NEGATIVO'
+export type MemberRole = 'user' | 'admin' | 'super_admin' | 'coach'
 
 // ============================================================
 // Core Member Entity
@@ -117,6 +118,9 @@ export interface CreateMemberDTO {
   
   // Objetivos
   goals?: Omit<MemberGoal, 'id' | 'created_at' | 'updated_at'>[]
+  
+  // Rol
+  role: MemberRole
 }
 
 export interface UpdateMemberDTO extends Partial<CreateMemberDTO> {
@@ -160,6 +164,9 @@ export interface MemberFormState {
   }
   
   goals: Omit<MemberGoal, 'id' | 'created_at' | 'updated_at'>[]
+  
+  // Role
+  role: MemberRole | ''
 }
 
 // ============================================================
@@ -172,4 +179,5 @@ export interface MemberValidationErrors {
   healthConditions?: Record<number, Record<string, string[]>>
   mentalHealth?: Record<string, string[]>
   goals?: Record<number, Record<string, string[]>>
+  role?: Record<string, string[]>
 }

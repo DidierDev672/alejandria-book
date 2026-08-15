@@ -109,7 +109,10 @@ export class MemberDomainService {
       // Goals
       goals: formState.goals.filter(goal => 
         goal.target_value.trim() !== ''
-      )
+      ),
+      
+      // Role
+      role: formState.role
     }
   }
   

@@ -106,14 +106,7 @@ const handleSubmit = async () => {
 
 // Resetear formulario
 const resetForm = () => {
-  form.value = {
-    title: '',
-    description: '',
-    author: '',
-    genres: [],
-    photos: [],
-    publicationDate: '',
-  }
+  form.value = BookFactory.createEmpty()
   newGenre.value = ''
 }
 </script>

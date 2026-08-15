@@ -38,10 +38,22 @@ const router = createRouter({
             import("@/features/dashboard/presentation/pages/BooksPage.vue"),
         },
         {
+          path: "digital-books",
+          name: "digital-books",
+          component: () =>
+            import("@/features/books/presentation/pages/DigitalBookListPage.vue"),
+        },
+        {
+          path: "digital-books/:id",
+          name: "digital-book-detail",
+          component: () =>
+            import("@/features/books/presentation/pages/DigitalBookDetailPage.vue"),
+        },
+        {
           path: "books/create",
           name: "create-book",
           component: () =>
-            import("@/features/books/presentation/components/BookForm.vue"),
+            import("@/features/books/presentation/pages/DigitalBookCreatePage.vue"),
         },
         {
           path: "authors",
@@ -168,6 +180,36 @@ const router = createRouter({
           name: "assigned-roles-list",
           component: () =>
             import("@/features/colesio/presentation/pages/AssignedRolesListPage.vue"),
+        },
+        {
+          path: "coliseo/rutinas",
+          name: "routines-create",
+          component: () =>
+            import("@/features/routines/presentation/pages/RoutingCreatePage.vue"),
+        },
+        {
+          path: "coliseo/rutinas/list",
+          name: "routines-list",
+          component: () =>
+            import("@/features/routines/presentation/pages/ListRoutingPage.vue"),
+        },
+        {
+          path: "coliseo/rutinas-miembro/create",
+          name: "member-routine-create",
+          component: () =>
+            import("@/features/member-routines/presentation/pages/MemberRoutineCreatePage.vue"),
+        },
+        {
+          path: "coliseo/rutinas-miembro/list",
+          name: "member-routine-list",
+          component: () =>
+            import("@/features/member-routines/presentation/pages/MemberRoutineListPage.vue"),
+        },
+        {
+          path: "coliseo/rutinas-ai",
+          name: "ai-routine-chat",
+          component: () =>
+            import("@/features/ai-routines/presentation/pages/AiRoutineChatPage.vue"),
         },
       ],
     },

@@ -262,7 +262,8 @@ export const useMemberStore = defineStore('members', () => {
         sleep_hours: '',
         notes: ''
       },
-      goals: []
+      goals: [],
+      role: 'user'
     }
   }
   
@@ -304,7 +305,8 @@ export const useMemberStore = defineStore('members', () => {
         goal_type: goal.goal_type,
         target_value: goal.target_value,
         is_achieved: goal.is_achieved
-      }))
+      })),
+      role: (member as any).role || 'user'
     }
   }
   

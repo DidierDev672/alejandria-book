@@ -5,7 +5,7 @@ import MemberBasicInfoForm from '../components/organisms/MemberBasicInfoForm.vue
 import MemberHealthForm from '../components/organisms/MemberHealthForm.vue'
 import { useMemberStore } from '../../application/stores/useMemberStore'
 import { MemberDomainService } from '../../domain/services/MemberDomainService'
-import type { MemberValidationErrors } from '../../domain/entities/Member.types'
+import type { MemberValidationErrors, MemberRole } from '../../domain/entities/Member.types'
 
 // ============================================================
 // COMPOSITION & STATE
@@ -26,7 +26,7 @@ const formState = ref(memberStore.createEmptyFormState())
 // COMPUTED
 // ============================================================
 
-const totalSteps = 2
+const totalSteps = 3
 
 const isStep1Valid = computed(() => {
   return (
@@ -50,7 +50,7 @@ const isStep2Valid = computed(() => {
 })
 
 const canProceedToStep2 = computed(() => isStep1Valid.value)
-const canSubmit = computed(() => isStep1Valid.value && isStep2Valid.value)
+const canSubmit = computed(() => isStep1Valid.value && isStep2Valid.value && formState.value.role !== '')
 
 const progressPercentage = computed(() => {
   return (currentStep.value / totalSteps) * 100
@@ -67,6 +67,8 @@ function validateCurrentStep(): boolean {
     return validateStep1()
   } else if (currentStep.value === 2) {
     return validateStep2()
+  } else if (currentStep.value === 3) {
+    return validateStep3()
   }
   
   return true
@@ -155,6 +157,21 @@ function validateStep2(): boolean {
   }
   
   const hasErrors = Object.keys(errors.mentalHealth!).length > 0
+  if (hasErrors) {
+    validationErrors.value = errors
+  }
+  
+  return !hasErrors
+}
+
+function validateStep3(): boolean {
+  const errors: MemberValidationErrors = { role: {} }
+  
+  if (!formState.value.role) {
+    errors.role!.role = ['El rol es obligatorio']
+  }
+  
+  const hasErrors = Object.keys(errors.role!).length > 0
   if (hasErrors) {
     validationErrors.value = errors
   }
@@ -292,6 +309,7 @@ const randomSuccessMessage = computed(() => {
           <div class="flex items-center justify-between text-xs text-stone-500 mb-2">
             <span>Información Básica</span>
             <span>Salud y Objetivos</span>
+            <span>Rol</span>
           </div>
           <div class="w-full bg-amber-100 rounded-full h-2 overflow-hidden">
             <div 
@@ -346,6 +364,169 @@ const randomSuccessMessage = computed(() => {
             :disabled="isSubmitting"
             @update:form-state="formState = $event"
           />
+        </div>
+
+        <!-- Step 3: Role Assignment -->
+        <div v-show="currentStep === 3" class="space-y-6">
+          <!-- Role Selection Card -->
+          <div class="relative overflow-hidden rounded-3xl border border-amber-500/20 bg-white/80 backdrop-blur-sm px-6 py-6 shadow-xl shadow-amber-100/60">
+            <div class="pointer-events-none absolute right-0 top-0 opacity-10">
+              <svg width="120" height="80" viewBox="0 0 120 80" fill="none">
+                <circle cx="100" cy="-10" r="60" fill="#f59e0b" />
+              </svg>
+            </div>
+            
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                <svg class="w-5 h-5 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                </svg>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold font-serif text-stone-900">Asignación de Rol</h2>
+                <p class="text-sm text-stone-500">Define el nivel de acceso del gladiador en el sistema</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- User Role -->
+              <label 
+                class="relative flex flex-col items-start p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200"
+                :class="formState.role === 'user' 
+                  ? 'border-amber-500 bg-amber-50 shadow-md shadow-amber-200/50' 
+                  : 'border-stone-200 bg-white hover:border-amber-300 hover:bg-amber-50/50'"
+              >
+                <input 
+                  type="radio" 
+                  v-model="formState.role" 
+                  value="user"
+                  class="sr-only"
+                />
+                <div class="flex items-center gap-3 w-full">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center"
+                       :class="formState.role === 'user' ? 'bg-amber-500 text-white' : 'bg-stone-100 text-stone-500'">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="font-semibold text-stone-800">Usuario</span>
+                    <p class="text-xs text-stone-500 mt-0.5">Acceso básico al sistema</p>
+                  </div>
+                </div>
+                <div v-if="formState.role === 'user'" class="absolute top-3 right-3">
+                  <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </label>
+
+              <!-- Coach Role -->
+              <label 
+                class="relative flex flex-col items-start p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200"
+                :class="formState.role === 'coach' 
+                  ? 'border-emerald-500 bg-emerald-50 shadow-md shadow-emerald-200/50' 
+                  : 'border-stone-200 bg-white hover:border-emerald-300 hover:bg-emerald-50/50'"
+              >
+                <input 
+                  type="radio" 
+                  v-model="formState.role" 
+                  value="coach"
+                  class="sr-only"
+                />
+                <div class="flex items-center gap-3 w-full">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center"
+                       :class="formState.role === 'coach' ? 'bg-emerald-500 text-white' : 'bg-stone-100 text-stone-500'">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="font-semibold text-stone-800">Entrenador</span>
+                    <p class="text-xs text-stone-500 mt-0.5">Gestiona ejercicios y progreso</p>
+                  </div>
+                </div>
+                <div v-if="formState.role === 'coach'" class="absolute top-3 right-3">
+                  <svg class="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </label>
+
+              <!-- Admin Role -->
+              <label 
+                class="relative flex flex-col items-start p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200"
+                :class="formState.role === 'admin' 
+                  ? 'border-blue-500 bg-blue-50 shadow-md shadow-blue-200/50' 
+                  : 'border-stone-200 bg-white hover:border-blue-300 hover:bg-blue-50/50'"
+              >
+                <input 
+                  type="radio" 
+                  v-model="formState.role" 
+                  value="admin"
+                  class="sr-only"
+                />
+                <div class="flex items-center gap-3 w-full">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center"
+                       :class="formState.role === 'admin' ? 'bg-blue-500 text-white' : 'bg-stone-100 text-stone-500'">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="font-semibold text-stone-800">Administrador</span>
+                    <p class="text-xs text-stone-500 mt-0.5">Control total del sistema</p>
+                  </div>
+                </div>
+                <div v-if="formState.role === 'admin'" class="absolute top-3 right-3">
+                  <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </label>
+
+              <!-- Super Admin Role -->
+              <label 
+                class="relative flex flex-col items-start p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200"
+                :class="formState.role === 'super_admin' 
+                  ? 'border-purple-500 bg-purple-50 shadow-md shadow-purple-200/50' 
+                  : 'border-stone-200 bg-white hover:border-purple-300 hover:bg-purple-50/50'"
+              >
+                <input 
+                  type="radio" 
+                  v-model="formState.role" 
+                  value="super_admin"
+                  class="sr-only"
+                />
+                <div class="flex items-center gap-3 w-full">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center"
+                       :class="formState.role === 'super_admin' ? 'bg-purple-500 text-white' : 'bg-stone-100 text-stone-500'">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="font-semibold text-stone-800">Super Administrador</span>
+                    <p class="text-xs text-stone-500 mt-0.5">Máximo nivel de acceso</p>
+                  </div>
+                </div>
+                <div v-if="formState.role === 'super_admin'" class="absolute top-3 right-3">
+                  <svg class="w-5 h-5 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </label>
+            </div>
+
+            <!-- Validation Error -->
+            <div v-if="validationErrors.role?.role" class="mt-4 flex items-center gap-2 text-red-600 text-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {{ validationErrors.role.role[0] }}
+            </div>
+          </div>
         </div>
 
         <!-- Navigation Footer -->
