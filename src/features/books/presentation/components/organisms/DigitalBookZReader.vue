@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import type { DigitalBookFeedbackCopy } from '../../../domain/services/DigitalBookFeedbackMessages'
-import type { BookLanguage } from '../../../domain/entities/DigitalBookTranslation.types'
+import { DigitalBookHighlighter } from '@/features/books/domain/services/DigitalBookHighlighter.ts'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import {
   pencilCursorDiameter,
   type PencilColor,
   type PencilSize,
 } from '../../../domain/entities/DigitalBookPencil.types'
-import { DigitalBookHighlighter } from '../../../domain/services/DigitalBookHighlighter'
+import type { HighlightNote } from '../../../domain/entities/DigitalBookNote.types'
+import type { BookLanguage } from '../../../domain/entities/DigitalBookTranslation.types'
+import type { DigitalBookFeedbackCopy } from '../../../domain/services/DigitalBookFeedbackMessages'
 import HighlightCursor from '../atoms/HighlightCursor.vue'
+import HighlightNoteModal from './HighlightNoteModal.vue'
 
 const props = defineProps<{
   contentHtml: string
@@ -32,8 +34,20 @@ const cursorVisible = ref(false)
 const drawing = ref(false)
 const cursorX = ref(0)
 const cursorY = ref(0)
+const noteModalOpen = ref(false)
+const noteHighlightId = ref('')
+const noteQuotedText = ref('')
+const notesById = ref<Record<string, HighlightNote>>({})
 
 const cursorDiameter = computed(() => pencilCursorDiameter(props.highlightSize))
+const activeNote = computed(() => notesById.value[noteHighlightId.value] ?? null)
+
+function findHighlightMark(event: Event): HTMLElement | null {
+  const target = event.target
+  if (!(target instanceof Element)) return null
+  const mark = target.closest('mark.pencil-highlight')
+  return mark instanceof HTMLElement ? mark : null
+}
 
 function updateCursor(event: PointerEvent) {
   cursorX.value = event.clientX
@@ -57,6 +71,7 @@ function onPointerLeave() {
 }
 
 function onPointerDown(event: PointerEvent) {
+  if (findHighlightMark(event)) return
   if (!props.highlightEnabled || event.button !== 0) return
   drawing.value = true
   updateCursor(event)
@@ -67,10 +82,24 @@ function onWindowPointerMove(event: PointerEvent) {
   updateCursor(event)
 }
 
-function commitHighlight() {
+async function commitHighlight() {
   const root = contentRef.value
-  if (!root || !props.highlightEnabled) return
-  DigitalBookHighlighter.wrapSelection(root, props.highlightColor, props.highlightSize)
+  if (!root || !props.highlightEnabled) return;
+
+
+  const selection = window.getSelection();
+  if (!selection || selection.isCollapsed || selection.rangeCount === 0) return;
+
+  const range = selection.getRangeAt(0);
+  if (!root.contains(range.commonAncestorContainer)) return;
+
+
+  // Crear el highlight
+  DigitalBookHighlighter.wrapSelection(root, props.highlightColor, props.highlightSize);
+
+  // Limpiar seleccion despues del nextTick para asegurar que el DOM se actualizo.
+  await nextTick();
+  selection.removeAllRanges();
 }
 
 function onPointerUp() {
@@ -81,6 +110,46 @@ function onPointerUp() {
 
 function onPointerCancel() {
   drawing.value = false
+}
+
+function openHighlightNotes(event: MouseEvent) {
+  const mark = findHighlightMark(event)
+  if (!mark) return
+  event.preventDefault()
+  event.stopPropagation()
+  drawing.value = false
+  cursorVisible.value = false
+  if (!mark.dataset.highlightId) {
+    mark.dataset.highlightId = `hl-${crypto.randomUUID()}`
+  }
+  noteHighlightId.value = mark.dataset.highlightId
+  noteQuotedText.value = mark.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+  noteModalOpen.value = true
+}
+
+function closeHighlightNotes() {
+  noteModalOpen.value = false
+}
+
+function saveHighlightNote(note: HighlightNote) {
+  notesById.value = { ...notesById.value, [note.highlightId]: note }
+  noteModalOpen.value = false
+}
+
+function clearHighlightNote() {
+  const id = noteHighlightId.value
+  if (!id) return
+  const current = notesById.value[id]
+  if (!current) return
+  notesById.value = {
+    ...notesById.value,
+    [id]: {
+      ...current,
+      cards: current.cards.map((card) =>
+        card.id === current.activeCardId ? { ...card, content: '' } : card,
+      ),
+    },
+  }
 }
 
 onMounted(() => {
@@ -104,30 +173,16 @@ onBeforeUnmount(() => {
       </h2>
       <div class="flex flex-col items-stretch sm:items-end gap-2">
         <div class="flex justify-end gap-2">
-          <button
-            type="button"
-            class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
-            :class="
-              activeLanguage === 'es'
-                ? 'bg-amber-600 text-white shadow-sm'
-                : 'border border-amber-600 text-amber-700 hover:bg-amber-50'
-            "
-            :disabled="translating || contentKind !== 'ok'"
-            @click="$emit('translate', 'es')"
-          >
+          <button type="button" class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors" :class="activeLanguage === 'es'
+            ? 'bg-amber-600 text-white shadow-sm'
+            : 'border border-amber-600 text-amber-700 hover:bg-amber-50'
+            " :disabled="translating || contentKind !== 'ok'" @click="$emit('translate', 'es')">
             Español
           </button>
-          <button
-            type="button"
-            class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
-            :class="
-              activeLanguage === 'en'
-                ? 'bg-amber-600 text-white shadow-sm'
-                : 'border border-amber-600 text-amber-700 hover:bg-amber-50'
-            "
-            :disabled="translating || contentKind !== 'ok'"
-            @click="$emit('translate', 'en')"
-          >
+          <button type="button" class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors" :class="activeLanguage === 'en'
+            ? 'bg-amber-600 text-white shadow-sm'
+            : 'border border-amber-600 text-amber-700 hover:bg-amber-50'
+            " :disabled="translating || contentKind !== 'ok'" @click="$emit('translate', 'en')">
             Inglés
           </button>
         </div>
@@ -137,29 +192,19 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <div
-      v-if="contentKind === 'loading'"
-      class="flex items-center justify-center py-16 rounded-xl border border-amber-200 bg-amber-100"
-    >
+    <div v-if="contentKind === 'loading'"
+      class="flex items-center justify-center py-16 rounded-xl border border-amber-200 bg-amber-100">
       <div class="w-8 h-8 border-4 border-amber-200 border-t-amber-600 rounded-full animate-spin" />
       <span class="ml-3 text-sm text-stone-500">Abriendo las páginas…</span>
     </div>
 
-    <div
-      v-else-if="contentKind === 'error'"
-      v-motion
-      :initial="{ opacity: 0, y: 12 }"
-      :enter="{ opacity: 1, y: 0, transition: { duration: 0.35 } }"
-      class="flex flex-col items-center justify-center py-16 text-center px-6
-             rounded-xl border border-amber-200 bg-amber-100"
-    >
+    <div v-else-if="contentKind === 'error'" v-motion :initial="{ opacity: 0, y: 12 }"
+      :enter="{ opacity: 1, y: 0, transition: { duration: 0.35 } }" class="flex flex-col items-center justify-center py-16 text-center px-6
+             rounded-xl border border-amber-200 bg-amber-100">
       <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-50 border border-amber-200">
         <svg class="h-8 w-8 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
-          />
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
         </svg>
       </div>
       <h3 class="font-serif text-lg font-semibold text-stone-700 mb-1 max-w-md">
@@ -170,10 +215,8 @@ onBeforeUnmount(() => {
       </p>
     </div>
 
-    <div
-      v-else-if="contentKind === 'ok' && contentHtml"
-      class="overflow-hidden rounded-2xl border border-amber-200 bg-[#FFF8EE] shadow-sm"
-    >
+    <div v-else-if="contentKind === 'ok' && contentHtml"
+      class="overflow-hidden rounded-2xl border border-amber-200 bg-[#FFF8EE] shadow-sm">
       <div class="flex items-center justify-between gap-3 px-4 py-3 border-b border-amber-200">
         <span class="text-sm font-medium text-stone-700 truncate">{{ bookName }}</span>
         <span class="shrink-0 text-xs font-medium uppercase tracking-widest text-stone-400">
@@ -181,26 +224,13 @@ onBeforeUnmount(() => {
         </span>
       </div>
 
-      <article
-        ref="contentRef"
-        data-digital-book-content
-        class="digital-book-html relative text-stone-800"
-        :class="{ 'is-highlighting': highlightEnabled }"
-        :style="{ '--pencil-highlight': highlightColor }"
-        :lang="activeLanguage === 'en' ? 'en' : 'es'"
-        @pointerenter="onPointerEnter"
-        @pointermove="onPointerMove"
-        @pointerleave="onPointerLeave"
-        @pointerdown="onPointerDown"
-        v-html="contentHtml"
-      />
+      <article ref="contentRef" data-digital-book-content class="digital-book-html relative text-stone-800"
+        :class="{ 'is-highlighting': highlightEnabled }" :style="{ '--pencil-highlight': highlightColor }"
+        :lang="activeLanguage === 'en' ? 'en' : 'es'" @pointerenter="onPointerEnter" @pointermove="onPointerMove"
+        @pointerleave="onPointerLeave" @pointerdown="onPointerDown" @dblclick="openHighlightNotes" v-html="contentHtml" />
 
       <div class="flex items-center justify-between gap-3 px-4 py-3 border-t border-amber-200">
-        <button
-          type="button"
-          class="text-sm font-medium text-amber-700 hover:underline"
-          @click="$emit('back')"
-        >
+        <button type="button" class="text-sm font-medium text-amber-700 hover:underline" @click="$emit('back')">
           Volver a la estantería
         </button>
         <span class="text-xs text-stone-400">Izquierda a derecha · arriba abajo</span>
@@ -208,13 +238,17 @@ onBeforeUnmount(() => {
     </div>
   </section>
 
-  <HighlightCursor
-    :color="highlightColor"
-    :diameter="cursorDiameter"
-    :x="cursorX"
-    :y="cursorY"
-    :visible="highlightEnabled && cursorVisible"
-    :drawing="drawing"
+  <HighlightCursor :color="highlightColor" :diameter="cursorDiameter" :x="cursorX" :y="cursorY"
+    :visible="highlightEnabled && cursorVisible" :drawing="drawing" />
+
+  <HighlightNoteModal
+    :visible="noteModalOpen"
+    :highlight-id="noteHighlightId"
+    :quoted-text="noteQuotedText"
+    :initial-note="activeNote"
+    @close="closeHighlightNotes"
+    @save="saveHighlightNote"
+    @clear="clearHighlightNote"
   />
 </template>
 
@@ -303,15 +337,18 @@ onBeforeUnmount(() => {
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   background-color: color-mix(in srgb, var(--pencil-highlight) 42%, transparent);
+  cursor: pointer;
+}
+
+.digital-book-html.is-highlighting :deep(mark.pencil-highlight) {
+  cursor: pointer;
 }
 
 .digital-book-html :deep(mark.pencil-highlight[data-size='small']) {
   padding: 0;
   background-color: transparent;
-  background-image: linear-gradient(
-    transparent 68%,
-    color-mix(in srgb, var(--pencil-highlight) 78%, transparent) 68%
-  );
+  background-image: linear-gradient(transparent 68%,
+      color-mix(in srgb, var(--pencil-highlight) 78%, transparent) 68%);
 }
 
 .digital-book-html :deep(mark.pencil-highlight[data-size='medium']) {

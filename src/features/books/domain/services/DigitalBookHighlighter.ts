@@ -18,6 +18,8 @@ export class DigitalBookHighlighter {
     const mark = document.createElement('mark')
     mark.className = 'pencil-highlight'
     mark.dataset.size = size
+    mark.dataset.highlightId = `hl-${crypto.randomUUID()}`
+    mark.title = 'Doble clic para abrir las notas'
     mark.style.setProperty('--pencil-highlight', color)
 
     try {
