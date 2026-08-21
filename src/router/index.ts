@@ -170,6 +170,18 @@ const router = createRouter({
             import("@/features/backup/presentation/pages/BackupPage.vue"),
         },
         {
+          path: "coliseo/asignar-ejercicios",
+          name: "assign-exercises",
+          component: () =>
+            import("@/features/exercise-assignments/presentation/pages/ExerciseAssignmentCreatePage.vue"),
+        },
+        {
+          path: "coliseo/asignar-ejercicios/list",
+          name: "assigned-exercises-list",
+          component: () =>
+            import("@/features/exercise-assignments/presentation/pages/ExerciseAssignmentListPage.vue"),
+        },
+        {
           path: "coliseo/asignar-roles",
           name: "assign-roles",
           component: () =>
