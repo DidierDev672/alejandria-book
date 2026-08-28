@@ -19,9 +19,19 @@ export const coliseoSections: ColiseoNavSection[] = [
       { label: 'Lista de gladiadores', icon: 'gladiator-list', route: '/dashboard/coliseo/members/list' },
       { label: 'Objetivos de gladiadores', icon: 'gladiator-goals', route: '/dashboard/coliseo/objetivo-gladiadores' },
       { label: 'Progreso de gladiadores', icon: 'gladiator-progress', route: '/dashboard/coliseo/progreso-gladiadores' },
+      { label: 'Asignar miembro a usuario', icon: 'member-user-link', route: '/dashboard/coliseo/asignar-miembros' },
+      { label: 'Lista de miembros asignados', icon: 'member-user-list', route: '/dashboard/coliseo/asignar-miembros/list' },
       { label: 'Asignar ejercicios', icon: 'exercise-assign', route: '/dashboard/coliseo/asignar-ejercicios' },
       { label: 'Lista de asignaciones', icon: 'assignment-list', route: '/dashboard/coliseo/asignar-ejercicios/list' },
       { label: 'Historial de ejercicios', icon: 'exercise-list', route: '/dashboard/coliseo/exercises' },
+    ],
+  },
+  {
+    id: 'membresias',
+    label: 'Membresías',
+    items: [
+      { label: 'Crear membresía', icon: 'membership-create', route: '/dashboard/coliseo/membresias/create' },
+      { label: 'Membresías', icon: 'gladiator-list', route: '/dashboard/coliseo/membresias/list' },
     ],
   },
   {

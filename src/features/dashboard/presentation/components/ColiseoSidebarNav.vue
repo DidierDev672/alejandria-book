@@ -340,6 +340,34 @@ onUnmounted(() => {
                 />
               </svg>
               <svg
+                v-else-if="item.icon === 'member-user-link'"
+                class="h-4 w-4 shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                />
+              </svg>
+              <svg
+                v-else-if="item.icon === 'member-user-list'"
+                class="h-4 w-4 shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 6h16M4 10h16M4 14h10M4 18h7"
+                />
+              </svg>
+              <svg
                 v-else-if="item.icon === 'exercise-assign'"
                 class="h-4 w-4 shrink-0"
                 fill="none"
@@ -376,6 +404,20 @@ onUnmounted(() => {
                 stroke-width="1.8"
               >
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <svg
+                v-else-if="item.icon === 'membership-create'"
+                class="h-4 w-4 shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
+                />
               </svg>
               <svg
                 v-else-if="item.icon === 'equipment'"

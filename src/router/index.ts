@@ -182,6 +182,30 @@ const router = createRouter({
             import("@/features/exercise-assignments/presentation/pages/ExerciseAssignmentListPage.vue"),
         },
         {
+          path: "coliseo/asignar-miembros",
+          name: "assign-members",
+          component: () =>
+            import("@/features/member-user-assignments/presentation/pages/MemberUserAssignmentCreatePage.vue"),
+        },
+        {
+          path: "coliseo/asignar-miembros/list",
+          name: "assigned-members-list",
+          component: () =>
+            import("@/features/member-user-assignments/presentation/pages/MemberUserAssignmentListPage.vue"),
+        },
+        {
+          path: "coliseo/membresias/create",
+          name: "membership-create",
+          component: () =>
+            import("@/features/memberships/presentation/pages/MembershipCreatePage.vue"),
+        },
+        {
+          path: "coliseo/membresias/list",
+          name: "membership-list",
+          component: () =>
+            import("@/features/memberships/presentation/pages/MembershipListPage.vue"),
+        },
+        {
           path: "coliseo/asignar-roles",
           name: "assign-roles",
           component: () =>
