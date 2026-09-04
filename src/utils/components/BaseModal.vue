@@ -8,6 +8,7 @@ interface Props {
     maxWithClass?: string; // Permite alterar el tamaño del modal desde afuera: 'max-w-md', 'max-w-2xl', etc.
     expandable?: boolean; // Habilita/deshabilita la funcionalidad de expandir
     expandMaxWidth?: string; // Clase de ancho máximo cuando está expandido (default: 'max-w-6xl')
+    closeLabel?: string; // Texto del botón de cerrar; si está vacío solo se muestra el ícono X.
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -15,6 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
     maxWithClass: 'max-w-md',
     expandable: true,
     expandMaxWidth: 'max-w-6xl',
+    closeLabel: '',
 });
 
 const emit = defineEmits<{
@@ -137,13 +139,15 @@ onUnmounted(() => {
 
                             <!-- Botón cerrar -->
                             <button type="button" @click="handleClose"
-                                class="flex-shrink-0 p-2 text-white/80 hover:text-white rounded-full hover:bg-white/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/30"
-                                aria-label="Cerrar modal">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                class="flex-shrink-0 inline-flex items-center gap-1.5 p-2 text-white/90 hover:text-white rounded-full hover:bg-white/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/30"
+                                :aria-label="closeLabel || 'Cerrar modal'"
+                                :title="closeLabel || 'Cerrar modal'">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" class="drop-shadow">
                                     <line x1="18" y1="6" x2="6" y2="18"></line>
                                     <line x1="6" y1="6" x2="18" y2="18"></line>
                                 </svg>
+                                <span v-if="closeLabel" class="text-sm font-semibold">{{ closeLabel }}</span>
                             </button>
                         </div>
                     </div>

@@ -30,8 +30,13 @@ export const coliseoSections: ColiseoNavSection[] = [
     id: 'membresias',
     label: 'Membresías',
     items: [
-      { label: 'Crear membresía', icon: 'membership-create', route: '/dashboard/coliseo/membresias/create' },
+      { label: 'Crear membresía', icon: 'membership-create', route: '/dashboard/coliseo/membresias/registrar' },
+      { label: 'Crear plan', icon: 'membership-create', route: '/dashboard/coliseo/membresias/create' },
       { label: 'Membresías', icon: 'gladiator-list', route: '/dashboard/coliseo/membresias/list' },
+      { label: 'Lista de membresías', icon: 'membership-list', route: '/dashboard/coliseo/membresias/registradas' },
+      { label: 'Registrar pago', icon: 'payment', route: '/dashboard/coliseo/membresias/pagos/registrar' },
+      { label: 'Lista pagos', icon: 'membership-list', route: '/dashboard/coliseo/membresias/pagos/list' },
+      { label: 'Asistencia', icon: 'assistance', route: '/dashboard/coliseo/miembros/asistencias/registrar' },
     ],
   },
   {

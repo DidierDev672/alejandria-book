@@ -194,6 +194,12 @@ const router = createRouter({
             import("@/features/member-user-assignments/presentation/pages/MemberUserAssignmentListPage.vue"),
         },
         {
+          path: "coliseo/membresias/dashboard",
+          name: "membership-dashboard",
+          component: () =>
+            import("@/features/memberships/presentation/pages/DashboardMembresia.vue"),
+        },
+        {
           path: "coliseo/membresias/create",
           name: "membership-create",
           component: () =>
@@ -204,6 +210,36 @@ const router = createRouter({
           name: "membership-list",
           component: () =>
             import("@/features/memberships/presentation/pages/MembershipListPage.vue"),
+        },
+        {
+          path: "coliseo/membresias/registradas",
+          name: "membership-registrations",
+          component: () =>
+            import("@/features/memberships/presentation/pages/MembershipRegistrationsPage.vue"),
+        },
+        {
+          path: "coliseo/membresias/registrar",
+          name: "membership-enroll",
+          component: () =>
+            import("@/features/memberships/presentation/pages/MembershipEnrollPage.vue"),
+        },
+        {
+          path: "coliseo/membresias/pagos/registrar",
+          name: "payment-register",
+          component: () =>
+            import("@/features/pay/presentation/pages/PaymentRegisterPage.vue"),
+        },
+        {
+          path: "coliseo/membresias/pagos/list",
+          name: "payment-list",
+          component: () =>
+            import("@/features/pay/presentation/pages/PaymentListPage.vue"),
+        },
+        {
+          path: "coliseo/miembros/asistencias/registrar",
+          name: "assistance-register",
+          component: () =>
+            import("@/features/assistance/presentation/pages/AssistanceRegisterPage.vue"),
         },
         {
           path: "coliseo/asignar-roles",

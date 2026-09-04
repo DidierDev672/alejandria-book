@@ -91,6 +91,14 @@ function toggleSection(id: string) {
   openSectionId.value = openSectionId.value === id ? null : id
 }
 
+function handleSectionDoubleClick(section: ColiseoNavSection) {
+  if (isSearching.value) return
+  // Doble clic en la sección "Membresías" navega al Dashboard de membresías.
+  if (section.id === 'membresias') {
+    navigateTo('/dashboard/coliseo/membresias/dashboard')
+  }
+}
+
 function isSectionOpen(id: string) {
   if (isSearching.value) return filteredSections.value.some((section) => section.id === id)
   return openSectionId.value === id
@@ -228,6 +236,7 @@ onUnmounted(() => {
               : 'text-amber-800/80'"
             :aria-expanded="isSectionOpen(section.id)"
             @click="toggleSection(section.id)"
+            @dblclick="handleSectionDoubleClick(section)"
           >
             <span class="font-serif text-[10px] font-semibold uppercase tracking-[0.16em]">
               {{ section.label }}
@@ -420,6 +429,34 @@ onUnmounted(() => {
                 />
               </svg>
               <svg
+                v-else-if="item.icon === 'membership-list'"
+                class="h-4 w-4 shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+                />
+              </svg>
+              <svg
+                v-else-if="item.icon === 'payment'"
+                class="h-4 w-4 shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M2.25 8.25h19.5M2.25 9h19.5m-13.5 5.25h7.5m-6.75 2.25h6.75M3.75 19.5h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z"
+                />
+              </svg>
+              <svg
                 v-else-if="item.icon === 'equipment'"
                 class="h-4 w-4 shrink-0"
                 fill="none"
@@ -433,6 +470,20 @@ onUnmounted(() => {
                   d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
                 />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <svg
+                v-else-if="item.icon === 'assistance'"
+                class="h-4 w-4 shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"
+                />
               </svg>
               <svg
                 v-else-if="item.icon === 'equipment-list'"

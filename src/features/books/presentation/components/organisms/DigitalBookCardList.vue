@@ -10,12 +10,12 @@ defineProps<{
 
 <template>
   <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 list-none p-0 m-0">
-    <li v-for="book in books" :key="book.id">
+    <li v-for="(book, index) in books" :key="book.id">
       <RouterLink
         :to="{ name: 'digital-book-detail', params: { id: book.id } }"
         class="block h-full rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
       >
-        <DigitalBookCard :book="book" />
+        <DigitalBookCard :book="book" :color-index="index" />
       </RouterLink>
     </li>
   </ul>

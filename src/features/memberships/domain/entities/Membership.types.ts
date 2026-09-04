@@ -3,6 +3,7 @@ export type MembershipType = 'BY_CLASS' | 'BY_PERIOD'
 export type MembershipDurationDays = 30 | 90 | 180 | 365
 
 export interface MembershipPlanPayload {
+  id?: string
   name: string
   type: MembershipType
   duration_days: MembershipDurationDays | null
@@ -13,6 +14,14 @@ export interface MembershipPlanPayload {
 }
 
 export type MembershipSubmitOutcome = 'success' | 'error'
+
+export interface MembershipRegisterPayload {
+  member_id: string
+  plan_id: string
+  date_start: string
+  date_end: string
+  automatic_renewal: boolean
+}
 
 export interface MembershipDraft {
   name: string
