@@ -384,8 +384,7 @@ class="rounded-3xl border border-[#591202]/50 bg-gradient-to-r from-[#F26616] vi
         :initial="fadeUpDelayed(360).initial"
         :enter="fadeUpDelayed(360).enter"
         :animate="fadeUpDelayed(360).animate"
-        class="relative overflow-hidden rounded-3xl border border-[#591202]/50 p-6 shadow-2xl"
-        style="background: linear-gradient(to right, #F26616 0%, #A62F03 50%, #0D0D0D 100%)"
+        class="bg-header-gradient relative overflow-hidden rounded-3xl border border-[#591202]/50 p-6 shadow-2xl"
       >
         <div class="pointer-events-none absolute right-0 top-0 opacity-10" aria-hidden="true">
           <svg width="180" height="120" viewBox="0 0 180 120" fill="none">

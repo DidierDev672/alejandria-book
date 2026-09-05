@@ -1,7 +1,24 @@
 @import "tailwindcss";
 
 @theme {
+  --color-header-1: #F26616;
+  --color-header-2: #A62F03;
+  --color-header-3: #591202;
+  --color-header-4: #260101;
+  --color-header-5: #0D0D0D;
+
   --animate-gradient-x: gradient-x 3s ease infinite;
+}
+
+.bg-header-gradient {
+  background-image: linear-gradient(
+    135deg,
+    var(--color-header-1) 0%,
+    var(--color-header-2) 30%,
+    var(--color-header-3) 55%,
+    var(--color-header-4) 78%,
+    var(--color-header-5) 100%
+  );
 }
 
 @keyframes gradient-x {
